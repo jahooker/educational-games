@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson games</title>
+  <style>
+    :root {
+      --bg: #f6f1e8;
+      --paper: rgba(255, 252, 246, 0.9);
+      --ink: #18222f;
+      --muted: #5f6b7a;
+      --accent: #0f766e;
+      --accent-2: #b45309;
+      --line: rgba(24, 34, 47, 0.12);
+      --shadow: 0 18px 45px rgba(46, 35, 22, 0.12);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", "Gill Sans", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 28%),
+        radial-gradient(circle at right, rgba(180, 83, 9, 0.12), transparent 32%),
+        linear-gradient(160deg, #f9f3e8 0%, #efe6d6 100%);
+    }
+
+    .page {
+      width: min(1100px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    .hero {
+      padding: 2rem;
+      border-radius: 32px;
+      background: var(--paper);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .eyebrow {
+      margin: 0;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0.6rem 0 0;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      max-width: 9ch;
+    }
+
+    .intro {
+      max-width: 60ch;
+      margin-top: 1rem;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .card {
+      display: grid;
+      gap: 0.9rem;
+      padding: 1.2rem;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      margin: 0;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .pill {
+      padding: 0.38rem 0.7rem;
+      border-radius: 999px;
+      background: #f2ece1;
+      border: 1px solid var(--line);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    a.button {
+      width: fit-content;
+      padding: 0.78rem 1rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #0b5f59);
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 12px 24px rgba(15, 118, 110, 0.2);
+    }
+
+    .notes {
+      margin-top: 1rem;
+      padding: 1rem 1.2rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    code {
+      font-family: Menlo, Consolas, monospace;
+      font-size: 0.95em;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">MyTutor browser activities</p>
+      <h1>Games for live lessons</h1>
+      <p class="intro">
+        These activities are designed to be opened directly in a browser during lessons.
+        They are lightweight, local-first, and built to create quick bursts of retrieval,
+        discussion, and competition without needing a login or a build step.
+      </p>
+      <div class="grid">
+        <article class="card">
+          <div class="meta">
+            <span class="pill">Chemistry</span>
+            <span class="pill">IBDP</span>
+            <span class="pill">Bonding</span>
+          </div>
+          <h2>Bonding Arcade</h2>
+          <p>
+            Students classify substances by structure, predict key properties, and build
+            a score streak. It works well as a five-minute retrieval warm-up or a short
+            competitive break inside a longer lesson.
+          </p>
+          <a class="button" href="./bonding-arcade.html">Open game</a>
+        </article>
+      </div>
+      <div class="notes">
+        Open these files directly from Finder or run a simple local server if you prefer.
+        For example: <code>python3 -m http.server</code> from the repository root, then visit
+        <code>http://localhost:8000/games/</code>.
+      </div>
+    </section>
+  </main>
+</body>
+</html>

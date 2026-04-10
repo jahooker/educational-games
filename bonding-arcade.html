@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonding Arcade</title>
+  <style>
+    :root {
+      --bg: #f3eadc;
+      --panel: rgba(255, 250, 243, 0.9);
+      --ink: #18222f;
+      --muted: #5e6875;
+      --accent: #bc4c2a;
+      --accent-2: #0f766e;
+      --accent-3: #3451b2;
+      --good: #166534;
+      --bad: #b42318;
+      --line: rgba(24, 34, 47, 0.12);
+      --shadow: 0 20px 52px rgba(50, 36, 20, 0.14);
+      --radius: 26px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", "Gill Sans", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(188, 76, 42, 0.16), transparent 26%),
+        radial-gradient(circle at right, rgba(15, 118, 110, 0.14), transparent 30%),
+        linear-gradient(155deg, #fbf5ea 0%, #ece0ca 100%);
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 1.5rem));
+      margin: 0 auto;
+      padding: 1rem 0 1.5rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      gap: 1rem;
+      padding: 1.1rem;
+    }
+
+    .hero-copy,
+    .hero-stats {
+      padding: 1.1rem;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid var(--line);
+    }
+
+    .kicker {
+      margin: 0;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0.55rem 0 0;
+      font-size: clamp(2.1rem, 5vw, 4rem);
+      line-height: 0.95;
+      max-width: 8ch;
+    }
+
+    .subtitle {
+      margin: 0.9rem 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 56ch;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      background: #f2ebdf;
+      border: 1px solid var(--line);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.4rem;
+    }
+
+    .stat {
+      padding: 0.8rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+    }
+
+    .stat-label {
+      margin: 0;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .stat-value {
+      margin: 0.35rem 0 0;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 800;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+      gap: 1rem;
+    }
+
+    .play-area,
+    .coach {
+      padding: 1.1rem;
+    }
+
+    .round-card,
+    .coach-card {
+      padding: 1.1rem;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.64);
+      border: 1px solid var(--line);
+    }
+
+    .round-number {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .compound {
+      margin: 0.5rem 0 0;
+      font-size: clamp(2.1rem, 6vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .prompt {
+      margin-top: 0.7rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .category-grid,
+    .property-grid,
+    .actions {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .category-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .property-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 0.95rem 1rem;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 130ms ease, border-color 130ms ease, background 130ms ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: rgba(24, 34, 47, 0.24);
+      background: #fffdf9;
+    }
+
+    button:disabled {
+      cursor: default;
+      opacity: 0.72;
+    }
+
+    .option-title {
+      display: block;
+      font-weight: 800;
+    }
+
+    .option-note {
+      display: block;
+      margin-top: 0.28rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .selected {
+      border-color: rgba(52, 81, 178, 0.32);
+      background: rgba(52, 81, 178, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(52, 81, 178, 0.16);
+    }
+
+    .feedback {
+      margin-top: 1rem;
+      min-height: 4.5rem;
+      padding: 0.95rem 1rem;
+      border-radius: 18px;
+      background: #f8f4ec;
+      border: 1px solid var(--line);
+      line-height: 1.55;
+    }
+
+    .feedback.good {
+      color: var(--good);
+      border-color: rgba(22, 101, 52, 0.2);
+      background: rgba(22, 101, 52, 0.08);
+    }
+
+    .feedback.bad {
+      color: var(--bad);
+      border-color: rgba(180, 35, 24, 0.2);
+      background: rgba(180, 35, 24, 0.08);
+    }
+
+    .actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .primary {
+      background: linear-gradient(135deg, var(--accent), #97361b);
+      color: white;
+      border-color: transparent;
+      text-align: center;
+    }
+
+    .secondary {
+      background: rgba(15, 118, 110, 0.12);
+      color: var(--accent-2);
+      border-color: rgba(15, 118, 110, 0.15);
+      text-align: center;
+    }
+
+    .coach-card h2,
+    .coach-card h3 {
+      margin: 0;
+    }
+
+    .coach-card h2 {
+      font-size: 1.25rem;
+    }
+
+    .coach-card h3 {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .coach-card p,
+    .coach-card li {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    ul {
+      margin: 0.6rem 0 0;
+      padding-left: 1.1rem;
+    }
+
+    .summary {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(15, 118, 110, 0.08);
+      border: 1px solid rgba(15, 118, 110, 0.16);
+    }
+
+    .summary.visible {
+      display: block;
+    }
+
+    .summary h2 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .summary p {
+      margin: 0.45rem 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .inline-chem sub {
+      font-size: 0.58em;
+      vertical-align: baseline;
+      position: relative;
+      bottom: -0.2em;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .layout,
+      .category-grid,
+      .property-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page {
+        width: calc(100% - 1rem);
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="panel hero">
+      <div class="hero-copy">
+        <p class="kicker">IB chemistry game</p>
+        <h1>Bonding Arcade</h1>
+        <p class="subtitle">
+          Each round asks for two linked decisions: classify the substance by structure,
+          then choose the property that best matches it. The fastest way to use it in a lesson
+          is to let the student talk through the reasoning before you click.
+        </p>
+        <div class="pill-row">
+          <span class="pill">10 rounds</span>
+          <span class="pill">Structure and bonding</span>
+          <span class="pill">Live discussion friendly</span>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stats-grid">
+          <div class="stat">
+            <p class="stat-label">Score</p>
+            <p class="stat-value" id="score">0</p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Streak</p>
+            <p class="stat-value" id="streak">0</p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Round</p>
+            <p class="stat-value" id="round">1 / 10</p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Best theme</p>
+            <p class="stat-value" id="theme">Ready</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="panel play-area">
+        <div class="round-card">
+          <p class="round-number" id="roundLabel">Round 1</p>
+          <p class="compound inline-chem" id="compoundLabel">NaCl</p>
+          <p class="prompt" id="promptText">
+            First classify the substance. Then choose the property that best fits its structure.
+          </p>
+
+          <div class="category-grid" id="categoryButtons"></div>
+          <div class="property-grid" id="propertyButtons"></div>
+
+          <div class="feedback" id="feedback">
+            Select one structure category and one property statement, then press Check answer.
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="checkButton">Check answer</button>
+            <button class="secondary" id="nextButton" disabled>Next round</button>
+          </div>
+
+          <div class="summary" id="summary">
+            <h2>Session complete</h2>
+            <p id="summaryText"></p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel coach">
+        <div class="coach-card">
+          <h2>Tutor notes</h2>
+          <p>
+            This works best when the student explains the link between microscopic structure
+            and macroscopic property. If they get the answer quickly, ask for a contrast case:
+            “What would change if this were simple molecular instead?”
+          </p>
+
+          <h3>Useful prompts</h3>
+          <ul>
+            <li>What particles are present?</li>
+            <li>What is the strongest attraction being overcome?</li>
+            <li>Would this conduct as a solid, or only when molten?</li>
+            <li>Is the key feature the bond itself or the overall structure?</li>
+          </ul>
+
+          <h3>How the score works</h3>
+          <ul>
+            <li>1 point for the correct structure type.</li>
+            <li>1 point for the matching property statement.</li>
+            <li>1 bonus point for getting both right in the same round.</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const rounds = [
+      {
+        formula: "NaCl",
+        category: "giant ionic",
+        property: "High melting point; does not conduct as a solid, but conducts when molten.",
+        explanation: "Sodium chloride is a giant ionic lattice with strong electrostatic attractions between oppositely charged ions."
+      },
+      {
+        formula: "Mg",
+        category: "metallic",
+        property: "Conducts electricity because delocalised electrons can move through the lattice.",
+        explanation: "Magnesium has metallic bonding: positive ions in a sea of delocalised electrons."
+      },
+      {
+        formula: "I<sub>2</sub>",
+        category: "simple molecular",
+        property: "Low melting point because only weak intermolecular forces are overcome.",
+        explanation: "Iodine exists as molecules with London dispersion forces between them, so melting does not require breaking covalent bonds."
+      },
+      {
+        formula: "SiO<sub>2</sub>",
+        category: "giant covalent",
+        property: "Very high melting point because many strong covalent bonds extend throughout the structure.",
+        explanation: "Silicon dioxide forms a network covalent structure rather than separate molecules."
+      },
+      {
+        formula: "Cu",
+        category: "metallic",
+        property: "Malleable and electrically conductive because layers of ions can shift while electrons remain mobile.",
+        explanation: "Copper is a metal with non-directional metallic bonding and mobile delocalised electrons."
+      },
+      {
+        formula: "CO<sub>2</sub>",
+        category: "simple molecular",
+        property: "Low boiling point because molecules are held together only by weak intermolecular forces.",
+        explanation: "Carbon dioxide is molecular, so phase change mainly involves overcoming intermolecular forces."
+      },
+      {
+        formula: "Diamond",
+        category: "giant covalent",
+        property: "Extremely hard because each atom is strongly bonded in a three-dimensional network.",
+        explanation: "Diamond is a giant covalent lattice in which each carbon is strongly bonded to four others."
+      },
+      {
+        formula: "KBr",
+        category: "giant ionic",
+        property: "Brittle because shifting layers can bring like charges next to each other, causing repulsion.",
+        explanation: "Potassium bromide is ionic; when layers shift, repulsion between like charges can fracture the lattice."
+      },
+      {
+        formula: "Graphite",
+        category: "giant covalent",
+        property: "Conducts electricity because one electron per carbon is delocalised within the layers.",
+        explanation: "Graphite is giant covalent, but unlike diamond it contains mobile electrons in each layer."
+      },
+      {
+        formula: "NH<sub>3</sub>",
+        category: "simple molecular",
+        property: "Has a relatively low boiling point compared with giant structures, even though intermolecular forces are present.",
+        explanation: "Ammonia is molecular; even with hydrogen bonding, it is still far lower boiling than giant ionic or giant covalent substances."
+      }
+    ];
+
+    const allCategories = [
+      "giant ionic",
+      "simple molecular",
+      "giant covalent",
+      "metallic"
+    ];
+
+    const allProperties = [
+      "High melting point; does not conduct as a solid, but conducts when molten.",
+      "Conducts electricity because delocalised electrons can move through the lattice.",
+      "Low melting point because only weak intermolecular forces are overcome.",
+      "Very high melting point because many strong covalent bonds extend throughout the structure.",
+      "Malleable and electrically conductive because layers of ions can shift while electrons remain mobile.",
+      "Low boiling point because molecules are held together only by weak intermolecular forces.",
+      "Extremely hard because each atom is strongly bonded in a three-dimensional network.",
+      "Brittle because shifting layers can bring like charges next to each other, causing repulsion.",
+      "Conducts electricity because one electron per carbon is delocalised within the layers.",
+      "Has a relatively low boiling point compared with giant structures, even though intermolecular forces are present."
+    ];
+
+    const scoreEl = document.getElementById("score");
+    const streakEl = document.getElementById("streak");
+    const roundEl = document.getElementById("round");
+    const themeEl = document.getElementById("theme");
+    const roundLabelEl = document.getElementById("roundLabel");
+    const compoundLabelEl = document.getElementById("compoundLabel");
+    const categoryButtonsEl = document.getElementById("categoryButtons");
+    const propertyButtonsEl = document.getElementById("propertyButtons");
+    const feedbackEl = document.getElementById("feedback");
+    const checkButtonEl = document.getElementById("checkButton");
+    const nextButtonEl = document.getElementById("nextButton");
+    const summaryEl = document.getElementById("summary");
+    const summaryTextEl = document.getElementById("summaryText");
+
+    let currentRound = 0;
+    let score = 0;
+    let streak = 0;
+    let selectedCategory = null;
+    let selectedProperty = null;
+    let answered = false;
+
+    function shuffled(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function makeOptionButton(label, detail, onClick) {
+      const button = document.createElement("button");
+      const title = document.createElement("span");
+      title.className = "option-title";
+      title.textContent = label;
+      button.appendChild(title);
+      if (detail) {
+        const note = document.createElement("span");
+        note.className = "option-note";
+        note.textContent = detail;
+        button.appendChild(note);
+      }
+      button.addEventListener("click", onClick);
+      return button;
+    }
+
+    function categoryNote(category) {
+      const notes = {
+        "giant ionic": "Ions arranged in a lattice",
+        "simple molecular": "Discrete molecules with intermolecular forces",
+        "giant covalent": "Network of covalent bonds",
+        "metallic": "Positive ions with delocalised electrons"
+      };
+      return notes[category];
+    }
+
+    function renderRound() {
+      const round = rounds[currentRound];
+      selectedCategory = null;
+      selectedProperty = null;
+      answered = false;
+
+      roundLabelEl.textContent = `Round ${currentRound + 1}`;
+      roundEl.textContent = `${currentRound + 1} / ${rounds.length}`;
+      compoundLabelEl.innerHTML = round.formula;
+      themeEl.textContent = round.category;
+      feedbackEl.className = "feedback";
+      feedbackEl.textContent = "Select one structure category and one property statement, then press Check answer.";
+      nextButtonEl.disabled = true;
+      summaryEl.classList.remove("visible");
+
+      categoryButtonsEl.innerHTML = "";
+      propertyButtonsEl.innerHTML = "";
+
+      shuffled(allCategories).forEach((category) => {
+        const button = makeOptionButton(category, categoryNote(category), () => {
+          if (answered) {
+            return;
+          }
+          selectedCategory = category;
+          [...categoryButtonsEl.children].forEach((child) => child.classList.remove("selected"));
+          button.classList.add("selected");
+        });
+        categoryButtonsEl.appendChild(button);
+      });
+
+      const propertyChoices = shuffled([
+        round.property,
+        ...shuffled(allProperties.filter((item) => item !== round.property)).slice(0, 3)
+      ]);
+
+      propertyChoices.forEach((property) => {
+        const button = makeOptionButton(property, "", () => {
+          if (answered) {
+            return;
+          }
+          selectedProperty = property;
+          [...propertyButtonsEl.children].forEach((child) => child.classList.remove("selected"));
+          button.classList.add("selected");
+        });
+        propertyButtonsEl.appendChild(button);
+      });
+    }
+
+    function checkAnswer() {
+      if (answered) {
+        return;
+      }
+      if (!selectedCategory || !selectedProperty) {
+        feedbackEl.className = "feedback bad";
+        feedbackEl.textContent = "Choose both a structure category and a property before checking the answer.";
+        return;
+      }
+
+      answered = true;
+      const round = rounds[currentRound];
+      const categoryCorrect = selectedCategory === round.category;
+      const propertyCorrect = selectedProperty === round.property;
+
+      let points = 0;
+      if (categoryCorrect) {
+        points += 1;
+      }
+      if (propertyCorrect) {
+        points += 1;
+      }
+      if (categoryCorrect && propertyCorrect) {
+        points += 1;
+      }
+
+      score += points;
+      scoreEl.textContent = score;
+
+      if (categoryCorrect && propertyCorrect) {
+        streak += 1;
+        streakEl.textContent = streak;
+        feedbackEl.className = "feedback good";
+        feedbackEl.textContent = `Perfect round. ${round.explanation}`;
+      } else {
+        streak = 0;
+        streakEl.textContent = streak;
+        feedbackEl.className = "feedback bad";
+        feedbackEl.textContent =
+          `Not quite. The correct structure is ${round.category}, and the best property match is: ${round.property} ${round.explanation}`;
+      }
+
+      [...categoryButtonsEl.children, ...propertyButtonsEl.children].forEach((button) => {
+        button.disabled = true;
+      });
+
+      nextButtonEl.disabled = false;
+
+      if (currentRound === rounds.length - 1) {
+        nextButtonEl.textContent = "See summary";
+      }
+    }
+
+    function nextRound() {
+      if (!answered) {
+        return;
+      }
+
+      if (currentRound === rounds.length - 1) {
+        showSummary();
+        return;
+      }
+
+      currentRound += 1;
+      nextButtonEl.textContent = "Next round";
+      renderRound();
+    }
+
+    function showSummary() {
+      summaryEl.classList.add("visible");
+      const maxScore = rounds.length * 3;
+      let note = "Strong foundation. Push the student to explain each answer in terms of particles and forces.";
+      if (score <= 12) {
+        note = "Use the lower-scoring rounds as a diagnosis. Slow down and compare each structure type explicitly.";
+      } else if (score >= 24) {
+        note = "Excellent. This student is ready for extension questions on polarity, giant structures, and exceptions such as graphite.";
+      }
+      summaryTextEl.textContent = `Final score: ${score} out of ${maxScore}. ${note}`;
+      feedbackEl.className = "feedback good";
+      feedbackEl.textContent = "Session finished. Use the summary below to decide whether to revisit the topic or extend it.";
+      nextButtonEl.disabled = true;
+    }
+
+    checkButtonEl.addEventListener("click", checkAnswer);
+    nextButtonEl.addEventListener("click", nextRound);
+
+    renderRound();
+  </script>
+</body>
+</html>
