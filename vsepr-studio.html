@@ -38,12 +38,12 @@
     }
 
     .page {
-      width: min(1220px, calc(100% - 1.5rem));
+      width: min(1380px, calc(100% - 1rem));
       margin: 0 auto;
       height: 100vh;
-      padding: 0.55rem 0;
+      padding: 0.4rem 0;
       display: grid;
-      gap: 0.55rem;
+      gap: 0.4rem;
       grid-template-rows: auto minmax(0, 1fr);
     }
 
@@ -58,12 +58,12 @@
     .hero,
     .workspace {
       display: grid;
-      gap: 1rem;
+      gap: 0.7rem;
     }
 
     .hero {
-      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
-      padding: 0.75rem;
+      grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.8fr);
+      padding: 0.5rem;
     }
 
     .hero-copy,
@@ -71,15 +71,15 @@
     .controls,
     .viewer,
     .explanation {
-      padding: 0.8rem;
+      padding: 0.65rem;
       border-radius: 22px;
       background: rgba(255, 255, 255, 0.64);
       border: 1px solid var(--line);
     }
 
     .workspace {
-      grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
-      padding: 0.75rem;
+      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+      padding: 0.5rem;
       align-items: stretch;
       min-height: 0;
     }
@@ -101,8 +101,8 @@
     }
 
     h1 {
-      margin-top: 0.35rem;
-      font-size: clamp(1.9rem, 4vw, 3.3rem);
+      margin-top: 0.2rem;
+      font-size: clamp(1.65rem, 3.4vw, 2.75rem);
       line-height: 0.95;
       max-width: 9ch;
     }
@@ -117,48 +117,48 @@
     }
 
     .subtitle {
-      margin-top: 0.55rem;
-      max-width: 58ch;
-      font-size: 0.96rem;
-      line-height: 1.45;
+      margin-top: 0.4rem;
+      max-width: 68ch;
+      font-size: 0.84rem;
+      line-height: 1.35;
     }
 
     .pill-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.7rem;
+      gap: 0.3rem;
+      margin-top: 0.45rem;
     }
 
     .pill {
-      padding: 0.3rem 0.62rem;
+      padding: 0.24rem 0.5rem;
       border-radius: 999px;
       background: #f0eadf;
       border: 1px solid var(--line);
-      font-size: 0.76rem;
+      font-size: 0.68rem;
       font-weight: 700;
     }
 
     .hero-notes {
       display: grid;
-      gap: 0.55rem;
+      gap: 0.4rem;
     }
 
     .stat-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.55rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.4rem;
     }
 
     .stat-card {
-      padding: 0.6rem;
+      padding: 0.45rem 0.5rem;
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.8);
       border: 1px solid var(--line);
     }
 
     .stat-label {
-      font-size: 0.7rem;
+      font-size: 0.62rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
@@ -166,30 +166,30 @@
     }
 
     .stat-value {
-      margin-top: 0.2rem;
-      font-size: clamp(1rem, 2.4vw, 1.35rem);
+      margin-top: 0.1rem;
+      font-size: clamp(0.82rem, 1.7vw, 1.05rem);
       font-weight: 800;
       line-height: 1.15;
     }
 
     .controls {
       display: grid;
-      gap: 0.7rem;
+      gap: 0.5rem;
       min-height: 0;
       overflow: auto;
     }
 
     .group {
       display: grid;
-      gap: 0.55rem;
-      padding: 0.75rem;
+      gap: 0.45rem;
+      padding: 0.55rem;
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.82);
       border: 1px solid var(--line);
     }
 
     .group-title {
-      font-size: 0.72rem;
+      font-size: 0.66rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--muted);
@@ -198,13 +198,13 @@
 
     .field-grid {
       display: grid;
-      gap: 0.6rem;
+      gap: 0.45rem;
     }
 
     label {
       display: grid;
-      gap: 0.32rem;
-      font-size: 0.84rem;
+      gap: 0.24rem;
+      font-size: 0.76rem;
       font-weight: 700;
     }
 
@@ -217,8 +217,8 @@
 
     select,
     input {
-      padding: 0.58rem 0.72rem;
-      border-radius: 14px;
+      padding: 0.46rem 0.58rem;
+      border-radius: 12px;
       border: 1px solid rgba(26, 34, 48, 0.14);
       background: #fffdf9;
       color: var(--ink);
@@ -227,19 +227,52 @@
     .pair-row {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.55rem;
+      gap: 0.4rem;
     }
 
     .preset-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.45rem;
+      gap: 0.4rem;
+    }
+
+    .preset-section {
+      display: grid;
+      gap: 0.35rem;
+      padding: 0.45rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--line);
+    }
+
+    .preset-section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.35rem;
+      align-items: baseline;
+    }
+
+    .preset-section-title {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .preset-section-subtitle {
+      font-size: 0.62rem;
+      color: var(--muted);
+    }
+
+    .preset-button-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
     }
 
     button {
       border-radius: 16px;
       border: 1px solid var(--line);
-      padding: 0.62rem 0.75rem;
+      padding: 0.46rem 0.58rem;
       background: rgba(255, 255, 255, 0.84);
       color: var(--ink);
       cursor: pointer;
@@ -260,24 +293,25 @@
 
     .preset-note {
       display: block;
-      margin-top: 0.15rem;
-      font-size: 0.78rem;
+      margin-top: 0.1rem;
+      font-size: 0.68rem;
       color: var(--muted);
-      line-height: 1.4;
+      line-height: 1.25;
     }
 
     .viewer {
       display: grid;
-      gap: 0.7rem;
+      gap: 0.45rem;
       min-height: 0;
       overflow: auto;
+      grid-template-rows: minmax(0, 1fr) auto auto;
     }
 
     .diagram-shell {
       display: grid;
       place-items: center;
-      min-height: 280px;
-      height: 34vh;
+      min-height: 0;
+      height: auto;
       border-radius: 20px;
       border: 1px solid var(--line);
       background:
@@ -287,25 +321,26 @@
     }
 
     .diagram-shell svg {
-      width: min(100%, 560px);
-      height: auto;
+      width: min(100%, 820px);
+      height: 100%;
+      max-height: 100%;
     }
 
     .caption-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.55rem;
+      gap: 0.4rem;
     }
 
     .caption-card {
-      padding: 0.65rem;
+      padding: 0.45rem 0.5rem;
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.82);
       border: 1px solid var(--line);
     }
 
     .caption-label {
-      font-size: 0.68rem;
+      font-size: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
@@ -313,28 +348,28 @@
     }
 
     .caption-value {
-      margin-top: 0.25rem;
-      font-size: 0.9rem;
+      margin-top: 0.14rem;
+      font-size: 0.8rem;
       font-weight: 800;
-      line-height: 1.25;
+      line-height: 1.18;
     }
 
     .explanation {
       display: grid;
-      gap: 0.5rem;
-      padding: 0.75rem;
+      gap: 0.35rem;
+      padding: 0.55rem;
     }
 
     .explanation h2 {
-      font-size: 1.05rem;
+      font-size: 0.9rem;
       line-height: 1.15;
     }
 
     .explanation p,
     .explanation li,
     .field-note {
-      font-size: 0.88rem;
-      line-height: 1.42;
+      font-size: 0.76rem;
+      line-height: 1.3;
     }
 
     ul {
@@ -352,7 +387,12 @@
       .workspace,
       .caption-grid,
       .pair-row,
-      .preset-grid {
+      .preset-grid,
+      .preset-button-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-grid {
         grid-template-columns: 1fr;
       }
 
@@ -391,12 +431,8 @@
             <div class="stat-value" id="lonePairStat">1</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Electron geometry</div>
-            <div class="stat-value" id="electronGeometryStat">tetrahedral</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Molecular geometry</div>
-            <div class="stat-value" id="molecularGeometryStat">trigonal pyramidal</div>
+            <div class="stat-label">AXE descriptor</div>
+            <div class="stat-value" id="axeStat">AX<sub>3</sub>E</div>
           </div>
         </div>
       </div>
@@ -405,28 +441,14 @@
     <section class="panel workspace">
       <div class="controls">
         <div class="group">
-          <div class="group-title">Preset molecules</div>
+          <div class="group-title">Presets by VSEPR pattern</div>
           <div class="preset-grid" id="presetGrid"></div>
         </div>
 
         <div class="group">
-          <div class="group-title">Custom structure</div>
+          <div class="group-title">VSEPR pattern</div>
           <div class="field-grid">
             <div class="pair-row">
-              <label>
-                Formula label
-                <input id="formulaInput" type="text" value="NH3" maxlength="14">
-              </label>
-              <label>
-                Central atom
-                <input id="centralInput" type="text" value="N" maxlength="3">
-              </label>
-            </div>
-            <div class="pair-row">
-              <label>
-                Bonded atom label
-                <input id="outerInput" type="text" value="H" maxlength="4">
-              </label>
               <label>
                 Steric number
                 <select id="regionsSelect">
@@ -444,17 +466,13 @@
                 <select id="lonePairsSelect"></select>
               </label>
               <label>
-                Multiple-bond note
-                <select id="multipleBondSelect">
-                  <option value="none">none</option>
-                  <option value="one double bond">one double bond</option>
-                  <option value="two double bonds">two double bonds</option>
-                  <option value="one triple bond">one triple bond</option>
+                Example molecule
+                <select id="exampleSelect">
                 </select>
               </label>
             </div>
             <p class="field-note" id="validityNote">
-              Select a steric number and lone-pair count. The molecular geometry is based on the arrangement of atoms only.
+              Choose a supported VSEPR pattern, then switch between curated example molecules for that pattern.
             </p>
           </div>
         </div>
@@ -477,7 +495,7 @@
           </div>
         </div>
         <div class="explanation">
-          <h2 id="headline">Tetrahedral electron geometry, trigonal pyramidal molecular geometry</h2>
+          <h2 id="headline">Electron geometry: tetrahedral. Molecular geometry: trigonal pyramidal.</h2>
           <p id="explanationText">
             Four regions of electron density arrange tetrahedrally. One of those regions is a lone pair,
             so the visible atoms form a trigonal pyramidal shape.
@@ -660,15 +678,13 @@
       { label: "ClF3", central: "Cl", outer: "F", regions: 5, lonePairs: 2, multipleBond: "none" },
       { label: "XeF2", central: "Xe", outer: "F", regions: 5, lonePairs: 3, multipleBond: "none" },
       { label: "SF6", central: "S", outer: "F", regions: 6, lonePairs: 0, multipleBond: "none" },
+      { label: "BrF5", central: "Br", outer: "F", regions: 6, lonePairs: 1, multipleBond: "none" },
       { label: "XeF4", central: "Xe", outer: "F", regions: 6, lonePairs: 2, multipleBond: "none" }
     ];
 
-    const formulaInput = document.getElementById("formulaInput");
-    const centralInput = document.getElementById("centralInput");
-    const outerInput = document.getElementById("outerInput");
     const regionsSelect = document.getElementById("regionsSelect");
     const lonePairsSelect = document.getElementById("lonePairsSelect");
-    const multipleBondSelect = document.getElementById("multipleBondSelect");
+    const exampleSelect = document.getElementById("exampleSelect");
     const validityNote = document.getElementById("validityNote");
     const presetGrid = document.getElementById("presetGrid");
     const diagramShell = document.getElementById("diagramShell");
@@ -680,8 +696,7 @@
     const studyPoints = document.getElementById("studyPoints");
     const regionsStat = document.getElementById("regionsStat");
     const lonePairStat = document.getElementById("lonePairStat");
-    const electronGeometryStat = document.getElementById("electronGeometryStat");
-    const molecularGeometryStat = document.getElementById("molecularGeometryStat");
+    const axeStat = document.getElementById("axeStat");
 
     function populateLonePairOptions() {
       const regions = Number(regionsSelect.value);
@@ -697,24 +712,105 @@
       lonePairsSelect.value = String(Math.min(current, maxLonePairs));
     }
 
+    function patternKeyFromPreset(preset) {
+      return `${preset.regions}-${preset.lonePairs}`;
+    }
+
+    function matchingExamples() {
+      const key = `${regionsSelect.value}-${lonePairsSelect.value}`;
+      return presets.filter((preset) => patternKeyFromPreset(preset) === key);
+    }
+
+    function populateExampleOptions(preferredLabel = "") {
+      const examples = matchingExamples();
+      const previous = preferredLabel || exampleSelect.value;
+      exampleSelect.innerHTML = "";
+
+      examples.forEach((preset) => {
+        const option = document.createElement("option");
+        option.value = preset.label;
+        option.textContent = preset.label;
+        exampleSelect.appendChild(option);
+      });
+
+      if (examples.length === 0) {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "No curated example";
+        exampleSelect.appendChild(option);
+      }
+
+      const preferredExists = examples.some((preset) => preset.label === previous);
+      exampleSelect.value = preferredExists ? previous : (examples[0]?.label || "");
+    }
+
+    function selectedExample() {
+      return presets.find((preset) => preset.label === exampleSelect.value) || null;
+    }
+
     function createPresetButton(preset) {
       const button = document.createElement("button");
       button.type = "button";
       button.innerHTML = `
         <span class="preset-name">${formatFormula(preset.label)}</span>
-        <span class="preset-note">${preset.regions} regions, ${preset.lonePairs} lone pair${preset.lonePairs === 1 ? "" : "s"}</span>
+        <span class="preset-note">${preset.regions - preset.lonePairs} bonding pair${preset.regions - preset.lonePairs === 1 ? "" : "s"}, ${preset.lonePairs} lone pair${preset.lonePairs === 1 ? "" : "s"}</span>
       `;
       button.addEventListener("click", () => {
-        formulaInput.value = preset.label;
-        centralInput.value = preset.central;
-        outerInput.value = preset.outer;
         regionsSelect.value = String(preset.regions);
         populateLonePairOptions();
         lonePairsSelect.value = String(preset.lonePairs);
-        multipleBondSelect.value = preset.multipleBond;
+        populateExampleOptions(preset.label);
         render();
       });
-      presetGrid.appendChild(button);
+      return button;
+    }
+
+    function buildPresetSections() {
+      const grouped = new Map();
+
+      presets.forEach((preset) => {
+        const bondingPairs = preset.regions - preset.lonePairs;
+        const key = `${bondingPairs}-${preset.lonePairs}`;
+        if (!grouped.has(key)) {
+          grouped.set(key, {
+            bondingPairs,
+            lonePairs: preset.lonePairs,
+            items: []
+          });
+        }
+        grouped.get(key).items.push(preset);
+      });
+
+      presetGrid.innerHTML = "";
+
+      [...grouped.values()]
+        .sort((a, b) => {
+          if (a.bondingPairs !== b.bondingPairs) {
+            return a.bondingPairs - b.bondingPairs;
+          }
+          return a.lonePairs - b.lonePairs;
+        })
+        .forEach((group) => {
+          const section = document.createElement("section");
+          section.className = "preset-section";
+
+          const header = document.createElement("div");
+          header.className = "preset-section-header";
+          header.innerHTML = `
+            <div class="preset-section-title">${group.bondingPairs} bonding pair${group.bondingPairs === 1 ? "" : "s"}</div>
+            <div class="preset-section-subtitle">${group.lonePairs} lone pair${group.lonePairs === 1 ? "" : "s"}</div>
+          `;
+
+          const grid = document.createElement("div");
+          grid.className = "preset-button-grid";
+          group.items.forEach((preset) => {
+            grid.appendChild(createPresetButton(preset));
+          });
+
+          section.appendChild(header);
+          section.appendChild(grid);
+          presetGrid.appendChild(section);
+        });
     }
 
     function bondLine(x1, y1, x2, y2, type = "solid", bondOrder = 1) {
@@ -900,14 +996,9 @@
         pair(120);
       }
 
-      const lonePairLabel = lonePairs > 0
-        ? `<text x="40" y="52" style="font:18px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:700;fill:#bf5b2b;">Lone pairs on central atom: ${lonePairs}</text>`
-        : `<text x="40" y="52" style="font:18px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:700;fill:#0f766e;">No lone pairs on central atom</text>`;
-
       return `
         <svg viewBox="0 0 700 460" role="img" aria-label="VSEPR geometry diagram">
           <rect x="0" y="0" width="700" height="460" rx="26" fill="transparent"/>
-          ${lonePairLabel}
           ${pieces.join("")}
           ${lonePairPieces.join("")}
           ${atomLabel(centralX, centralY, central, "#1a2230", 34)}
@@ -923,15 +1014,20 @@
       return raw.replace(/([A-Z][a-z]?[\w()]*)/g, (match) => formatFormula(match));
     }
 
+    function axeDescriptor(bondRegions, lonePairs) {
+      const xPart = `AX${bondRegions === 1 ? "" : `<sub>${bondRegions}</sub>`}`;
+      if (lonePairs === 0) {
+        return xPart;
+      }
+      return `${xPart}E${lonePairs === 1 ? "" : `<sub>${lonePairs}</sub>`}`;
+    }
+
     function render() {
-      const formula = formulaInput.value.trim() || "AX";
-      const central = centralInput.value.trim() || "A";
-      const outer = outerInput.value.trim() || "X";
       const regions = Number(regionsSelect.value);
       const lonePairs = Number(lonePairsSelect.value);
-      const multipleBond = multipleBondSelect.value;
       const key = `${regions}-${lonePairs}`;
       const entry = geometryMap[key];
+      const example = selectedExample();
 
       if (!entry) {
         validityNote.textContent = "That combination is not supported in this tool. Reduce the lone-pair count or change the steric number.";
@@ -942,6 +1038,11 @@
         return;
       }
 
+      const formula = example?.label || `AX`;
+      const central = example?.central || "A";
+      const outer = example?.outer || "X";
+      const multipleBond = example?.multipleBond || "none";
+
       const bondRegions = regions - lonePairs;
       validityNote.textContent = multipleBond === "none"
         ? `${bondRegions} bonding region${bondRegions === 1 ? "" : "s"} and ${lonePairs} lone pair${lonePairs === 1 ? "" : "s"} on the central atom.`
@@ -951,27 +1052,28 @@
       formulaCaption.innerHTML = formatFormula(formula);
       angleCaption.textContent = entry.angle;
       polarityCaption.textContent = entry.polarityHint;
-      headline.textContent = `${entry.electronGeometry} electron geometry, ${entry.molecularGeometry} molecular geometry`;
+      headline.textContent = `Electron geometry: ${entry.electronGeometry}. Molecular geometry: ${entry.molecularGeometry}.`;
       explanationText.innerHTML = formatChemText(entry.note);
       studyPoints.innerHTML = entry.points.map((point) => `<li>${formatChemText(point)}</li>`).join("");
       regionsStat.textContent = String(regions);
       lonePairStat.textContent = String(lonePairs);
-      electronGeometryStat.textContent = entry.electronGeometry;
-      molecularGeometryStat.textContent = entry.molecularGeometry;
+      axeStat.innerHTML = axeDescriptor(bondRegions, lonePairs);
     }
 
     regionsSelect.addEventListener("change", () => {
       populateLonePairOptions();
+      populateExampleOptions();
       render();
     });
 
-    [formulaInput, centralInput, outerInput, lonePairsSelect, multipleBondSelect].forEach((element) => {
+    [lonePairsSelect, exampleSelect].forEach((element) => {
       element.addEventListener("input", render);
       element.addEventListener("change", render);
     });
 
-    presets.forEach(createPresetButton);
+    buildPresetSections();
     populateLonePairOptions();
+    populateExampleOptions("NH3");
     render();
   </script>
 </body>
