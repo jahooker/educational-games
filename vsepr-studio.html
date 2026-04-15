@@ -1,3 +1,4 @@
+<!-- Generated from games/. Do not edit pages/ files directly. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,21 +39,21 @@
     }
 
     .page {
-      width: min(1380px, calc(100% - 1rem));
+      width: min(1500px, calc(100% - 0.75rem));
       margin: 0 auto;
       height: 100vh;
-      padding: 0.4rem 0;
+      padding: 0.3rem 0;
       display: grid;
-      gap: 0.4rem;
+      gap: 0.3rem;
       grid-template-rows: auto minmax(0, 1fr);
     }
 
     .panel {
-      background: var(--panel);
-      border: 1px solid rgba(255, 255, 255, 0.65);
+      background: rgba(255, 251, 245, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.38);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
+      box-shadow: 0 10px 28px rgba(45, 35, 24, 0.07);
+      backdrop-filter: blur(12px);
     }
 
     .hero,
@@ -62,7 +63,7 @@
     }
 
     .hero {
-      grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.8fr);
+      grid-template-columns: minmax(0, 1fr);
       padding: 0.5rem;
     }
 
@@ -73,13 +74,11 @@
     .explanation {
       padding: 0.65rem;
       border-radius: 22px;
-      background: rgba(255, 255, 255, 0.64);
-      border: 1px solid var(--line);
     }
 
     .workspace {
-      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
-      padding: 0.5rem;
+      grid-template-columns: minmax(360px, 430px) minmax(0, 1fr);
+      padding: 0.45rem;
       align-items: stretch;
       min-height: 0;
     }
@@ -119,7 +118,7 @@
     .subtitle {
       margin-top: 0.4rem;
       max-width: 68ch;
-      font-size: 0.84rem;
+      font-size: 0.92rem;
       line-height: 1.35;
     }
 
@@ -133,28 +132,21 @@
     .pill {
       padding: 0.24rem 0.5rem;
       border-radius: 999px;
-      background: #f0eadf;
-      border: 1px solid var(--line);
-      font-size: 0.68rem;
+      background: rgba(240, 234, 223, 0.72);
+      border: 1px solid rgba(26, 34, 48, 0.08);
+      font-size: 0.74rem;
       font-weight: 700;
-    }
-
-    .hero-notes {
-      display: grid;
-      gap: 0.4rem;
     }
 
     .stat-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
 
     .stat-card {
-      padding: 0.45rem 0.5rem;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid var(--line);
+      padding: 0.35rem 0 0;
+      border-top: 1px solid var(--line);
     }
 
     .stat-label {
@@ -176,20 +168,24 @@
       display: grid;
       gap: 0.5rem;
       min-height: 0;
-      overflow: auto;
+      min-width: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .group {
       display: grid;
       gap: 0.45rem;
-      padding: 0.55rem;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.82);
-      border: 1px solid var(--line);
+      padding: 0.15rem 0 0;
+    }
+
+    .group + .group {
+      border-top: 1px solid var(--line);
+      padding-top: 0.55rem;
     }
 
     .group-title {
-      font-size: 0.66rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--muted);
@@ -204,7 +200,7 @@
     label {
       display: grid;
       gap: 0.24rem;
-      font-size: 0.76rem;
+      font-size: 0.84rem;
       font-weight: 700;
     }
 
@@ -217,7 +213,7 @@
 
     select,
     input {
-      padding: 0.46rem 0.58rem;
+      padding: 0.55rem 0.65rem;
       border-radius: 12px;
       border: 1px solid rgba(26, 34, 48, 0.14);
       background: #fffdf9;
@@ -233,70 +229,84 @@
     .preset-grid {
       display: grid;
       gap: 0.4rem;
+      min-width: 0;
     }
 
-    .preset-section {
+    .preset-matrix {
       display: grid;
-      gap: 0.35rem;
-      padding: 0.45rem;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid var(--line);
+      grid-template-columns: 88px repeat(4, minmax(0, 1fr));
+      gap: 0.3rem;
+      align-items: stretch;
+      min-width: 0;
     }
 
-    .preset-section-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 0.35rem;
-      align-items: baseline;
+    .preset-corner,
+    .preset-axis {
+      padding: 0.42rem 0.36rem;
+      min-width: 0;
     }
 
-    .preset-section-title {
-      font-size: 0.7rem;
+    .preset-corner {
+      display: grid;
+      place-items: center;
+      font-size: 0.58rem;
+      line-height: 1.15;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .preset-axis {
+      display: grid;
+      place-items: center;
+      min-height: 62px;
+      font-size: 0.76rem;
       font-weight: 800;
       color: var(--ink);
+      line-height: 1.1;
+      text-align: center;
     }
 
-    .preset-section-subtitle {
-      font-size: 0.62rem;
-      color: var(--muted);
-    }
-
-    .preset-button-grid {
+    .preset-cell {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.35rem;
+      min-height: 62px;
+      padding: 0.1rem;
+      align-items: stretch;
+      min-width: 0;
+    }
+
+    .preset-cell.empty {
+      place-items: center;
+      color: rgba(95, 105, 120, 0.45);
+      font-size: 0.9rem;
     }
 
     button {
       border-radius: 16px;
-      border: 1px solid var(--line);
-      padding: 0.46rem 0.58rem;
-      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid transparent;
+      padding: 0.48rem 0.5rem;
+      background: rgba(255, 255, 255, 0.48);
       color: var(--ink);
       cursor: pointer;
       text-align: left;
       transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+      min-width: 0;
     }
 
     button:hover {
       transform: translateY(-1px);
-      background: #fffefb;
-      border-color: rgba(26, 34, 48, 0.22);
+      background: rgba(255, 255, 255, 0.82);
+      border-color: rgba(26, 34, 48, 0.14);
     }
 
     .preset-name {
       display: block;
       font-weight: 800;
-    }
-
-    .preset-note {
-      display: block;
-      margin-top: 0.1rem;
-      font-size: 0.68rem;
-      color: var(--muted);
-      line-height: 1.25;
+      font-size: 0.78rem;
+      line-height: 1.18;
+      overflow-wrap: anywhere;
     }
 
     .viewer {
@@ -326,6 +336,72 @@
       max-height: 100%;
     }
 
+    .relationship-block {
+      display: grid;
+      gap: 0.24rem;
+    }
+
+    .relationship-axe {
+      padding-top: 0.35rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.9rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .relationship-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 0.3rem;
+      align-items: center;
+    }
+
+    .operator-cell {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .relation-card {
+      display: inline-grid;
+      grid-template-columns: max-content auto;
+      grid-template-areas:
+        "symbol name"
+        "value .";
+      justify-content: center;
+      align-items: baseline;
+      column-gap: 0.28rem;
+      row-gap: 0.1rem;
+      padding: 0.35rem 0;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .relation-symbol {
+      grid-area: symbol;
+      font-size: 1rem;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .relation-name {
+      grid-area: name;
+      font-size: 0.64rem;
+      color: var(--muted);
+      line-height: 1.2;
+      text-align: left;
+    }
+
+    .relation-value {
+      grid-area: value;
+      justify-self: center;
+      font-size: 0.96rem;
+      font-weight: 800;
+      line-height: 1.12;
+    }
+
     .caption-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -333,14 +409,12 @@
     }
 
     .caption-card {
-      padding: 0.45rem 0.5rem;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.82);
-      border: 1px solid var(--line);
+      padding: 0.35rem 0;
+      border-top: 1px solid var(--line);
     }
 
     .caption-label {
-      font-size: 0.6rem;
+      font-size: 0.66rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
@@ -349,7 +423,7 @@
 
     .caption-value {
       margin-top: 0.14rem;
-      font-size: 0.8rem;
+      font-size: 0.92rem;
       font-weight: 800;
       line-height: 1.18;
     }
@@ -357,19 +431,19 @@
     .explanation {
       display: grid;
       gap: 0.35rem;
-      padding: 0.55rem;
+      padding: 0.35rem 0 0;
     }
 
     .explanation h2 {
-      font-size: 0.9rem;
+      font-size: 1rem;
       line-height: 1.15;
     }
 
     .explanation p,
     .explanation li,
     .field-note {
-      font-size: 0.76rem;
-      line-height: 1.3;
+      font-size: 0.84rem;
+      line-height: 1.35;
     }
 
     ul {
@@ -388,7 +462,7 @@
       .caption-grid,
       .pair-row,
       .preset-grid,
-      .preset-button-grid {
+      .preset-matrix {
         grid-template-columns: 1fr;
       }
 
@@ -418,22 +492,6 @@
           <span class="pill">VSEPR</span>
           <span class="pill">Geometry generator</span>
           <span class="pill">Local and shareable</span>
-        </div>
-      </div>
-      <div class="hero-notes">
-        <div class="stat-grid">
-          <div class="stat-card">
-            <div class="stat-label">Electron regions</div>
-            <div class="stat-value" id="regionsStat">4</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Lone pairs</div>
-            <div class="stat-value" id="lonePairStat">1</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">AXE descriptor</div>
-            <div class="stat-value" id="axeStat">AX<sub>3</sub>E</div>
-          </div>
         </div>
       </div>
     </section>
@@ -480,6 +538,28 @@
 
       <div class="viewer">
         <div class="diagram-shell" id="diagramShell"></div>
+        <div class="relationship-block">
+          <div class="relationship-axe" id="axeStat">AX<sub>3</sub>E</div>
+          <div class="relationship-grid">
+            <div class="relation-card">
+              <div class="relation-symbol">S</div>
+              <div class="relation-name">steric number</div>
+              <div class="relation-value" id="regionsStat">4</div>
+            </div>
+            <div class="operator-cell">=</div>
+            <div class="relation-card">
+              <div class="relation-symbol">X</div>
+              <div class="relation-name">bonding domains</div>
+              <div class="relation-value" id="bondRegionsStat">3</div>
+            </div>
+            <div class="operator-cell">+</div>
+            <div class="relation-card">
+              <div class="relation-symbol">E</div>
+              <div class="relation-name">lone pairs</div>
+              <div class="relation-value" id="lonePairStat">1</div>
+            </div>
+          </div>
+        </div>
         <div class="caption-grid">
           <div class="caption-card">
             <div class="caption-label">Formula</div>
@@ -696,6 +776,7 @@
     const studyPoints = document.getElementById("studyPoints");
     const regionsStat = document.getElementById("regionsStat");
     const lonePairStat = document.getElementById("lonePairStat");
+    const bondRegionsStat = document.getElementById("bondRegionsStat");
     const axeStat = document.getElementById("axeStat");
 
     function populateLonePairOptions() {
@@ -753,7 +834,6 @@
       button.type = "button";
       button.innerHTML = `
         <span class="preset-name">${formatFormula(preset.label)}</span>
-        <span class="preset-note">${preset.regions - preset.lonePairs} bonding region${preset.regions - preset.lonePairs === 1 ? "" : "s"}, ${preset.lonePairs} lone pair${preset.lonePairs === 1 ? "" : "s"}</span>
       `;
       button.addEventListener("click", () => {
         regionsSelect.value = String(preset.regions);
@@ -766,51 +846,48 @@
     }
 
     function buildPresetSections() {
-      const grouped = new Map();
+      const stericNumbers = [2, 3, 4, 5, 6];
+      const lonePairColumns = [0, 1, 2, 3];
+      const matrix = document.createElement("div");
+      matrix.className = "preset-matrix";
 
-      presets.forEach((preset) => {
-        const bondingRegions = preset.regions - preset.lonePairs;
-        const key = `${bondingRegions}-${preset.lonePairs}`;
-        if (!grouped.has(key)) {
-          grouped.set(key, {
-            bondingRegions,
-            lonePairs: preset.lonePairs,
-            items: []
-          });
-        }
-        grouped.get(key).items.push(preset);
+      const corner = document.createElement("div");
+      corner.className = "preset-corner";
+      matrix.appendChild(corner);
+
+      lonePairColumns.forEach((lonePairs) => {
+        const axis = document.createElement("div");
+        axis.className = "preset-axis";
+        axis.textContent = `E = ${lonePairs}`;
+        matrix.appendChild(axis);
+      });
+
+      stericNumbers.forEach((regions) => {
+        const rowAxis = document.createElement("div");
+        rowAxis.className = "preset-axis";
+        rowAxis.textContent = `S = ${regions}`;
+        matrix.appendChild(rowAxis);
+
+        lonePairColumns.forEach((lonePairs) => {
+          const cell = document.createElement("div");
+          cell.className = "preset-cell";
+          const matches = presets.filter((preset) => preset.regions === regions && preset.lonePairs === lonePairs);
+
+          if (matches.length === 0) {
+            cell.classList.add("empty");
+            cell.textContent = "—";
+          } else {
+            matches.forEach((preset) => {
+              cell.appendChild(createPresetButton(preset));
+            });
+          }
+
+          matrix.appendChild(cell);
+        });
       });
 
       presetGrid.innerHTML = "";
-
-      [...grouped.values()]
-        .sort((a, b) => {
-          if (a.bondingRegions !== b.bondingRegions) {
-            return a.bondingRegions - b.bondingRegions;
-          }
-          return a.lonePairs - b.lonePairs;
-        })
-        .forEach((group) => {
-          const section = document.createElement("section");
-          section.className = "preset-section";
-
-          const header = document.createElement("div");
-          header.className = "preset-section-header";
-          header.innerHTML = `
-            <div class="preset-section-title">${group.bondingRegions} bonding region${group.bondingRegions === 1 ? "" : "s"}</div>
-            <div class="preset-section-subtitle">${group.lonePairs} lone pair${group.lonePairs === 1 ? "" : "s"}</div>
-          `;
-
-          const grid = document.createElement("div");
-          grid.className = "preset-button-grid";
-          group.items.forEach((preset) => {
-            grid.appendChild(createPresetButton(preset));
-          });
-
-          section.appendChild(header);
-          section.appendChild(grid);
-          presetGrid.appendChild(section);
-        });
+      presetGrid.appendChild(matrix);
     }
 
     function bondLine(x1, y1, x2, y2, type = "solid", bondOrder = 1) {
@@ -941,57 +1018,57 @@
         place(145, outer);
         pair(-90);
       } else if (mode === "tetrahedral") {
-        place(-90, outer, "solid", 118);
-        place(35, outer, "solid", 126);
-        place(145, outer, "wedge", 126);
-        place(90, outer, "hashed", 102);
+        place(-90, outer, "solid");
+        place(35, outer, "solid");
+        place(145, outer, "wedge");
+        place(90, outer, "hashed");
       } else if (mode === "trigonalPyramidal") {
-        place(-90, outer, "solid", 118);
-        place(35, outer, "hashed", 126);
-        place(145, outer, "wedge", 126);
+        place(-90, outer, "solid");
+        place(35, outer, "hashed");
+        place(145, outer, "wedge");
         pair(90);
       } else if (mode === "bentTetra") {
-        place(35, outer, "hashed", 126);
-        place(145, outer, "wedge", 126);
+        place(35, outer, "hashed");
+        place(145, outer, "wedge");
         pair(215);
         pair(325);
       } else if (mode === "trigonalBipyramidal") {
-        place(-90, outer, "solid", 126);
-        place(90, outer, "hashed", 104);
-        place(30, outer, "solid", 126);
-        place(150, outer, "solid", 126);
-        place(210, outer, "solid", 126);
+        place(-90, outer, "solid");
+        place(90, outer, "solid");
+        place(0, outer, "solid");
+        place(150, outer, "wedge");
+        place(210, outer, "hashed");
       } else if (mode === "seesaw") {
-        place(-90, outer, "solid", 126);
-        place(90, outer, "hashed", 104);
-        place(35, outer, "wedge", 126);
-        place(160, outer, "solid", 126);
+        place(-90, outer, "solid");
+        place(90, outer, "hashed");
+        place(35, outer, "wedge");
+        place(160, outer, "solid");
         pair(220);
       } else if (mode === "tShaped") {
-        place(-90, outer, "solid", 126);
-        place(90, outer, "hashed", 104);
-        place(180, outer, "solid", 126);
-        pair(20);
-        pair(340);
+        place(90, outer, "solid");
+        place(180, outer, "solid");
+        place(0, outer, "solid");
+        pair(240);
+        pair(300);
       } else if (mode === "octahedral") {
-        place(-90, outer, "solid", 126);
-        place(90, outer, "hashed", 104);
-        place(0, outer, "solid", 126);
-        place(180, outer, "solid", 126);
-        place(45, outer, "wedge", 98);
-        place(225, outer, "hashed", 98);
+        place(-90, outer, "solid");
+        place(90, outer, "hashed");
+        place(0, outer, "solid");
+        place(180, outer, "solid");
+        place(45, outer, "wedge");
+        place(225, outer, "hashed");
       } else if (mode === "squarePyramidal") {
-        place(-90, outer, "wedge", 126);
-        place(0, outer, "solid", 118);
-        place(90, outer, "solid", 118);
-        place(180, outer, "solid", 118);
-        place(270, outer, "solid", 118);
-        pair(225, 78);
+        place(-90, outer, "solid");
+        place(58, outer, "solid");
+        place(122, outer, "solid");
+        place(238, outer, "solid");
+        place(302, outer, "solid");
+        pair(90, 62);
       } else if (mode === "squarePlanar") {
-        place(0, outer, "solid", 118);
-        place(90, outer, "solid", 118);
-        place(180, outer, "solid", 118);
-        place(270, outer, "solid", 118);
+        place(0, outer, "solid");
+        place(90, outer, "solid");
+        place(180, outer, "solid");
+        place(270, outer, "solid");
         pair(-60);
         pair(120);
       }
@@ -999,6 +1076,7 @@
       return `
         <svg viewBox="0 0 700 460" role="img" aria-label="VSEPR geometry diagram">
           <rect x="0" y="0" width="700" height="460" rx="26" fill="transparent"/>
+          <circle cx="${centralX}" cy="${centralY}" r="${length}" fill="none" stroke="rgba(26,34,48,0.14)" stroke-width="2.5"/>
           ${pieces.join("")}
           ${lonePairPieces.join("")}
           ${atomLabel(centralX, centralY, central, "#1a2230", 34)}
@@ -1055,9 +1133,11 @@
       headline.textContent = `Electron geometry: ${entry.electronGeometry}. Molecular geometry: ${entry.molecularGeometry}.`;
       explanationText.innerHTML = formatChemText(entry.note);
       studyPoints.innerHTML = entry.points.map((point) => `<li>${formatChemText(point)}</li>`).join("");
+      const axeHtml = axeDescriptor(bondRegions, lonePairs);
       regionsStat.textContent = String(regions);
       lonePairStat.textContent = String(lonePairs);
-      axeStat.innerHTML = axeDescriptor(bondRegions, lonePairs);
+      bondRegionsStat.textContent = String(bondRegions);
+      axeStat.innerHTML = axeHtml;
     }
 
     regionsSelect.addEventListener("change", () => {
