@@ -753,7 +753,7 @@
       button.type = "button";
       button.innerHTML = `
         <span class="preset-name">${formatFormula(preset.label)}</span>
-        <span class="preset-note">${preset.regions - preset.lonePairs} bonding pair${preset.regions - preset.lonePairs === 1 ? "" : "s"}, ${preset.lonePairs} lone pair${preset.lonePairs === 1 ? "" : "s"}</span>
+        <span class="preset-note">${preset.regions - preset.lonePairs} bonding region${preset.regions - preset.lonePairs === 1 ? "" : "s"}, ${preset.lonePairs} lone pair${preset.lonePairs === 1 ? "" : "s"}</span>
       `;
       button.addEventListener("click", () => {
         regionsSelect.value = String(preset.regions);
@@ -769,11 +769,11 @@
       const grouped = new Map();
 
       presets.forEach((preset) => {
-        const bondingPairs = preset.regions - preset.lonePairs;
-        const key = `${bondingPairs}-${preset.lonePairs}`;
+        const bondingRegions = preset.regions - preset.lonePairs;
+        const key = `${bondingRegions}-${preset.lonePairs}`;
         if (!grouped.has(key)) {
           grouped.set(key, {
-            bondingPairs,
+            bondingRegions,
             lonePairs: preset.lonePairs,
             items: []
           });
@@ -785,8 +785,8 @@
 
       [...grouped.values()]
         .sort((a, b) => {
-          if (a.bondingPairs !== b.bondingPairs) {
-            return a.bondingPairs - b.bondingPairs;
+          if (a.bondingRegions !== b.bondingRegions) {
+            return a.bondingRegions - b.bondingRegions;
           }
           return a.lonePairs - b.lonePairs;
         })
@@ -797,7 +797,7 @@
           const header = document.createElement("div");
           header.className = "preset-section-header";
           header.innerHTML = `
-            <div class="preset-section-title">${group.bondingPairs} bonding pair${group.bondingPairs === 1 ? "" : "s"}</div>
+            <div class="preset-section-title">${group.bondingRegions} bonding region${group.bondingRegions === 1 ? "" : "s"}</div>
             <div class="preset-section-subtitle">${group.lonePairs} lone pair${group.lonePairs === 1 ? "" : "s"}</div>
           `;
 
