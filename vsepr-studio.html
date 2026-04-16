@@ -1,814 +1,809 @@
-<!-- Generated from games/. Do not edit pages/ files directly. -->
-<!--
-  Source file for the VSEPR Studio activity.
-
-  Edit this file in games/. The matching file in pages/ is generated for
-  GitHub Pages by scripts/build_pages.py.
--->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VSEPR Studio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f4efe5;
-      --panel: rgba(255, 251, 245, 0.9);
-      --ink: #1a2230;
-      --muted: #5f6978;
-      --accent: #0f766e;
-      --accent-2: #bf5b2b;
-      --accent-3: #3553b8;
-      --line: rgba(26, 34, 48, 0.12);
-      --shadow: 0 20px 54px rgba(45, 35, 24, 0.14);
-      --radius: 26px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      height: 100vh;
-      overflow: hidden;
-      font-family: "IBM Plex Mono", "Menlo", "Consolas", monospace;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 26%),
-        radial-gradient(circle at right, rgba(191, 91, 43, 0.12), transparent 32%),
-        linear-gradient(160deg, #faf4ea 0%, #ede2cf 100%);
-    }
-
-    .page {
-      width: min(1500px, calc(100% - 0.75rem));
-      margin: 0 auto;
-      height: 100vh;
-      padding: 0.3rem 0;
-      display: grid;
-      gap: 0.3rem;
-      grid-template-rows: auto minmax(0, 1fr);
-    }
-
-    .panel {
-      background: rgba(255, 251, 245, 0.58);
-      border: 1px solid rgba(255, 255, 255, 0.38);
-      border-radius: var(--radius);
-      box-shadow: 0 10px 28px rgba(45, 35, 24, 0.07);
-      backdrop-filter: blur(12px);
-    }
-
-    .hero,
-    .workspace {
-      display: grid;
-      gap: 0.7rem;
-    }
-
-    .hero {
-      grid-template-columns: minmax(0, 1fr);
-      padding: 0.5rem;
-    }
-
-    .hero-copy,
-    .hero-notes,
-    .controls,
-    .viewer,
-    .explanation {
-      padding: 0.65rem;
-      border-radius: 22px;
-    }
-
-    .workspace {
-      grid-template-columns: minmax(360px, 430px) minmax(0, 1fr);
-      padding: 0.45rem;
-      align-items: stretch;
-      min-height: 0;
-    }
-
-    .kicker {
-      margin: 0;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin: 0;
-    }
-
-    h1 {
-      margin-top: 0.2rem;
-      font-size: clamp(1.65rem, 3.4vw, 2.75rem);
-      line-height: 0.95;
-      max-width: 9ch;
-    }
-
-    .subtitle,
-    .hero-notes p,
-    .explanation p,
-    .explanation li,
-    .field-note {
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .subtitle {
-      margin-top: 0.4rem;
-      max-width: 68ch;
-      font-size: 0.92rem;
-      line-height: 1.35;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-top: 0.45rem;
-    }
-
-    .pill {
-      padding: 0.24rem 0.5rem;
-      border-radius: 999px;
-      background: rgba(240, 234, 223, 0.72);
-      border: 1px solid rgba(26, 34, 48, 0.08);
-      font-size: 0.74rem;
-      font-weight: 700;
-    }
-
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.5rem;
-    }
-
-    .stat-card {
-      padding: 0.35rem 0 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .stat-label {
-      font-size: 0.62rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .stat-value {
-      margin-top: 0.1rem;
-      font-size: clamp(0.82rem, 1.7vw, 1.05rem);
-      font-weight: 800;
-      line-height: 1.15;
-    }
-
-    .controls {
-      display: grid;
-      gap: 0.5rem;
-      min-height: 0;
-      min-width: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    .group {
-      display: grid;
-      gap: 0.45rem;
-      padding: 0.15rem 0 0;
-    }
-
-    .group + .group {
-      border-top: 1px solid var(--line);
-      padding-top: 0.55rem;
-    }
-
-    .group-title {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .field-grid {
-      display: grid;
-      gap: 0.45rem;
-    }
-
-    label {
-      display: grid;
-      gap: 0.24rem;
-      font-size: 0.84rem;
-      font-weight: 700;
-    }
-
-    select,
-    input,
-    button {
-      width: 100%;
-      font: inherit;
-    }
-
-    select,
-    input {
-      padding: 0.55rem 0.65rem;
-      border-radius: 12px;
-      border: 1px solid rgba(26, 34, 48, 0.14);
-      background: #fffdf9;
-      color: var(--ink);
-    }
-
-    .pair-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.4rem;
-    }
-
-    .preset-grid {
-      display: grid;
-      gap: 0.4rem;
-      min-width: 0;
-    }
-
-    .preset-matrix {
-      display: grid;
-      grid-template-columns: 88px repeat(4, minmax(0, 1fr));
-      gap: 0.3rem;
-      align-items: stretch;
-      min-width: 0;
-    }
-
-    .preset-corner,
-    .preset-axis {
-      padding: 0.42rem 0.36rem;
-      min-width: 0;
-    }
-
-    .preset-corner {
-      display: grid;
-      place-items: center;
-      font-size: 0.58rem;
-      line-height: 1.15;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .preset-axis {
-      display: grid;
-      place-items: center;
-      min-height: 62px;
-      font-size: 0.76rem;
-      font-weight: 800;
-      color: var(--ink);
-      line-height: 1.1;
-      text-align: center;
-    }
-
-    .preset-cell {
-      display: grid;
-      min-height: 62px;
-      padding: 0.1rem;
-      align-items: stretch;
-      min-width: 0;
-    }
-
-    .preset-cell.empty {
-      place-items: center;
-      color: rgba(95, 105, 120, 0.45);
-      font-size: 0.9rem;
-    }
-
-    button {
-      border-radius: 16px;
-      border: 1px solid transparent;
-      padding: 0.48rem 0.5rem;
-      background: rgba(255, 255, 255, 0.48);
-      color: var(--ink);
-      cursor: pointer;
-      text-align: left;
-      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
-      min-width: 0;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-      background: rgba(255, 255, 255, 0.82);
-      border-color: rgba(26, 34, 48, 0.14);
-    }
-
-    .preset-name {
-      display: block;
-      font-weight: 800;
-      font-size: 0.78rem;
-      line-height: 1.18;
-      overflow-wrap: anywhere;
-    }
-
-    .preset-button.is-active {
-      background: rgba(15, 118, 110, 0.12);
-      border-color: rgba(15, 118, 110, 0.42);
-      color: var(--accent);
-      box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.16);
-    }
-
-    .preset-button.is-active:hover {
-      background: rgba(15, 118, 110, 0.16);
-      border-color: rgba(15, 118, 110, 0.48);
-    }
-
-    .viewer {
-      display: grid;
-      gap: 0.45rem;
-      min-height: 0;
-      overflow: auto;
-      grid-template-rows: minmax(0, 1fr) auto auto;
-    }
-
-    .diagram-shell {
-      position: relative;
-      display: grid;
-      place-items: center;
-      min-height: 0;
-      height: auto;
-      border-radius: 20px;
-      border: 1px solid var(--line);
-      background:
-        radial-gradient(circle at top, rgba(53, 83, 184, 0.06), transparent 42%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(250, 247, 241, 0.8));
-      overflow: hidden;
-    }
-
-    .diagram-shell svg {
-      width: min(100%, 820px);
-      height: 100%;
-      max-height: 100%;
-      animation: diagram-in 180ms ease-out both;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-
-    .diagram-shell svg line,
-    .diagram-shell svg polygon {
-      animation: bond-in 180ms ease-out both;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-
-    .diagram-shell svg text,
-    .diagram-shell svg circle {
-      animation: atom-in 220ms ease-out both;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-
-    .diagram-shell svg circle:first-of-type {
-      animation: guide-in 180ms ease-out both;
-    }
-
-    @keyframes diagram-in {
-      from {
-        opacity: 0;
-        transform: scale(0.985);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @keyframes bond-in {
-      from {
-        opacity: 0;
-        transform: scale(0.94);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @keyframes atom-in {
-      from {
-        opacity: 0;
-        transform: translateY(4px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes guide-in {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    .relationship-block {
-      position: absolute;
-      left: 14px;
-      right: 14px;
-      bottom: 10px;
-      display: grid;
-      gap: 0.24rem;
-      padding: 0;
-    }
-
-    .relationship-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
-      gap: 0.3rem;
-      align-items: center;
-    }
-
-    .operator-cell {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .relation-card {
-      display: inline-grid;
-      grid-template-columns: max-content auto;
-      grid-template-areas:
-        "symbol name"
-        "value ."
-        "controls controls";
-      justify-content: center;
-      align-items: baseline;
-      column-gap: 0.28rem;
-      row-gap: 0.1rem;
-      padding: 0.15rem 0 0;
-      text-align: center;
-      min-height: 4.15rem;
-    }
-
-    .relation-symbol {
-      grid-area: symbol;
-      font-size: 1rem;
-      font-weight: 800;
-      text-align: center;
-      line-height: 1.1;
-    }
-
-    .relation-name {
-      grid-area: name;
-      font-size: 0.64rem;
-      color: var(--muted);
-      line-height: 1.2;
-      text-align: left;
-    }
-
-    .relation-value {
-      grid-area: value;
-      justify-self: center;
-      font-size: 0.96rem;
-      font-weight: 800;
-      line-height: 1.12;
-    }
-
-    .relation-controls {
-      grid-area: controls;
-      display: flex;
-      justify-content: center;
-      gap: 0.24rem;
-      margin-top: 0.18rem;
-      min-height: 1.35rem;
-    }
-
-    .step-button {
-      width: 1.65rem;
-      height: 1.35rem;
-      padding: 0;
-      border-radius: 999px;
-      text-align: center;
-      line-height: 1;
-      font-weight: 800;
-    }
-
-    .step-button:hover {
-      transform: none;
-    }
-
-    .step-button:disabled {
-      cursor: not-allowed;
-      opacity: 0.28;
-      transform: none;
-    }
-
-    .step-button:disabled:hover {
-      background: rgba(255, 255, 255, 0.48);
-      border-color: transparent;
-      transform: none;
-    }
-
-    .explanation {
-      display: grid;
-      gap: 0.35rem;
-      padding: 0.35rem 0 0;
-      min-height: 7rem;
-    }
-
-    .explanation h2 {
-      font-size: 1rem;
-      line-height: 1.15;
-    }
-
-    .explanation p,
-    .explanation li,
-    .field-note {
-      font-size: 0.84rem;
-      line-height: 1.35;
-    }
-
-    ul {
-      margin: 0;
-      padding-left: 1.1rem;
-    }
-
-    code {
-      font-family: Menlo, Consolas, monospace;
-      font-size: 0.95em;
-    }
-
-    @media (max-width: 940px) {
-      .hero,
-      .workspace,
-      .pair-row,
-      .preset-grid,
-      .preset-matrix {
-        grid-template-columns: 1fr;
-      }
-
-      .stat-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .diagram-shell {
-        min-height: 240px;
-        height: auto;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .diagram-shell svg,
-      .diagram-shell svg line,
-      .diagram-shell svg polygon,
-      .diagram-shell svg text,
-      .diagram-shell svg circle {
-        animation: none;
-      }
-    }
-  </style>
-</head>
-<body>
-  <main class="page">
-    <section class="panel hero">
-      <div class="hero-copy">
-        <p class="kicker">IB chemistry study tool</p>
-        <h1>VSEPR Studio</h1>
-        <p class="subtitle">
-          Generate a quick molecular geometry diagram from the steric number and lone-pair count,
-          or jump in with a preset molecule. The diagram, shape name, and bond-angle notes update
-          live, which makes it useful for explanation, retrieval, and screen-shared teaching.
-        </p>
-        <div class="pill-row">
-          <span class="pill">VSEPR</span>
-          <span class="pill">Geometry generator</span>
-          <span class="pill">Local and shareable</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel workspace">
-      <div class="controls">
-        <div class="group">
-          <div class="group-title">Presets by VSEPR pattern</div>
-          <div class="preset-grid" id="presetGrid"></div>
-          <p class="field-note" id="validityNote">
-            Use the presets or the X/E controls below the diagram to choose a supported VSEPR pattern.
-          </p>
-        </div>
-      </div>
-
-      <div class="viewer">
-        <div class="diagram-shell" id="diagramShell"></div>
-        <div class="explanation">
-          <h2 id="headline">Molecular geometry: trigonal pyramidal.</h2>
-          <p id="explanationText">
-            Four regions of electron density arrange tetrahedrally. One of those regions is a lone pair,
-            so the visible atoms form a trigonal pyramidal shape.
-          </p>
-          <ul id="studyPoints"></ul>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    /*
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VSEPR Studio</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --bg: #f4efe5;
+                --ink: #1a2230;
+                --muted: #5f6978;
+                --accent: #0f766e;
+                --accent-2: #bf5b2b;
+                --accent-3: #3553b8;
+                --line: rgba(26, 34, 48, 0.12);
+                --shadow: 0 20px 54px rgba(45, 35, 24, 0.14);
+                --radius: 26px;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                height: 100vh;
+                overflow: hidden;
+                font-family: "IBM Plex Mono", "Menlo", "Consolas", monospace;
+                color: var(--ink);
+                background:
+                    radial-gradient(
+                        circle at top left,
+                        rgba(15, 118, 110, 0.16),
+                        transparent 26%
+                    ),
+                    radial-gradient(
+                        circle at right,
+                        rgba(191, 91, 43, 0.12),
+                        transparent 32%
+                    ),
+                    linear-gradient(160deg, #faf4ea 0%, #ede2cf 100%);
+            }
+
+            .page {
+                width: 100%;
+                margin: 0 auto;
+                height: 100vh;
+                padding: 0.3rem 0.375rem;
+                display: grid;
+                gap: 0;
+                grid-template-rows: auto minmax(0, 1fr);
+            }
+
+            .hero,
+            .workspace {
+                display: grid;
+                gap: 0.7rem;
+            }
+
+            .hero {
+                grid-template-columns: minmax(0, 1fr);
+                padding: 0.5rem 0.5rem 0.2rem;
+            }
+
+            .hero-copy,
+            .hero-notes,
+            .controls,
+            .viewer,
+            .explanation {
+                padding: 0.65rem;
+                border-radius: 22px;
+            }
+
+            .workspace {
+                grid-template-columns: minmax(360px, 430px) minmax(0, 1fr);
+                padding: 0.45rem;
+                align-items: stretch;
+                min-height: 0;
+            }
+
+            h1,
+            h2,
+            h3,
+            p {
+                margin: 0;
+            }
+
+            h1 {
+                margin-top: 0.2rem;
+                font-size: clamp(1.65rem, 3.4vw, 2.75rem);
+                line-height: 0.95;
+            }
+
+            .subtitle,
+            .hero-notes p,
+            .explanation p,
+            .explanation li,
+            .field-note {
+                color: var(--muted);
+                line-height: 1.6;
+            }
+
+            .subtitle {
+                margin-top: 0.4rem;
+                font-size: 0.92rem;
+                line-height: 1.35;
+            }
+
+            .stat-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.5rem;
+            }
+
+            .stat-card {
+                padding: 0.35rem 0 0;
+                border-top: 1px solid var(--line);
+            }
+
+            .stat-label {
+                font-size: 0.62rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--muted);
+                font-weight: 700;
+            }
+
+            .stat-value {
+                margin-top: 0.1rem;
+                font-size: clamp(0.82rem, 1.7vw, 1.05rem);
+                font-weight: 800;
+                line-height: 1.15;
+            }
+
+            .controls {
+                display: grid;
+                gap: 0.5rem;
+                min-height: 0;
+                min-width: 0;
+                padding-top: 0.35rem;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            .group {
+                display: grid;
+                gap: 0.45rem;
+                padding: 0.15rem 0 0;
+            }
+
+            .group + .group {
+                border-top: 1px solid var(--line);
+                padding-top: 0.55rem;
+            }
+
+            .field-grid {
+                display: grid;
+                gap: 0.45rem;
+            }
+
+            label {
+                display: grid;
+                gap: 0.24rem;
+                font-size: 0.84rem;
+                font-weight: 700;
+            }
+
+            select,
+            input,
+            button {
+                width: 100%;
+                font: inherit;
+            }
+
+            select,
+            input {
+                padding: 0.55rem 0.65rem;
+                border-radius: 12px;
+                border: 1px solid rgba(26, 34, 48, 0.14);
+                background: #fffdf9;
+                color: var(--ink);
+            }
+
+            .pair-row {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0.4rem;
+            }
+
+            .preset-grid {
+                display: grid;
+                gap: 0.4rem;
+                min-width: 0;
+            }
+
+            .preset-matrix {
+                display: grid;
+                grid-template-columns: 88px repeat(4, minmax(0, 1fr));
+                gap: 0.3rem;
+                align-items: stretch;
+                min-width: 0;
+            }
+
+            .preset-corner,
+            .preset-axis {
+                padding: 0.42rem 0.36rem;
+                min-width: 0;
+            }
+
+            .preset-corner {
+                display: grid;
+                place-items: center;
+                font-size: 0.58rem;
+                line-height: 1.15;
+                color: var(--muted);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                font-weight: 800;
+                text-align: center;
+            }
+
+            .preset-axis {
+                display: grid;
+                place-items: center;
+                min-height: 62px;
+                font-size: 0.76rem;
+                font-weight: 800;
+                color: var(--ink);
+                line-height: 1.1;
+                text-align: center;
+            }
+
+            .preset-axis-label {
+                display: inline-block;
+                white-space: nowrap;
+            }
+
+            .preset-axis-label sub {
+                font-size: 0.72em;
+                line-height: 0;
+                vertical-align: sub;
+            }
+
+            .preset-cell {
+                display: grid;
+                min-height: 62px;
+                padding: 0.1rem;
+                align-items: stretch;
+                min-width: 0;
+            }
+
+            .preset-cell.empty {
+                place-items: center;
+                color: rgba(95, 105, 120, 0.45);
+                font-size: 0.9rem;
+            }
+
+            button {
+                border-radius: 16px;
+                border: 1px solid transparent;
+                padding: 0.48rem 0.5rem;
+                background: rgba(255, 255, 255, 0.48);
+                color: var(--ink);
+                cursor: pointer;
+                text-align: left;
+                transition:
+                    transform 120ms ease,
+                    background 120ms ease,
+                    border-color 120ms ease;
+                min-width: 0;
+            }
+
+            button:hover {
+                transform: translateY(-1px);
+                background: rgba(255, 255, 255, 0.82);
+                border-color: rgba(26, 34, 48, 0.14);
+            }
+
+            .preset-name {
+                display: block;
+                font-weight: 800;
+                font-size: 0.78rem;
+                line-height: 1.18;
+                text-align: center;
+                overflow-wrap: anywhere;
+            }
+
+            .preset-button.is-active {
+                background: rgba(15, 118, 110, 0.12);
+                border-color: rgba(15, 118, 110, 0.42);
+                color: var(--accent);
+                box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.16);
+            }
+
+            .preset-button.is-active:hover {
+                background: rgba(15, 118, 110, 0.16);
+                border-color: rgba(15, 118, 110, 0.48);
+            }
+
+            .viewer {
+                display: grid;
+                gap: 0.45rem;
+                min-height: 0;
+                overflow: auto;
+                grid-template-rows: minmax(0, 1fr) auto auto;
+            }
+
+            .diagram-shell {
+                position: relative;
+                display: grid;
+                place-items: center;
+                min-height: 0;
+                height: auto;
+                border-radius: 20px;
+                background:
+                    radial-gradient(
+                        circle at top,
+                        rgba(53, 83, 184, 0.06),
+                        transparent 42%
+                    ),
+                    linear-gradient(
+                        180deg,
+                        rgba(255, 255, 255, 0.95),
+                        rgba(250, 247, 241, 0.8)
+                    );
+                overflow: hidden;
+            }
+
+            .diagram-shell svg {
+                width: min(100%, 820px);
+                height: 100%;
+                max-height: 100%;
+                animation: diagram-in 180ms ease-out both;
+                transform-origin: center;
+                transform-box: fill-box;
+            }
+
+            .diagram-shell svg line,
+            .diagram-shell svg polygon {
+                animation: bond-in 180ms ease-out both;
+                transform-origin: center;
+                transform-box: fill-box;
+            }
+
+            .diagram-shell svg text,
+            .diagram-shell svg circle {
+                animation: atom-in 220ms ease-out both;
+                transform-origin: center;
+                transform-box: fill-box;
+            }
+
+            .diagram-shell svg circle:first-of-type {
+                animation: guide-in 180ms ease-out both;
+            }
+
+            @keyframes diagram-in {
+                from {
+                    opacity: 0;
+                    transform: scale(0.985);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes bond-in {
+                from {
+                    opacity: 0;
+                    transform: scale(0.94);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes atom-in {
+                from {
+                    opacity: 0;
+                    transform: translateY(4px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes guide-in {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+
+            .relationship-block {
+                position: absolute;
+                left: 14px;
+                right: 14px;
+                bottom: 10px;
+                display: grid;
+                gap: 0.24rem;
+                padding: 0;
+            }
+
+            .relationship-grid {
+                display: grid;
+                grid-template-columns:
+                    minmax(0, 1fr) auto minmax(0, 1fr)
+                    auto minmax(0, 1fr);
+                gap: 0.3rem;
+                align-items: center;
+            }
+
+            .operator-cell {
+                font-size: 1.1rem;
+                font-weight: 800;
+                color: var(--muted);
+                text-align: center;
+            }
+
+            .relation-card {
+                display: inline-grid;
+                grid-template-columns: max-content auto;
+                grid-template-areas:
+                    "symbol name"
+                    "value ."
+                    "controls controls";
+                justify-content: center;
+                align-items: baseline;
+                column-gap: 0.28rem;
+                row-gap: 0.1rem;
+                padding: 0.15rem 0 0;
+                text-align: center;
+                min-height: 4.15rem;
+            }
+
+            .relation-symbol {
+                grid-area: symbol;
+                font-size: 1rem;
+                font-weight: 800;
+                text-align: center;
+                line-height: 1.1;
+            }
+
+            .relation-name {
+                grid-area: name;
+                font-size: 0.64rem;
+                color: var(--muted);
+                line-height: 1.2;
+                text-align: left;
+            }
+
+            .relation-value {
+                grid-area: value;
+                justify-self: center;
+                font-size: 0.96rem;
+                font-weight: 800;
+                line-height: 1.12;
+            }
+
+            .relation-controls {
+                grid-area: controls;
+                display: flex;
+                justify-content: center;
+                gap: 0.24rem;
+                margin-top: 0.18rem;
+                min-height: 1.35rem;
+            }
+
+            .step-button {
+                width: 1.65rem;
+                height: 1.35rem;
+                padding: 0;
+                border-radius: 999px;
+                text-align: center;
+                line-height: 1;
+                font-weight: 800;
+            }
+
+            .step-button:hover {
+                transform: none;
+            }
+
+            .step-button:disabled {
+                cursor: not-allowed;
+                opacity: 0.28;
+                transform: none;
+            }
+
+            .step-button:disabled:hover {
+                background: rgba(255, 255, 255, 0.48);
+                border-color: transparent;
+                transform: none;
+            }
+
+            .explanation {
+                display: grid;
+                gap: 0.35rem;
+                padding: 0.35rem 0 0;
+                min-height: 7rem;
+            }
+
+            .explanation h2 {
+                font-size: 1rem;
+                line-height: 1.15;
+            }
+
+            .explanation p,
+            .explanation li,
+            .field-note {
+                font-size: 0.84rem;
+                line-height: 1.35;
+            }
+
+            ul {
+                margin: 0;
+                padding-left: 1.1rem;
+            }
+
+            code {
+                font-family: Menlo, Consolas, monospace;
+                font-size: 0.95em;
+            }
+
+            @media (max-width: 940px) {
+                .hero,
+                .workspace,
+                .pair-row,
+                .preset-grid,
+                .preset-matrix {
+                    grid-template-columns: 1fr;
+                }
+
+                .stat-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .diagram-shell {
+                    min-height: 240px;
+                    height: auto;
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .diagram-shell svg,
+                .diagram-shell svg line,
+                .diagram-shell svg polygon,
+                .diagram-shell svg text,
+                .diagram-shell svg circle {
+                    animation: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="page">
+            <section class="hero">
+                <div class="hero-copy">
+                    <h1>VSEPR Studio</h1>
+                    <p class="subtitle">
+                        Explore VSEPR shapes by choosing a preset molecule or
+                        adjusting the AXE pattern directly. The molecular
+                        geometry, bond-angle note, and polarity comment update
+                        live as the bonding and non-bonding domains change.
+                    </p>
+                </div>
+            </section>
+
+            <section class="workspace">
+                <div class="controls">
+                    <div class="group">
+                        <div class="preset-grid" id="presetGrid"></div>
+                    </div>
+                </div>
+
+                <div class="viewer">
+                    <div class="diagram-shell" id="diagramShell"></div>
+                    <div class="explanation">
+                        <h2 id="headline">
+                            Molecular geometry: trigonal pyramidal.
+                        </h2>
+                        <p class="field-note" id="validityNote">
+                            Use the presets or the X/E controls below the
+                            diagram to choose a supported VSEPR pattern.
+                        </p>
+                        <p id="explanationText">
+                            Four bonding electron domains spread themselves out
+                            evenly, forming a tetrahedron. The expected bond
+                            angle is 109.5°. If the surrounding atoms are
+                            identical, the molecule will be non-polar.
+                        </p>
+                        <ul id="studyPoints"></ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script>
+            /*
       VSEPR data model
       ----------------
       geometryMap is keyed as "S-E", where:
       - S is the steric number: total electron domains around the central atom.
-      - E is the number of lone-pair domains on the central atom.
+      - E represents the non-bonding electron domains on the central atom.
       - X is the coordination number; in these diagrams it is computed as S - E
         because each bonded atom occupies one bonding domain.
 
       Each entry describes the conceptual VSEPR pattern. The separate presets
       list chooses concrete molecule examples for those patterns.
     */
-    const geometryMap = {
-      "2-0": {
-        molecularGeometry: "linear",
-        angle: "180°",
-        polarityHint: "The molecule is often non-polar if the outer atoms are identical.",
-        note: "Two regions of electron density repel to opposite sides of the central atom.",
-        points: [
-          "A double bond still counts as one region of electron density.",
-          "There are no lone pairs, so the molecular geometry follows the arrangement of the bonded atoms."
-        ],
-        draw: "linear"
-      },
-      "3-0": {
-        molecularGeometry: "trigonal planar",
-        angle: "120°",
-        polarityHint: "The molecule is often non-polar if the outer atoms are identical and arranged symmetrically.",
-        note: "Three electron regions spread into a plane as far apart as possible.",
-        points: [
-          "Each bonded atom sits at a corner of a trigonal planar arrangement.",
-          "This is the common pattern for molecules such as BF3."
-        ],
-        draw: "trigonalPlanar"
-      },
-      "3-1": {
-        molecularGeometry: "bent",
-        angle: "slightly less than 120°",
-        polarityHint: "The molecule is often polar because the bent shape prevents bond dipoles from cancelling.",
-        note: "Three electron regions still arrange trigonal-planarly, but one region is a lone pair.",
-        points: [
-          "Ignore the lone pair when naming the molecular geometry.",
-          "SO2 is the standard comparison case here."
-        ],
-        draw: "bentTrigonal"
-      },
-      "4-0": {
-        molecularGeometry: "tetrahedral",
-        angle: "109.5°",
-        polarityHint: "The molecule is often non-polar if the outer atoms are identical.",
-        note: "Four electron regions adopt a tetrahedral arrangement.",
-        points: [
-          "This is the reference case before lone pairs compress bond angles.",
-          "CH4 is the standard tetrahedral example."
-        ],
-        draw: "tetrahedral"
-      },
-      "4-1": {
-        molecularGeometry: "trigonal pyramidal",
-        angle: "about 107°",
-        polarityHint: "The molecule is often polar because the lone pair breaks symmetry.",
-        note: "Four electron regions are tetrahedral overall, but one is a lone pair, leaving three atoms in a pyramid.",
-        points: [
-          "The lone pair repels more strongly than bonding pairs.",
-          "NH3 is the classic trigonal pyramidal example."
-        ],
-        draw: "trigonalPyramidal"
-      },
-      "4-2": {
-        molecularGeometry: "bent",
-        angle: "about 104.5°",
-        polarityHint: "The molecule is often polar because the bent shape is asymmetrical.",
-        note: "Four electron regions remain tetrahedral, but two lone pairs leave only two visible bonds.",
-        points: [
-          "More lone pairs means stronger compression of the bond angle.",
-          "H2O is the standard tetrahedral-to-bent comparison."
-        ],
-        draw: "bentTetra"
-      },
-      "5-0": {
-        molecularGeometry: "trigonal bipyramidal",
-        angle: "90°, 120°, and 180°",
-        polarityHint: "The molecule may be non-polar if the outer atoms are identical and the arrangement is symmetrical.",
-        note: "Five regions arrange with three equatorial positions and two axial positions.",
-        points: [
-          "Equatorial positions are separated by 120°.",
-          "Axial bonds are 90° to the equatorial plane."
-        ],
-        draw: "trigonalBipyramidal"
-      },
-      "5-1": {
-        molecularGeometry: "seesaw",
-        angle: "slightly less than 90° and 120°",
-        polarityHint: "The molecule is usually polar because the shape is not symmetrical.",
-        note: "A lone pair occupies an equatorial position to minimise 90° repulsions.",
-        points: [
-          "The equatorial lone pair leaves a seesaw arrangement of atoms.",
-          "SF4 is the standard example."
-        ],
-        draw: "seesaw"
-      },
-      "5-2": {
-        molecularGeometry: "T-shaped",
-        angle: "close to 90° and 180°",
-        polarityHint: "The molecule is usually polar because the T-shape is not symmetrical.",
-        note: "Two equatorial lone pairs leave three bonded atoms in a T-shape.",
-        points: [
-          "Both lone pairs prefer equatorial positions.",
-          "ClF3 is the common textbook example."
-        ],
-        draw: "tShaped"
-      },
-      "5-3": {
-        molecularGeometry: "linear",
-        angle: "180°",
-        polarityHint: "The molecule can be non-polar if the two outer atoms are identical.",
-        note: "Three equatorial lone pairs leave two axial bonds opposite each other.",
-        points: [
-          "The three lone pairs occupy equatorial positions.",
-          "XeF2 is the usual example."
-        ],
-        draw: "linear"
-      },
-      "6-0": {
-        molecularGeometry: "octahedral",
-        angle: "90° and 180°",
-        polarityHint: "The molecule is often non-polar if the outer atoms are identical.",
-        note: "Six regions arrange octahedrally around the central atom.",
-        points: [
-          "Four bonds sit roughly in a square plane with two axial bonds.",
-          "SF6 is the usual example."
-        ],
-        draw: "octahedral"
-      },
-      "6-1": {
-        molecularGeometry: "square pyramidal",
-        angle: "close to 90°",
-        polarityHint: "The molecule is usually polar because one site is occupied by a lone pair.",
-        note: "One lone pair removes one vertex from an octahedral arrangement.",
-        points: [
-          "The remaining atoms form a square base with one atom above it.",
-          "BrF5 is the standard example."
-        ],
-        draw: "squarePyramidal"
-      },
-      "6-2": {
-        molecularGeometry: "square planar",
-        angle: "90° and 180°",
-        polarityHint: "The molecule can be non-polar if identical atoms occupy the corners symmetrically.",
-        note: "Two opposite lone pairs leave four atoms arranged in a square plane.",
-        points: [
-          "The two lone pairs occupy opposite positions.",
-          "XeF4 is the familiar example."
-        ],
-        draw: "squarePlanar"
-      },
-      "7-0": {
-        molecularGeometry: "pentagonal bipyramidal",
-        angle: "72°, 90°, and 180°",
-        polarityHint: "The molecule is often non-polar if all seven outer atoms are identical.",
-        note: "Seven electron regions can arrange as a pentagonal bipyramid: five around an equatorial pentagon and two axial.",
-        points: [
-          "This is beyond the usual IB core examples, but it is a standard higher-coordinate VSEPR case.",
-          "IF7 is the common example."
-        ],
-        draw: "pentagonalBipyramidal"
-      },
-      "7-1": {
-        // Higher-coordinate examples are deliberately marked as advanced.
-        // XeF6 is neutral and its real structure is distorted. Treat it as an
-        // advanced comparison case, with CH4 and NH3 serving as cleaner models.
-        molecularGeometry: "pentagonal pyramidal",
-        angle: "approximately 72° and 90°",
-        polarityHint: "The molecule is usually polar because the lone pair breaks the symmetry.",
-        note: "One lone pair in a seven-region arrangement leaves six bonded atoms in a pentagonal pyramid.",
-        points: [
-          "XeF6 is often discussed as an AX6E case, though its real structure is distorted.",
-          "Treat this as an advanced, approximate VSEPR example."
-        ],
-        draw: "pentagonalPyramidal"
-      }
-    };
+            const geometryMap = {
+                "2-0": {
+                    molecularGeometry: "linear",
+                    angle: "180°",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule will be non-polar.",
+                    note: "The two bonding electron domains repel to opposite sides of the central atom.",
+                    points: [
+                        "There are no non-bonding electron domains, so the molecular geometry follows the arrangement of the bonded atoms.",
+                    ],
+                    draw: "linear",
+                },
+                "3-0": {
+                    molecularGeometry: "trigonal planar",
+                    angle: "120°",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule will be non-polar.",
+                    note: "Three bonding electron domains spread themselves out evenly, forming a triangle.",
+                    points: [
+                        "Each surrounding atom sits at a corner of a triangle.",
+                        "This is the common pattern for molecules such as BF3.",
+                    ],
+                    draw: "trigonalPlanar",
+                },
+                "3-1": {
+                    molecularGeometry: "bent",
+                    angle: "slightly less than 120°",
+                    polarityHint:
+                        "Due to the bent shape, bond dipoles cause the molecule to be polar.",
+                    note: "Two bonding electron domains and one non-bonding electron domain arrange in a trigonal planar pattern.",
+                    points: ["SO2 is the standard example."],
+                    draw: "bentTrigonal",
+                },
+                "4-0": {
+                    molecularGeometry: "tetrahedral",
+                    angle: "109.5°",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule will be non-polar.",
+                    note: "Four bonding electron domains spread themselves out evenly, forming a tetrahedron.",
+                    points: [
+                        "Each surrounding atom sits at a corner of a tetrahedron.",
+                        "CH4 is the standard tetrahedral example.",
+                    ],
+                    draw: "tetrahedral",
+                },
+                "4-1": {
+                    molecularGeometry: "trigonal pyramidal",
+                    angle: "about 107°",
+                    polarityHint:
+                        "Due to the trigonal pyramidal shape, bond dipoles cause the molecule to be polar.",
+                    note: "Three bonding electron domains and one non-bonding electron domain arrange tetrahedrally.",
+                    points: [
+                        "The surrounding atoms form a pyramid with the central atom at the top.",
+                        "NH3 is the classic trigonal pyramidal example.",
+                    ],
+                    draw: "trigonalPyramidal",
+                },
+                "4-2": {
+                    molecularGeometry: "bent",
+                    angle: "about 104.5°",
+                    polarityHint:
+                        "Due to the bent shape, bond dipoles cause the molecule to be polar.",
+                    note: "Two bonding electron domains and two non-bonding electron domains arrange tetrahedrally.",
+                    points: [
+                        "The two surrounding atoms form a bent shape.",
+                        "H2O is the standard tetrahedral-to-bent comparison.",
+                    ],
+                    draw: "bentTetra",
+                },
+                "5-0": {
+                    molecularGeometry: "trigonal bipyramidal",
+                    angle: "90°, 120°, and 180°",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule will be non-polar.",
+                    note: "Five bonding electron domains arrange with three equatorial positions and two axial positions.",
+                    points: [
+                        "Equatorial positions are separated by 120°.",
+                        "Axial bonds are 90° to the equatorial plane.",
+                    ],
+                    draw: "trigonalBipyramidal",
+                },
+                "5-1": {
+                    molecularGeometry: "seesaw",
+                    angle: "slightly less than 90° and 120°",
+                    polarityHint:
+                        "Due to the seesaw shape, bond dipoles cause the molecule to be polar.",
+                    note: "Four bonding electron domains and one non-bonding electron domain arrange in a trigonal bipyramid.",
+                    points: [
+                        "The non-bonding electron domain occupies an equatorial position to minimise 90° repulsions.",
+                        "SF4 is the standard example.",
+                    ],
+                    draw: "seesaw",
+                },
+                "5-2": {
+                    molecularGeometry: "T-shaped",
+                    angle: "close to 90° and 180°",
+                    polarityHint:
+                        "Due to the T-shape, bond dipoles cause the molecule to be polar.",
+                    note: "Three bonding electron domains and two non-bonding electron domains arrange in a trigonal bipyramid.",
+                    points: [
+                        "Both non-bonding electron domains occupy equatorial positions.",
+                        "ClF3 is the common textbook example.",
+                    ],
+                    draw: "tShaped",
+                },
+                "5-3": {
+                    molecularGeometry: "linear",
+                    angle: "180°",
+                    polarityHint:
+                        "If the two surrounding atoms are identical, the molecule will be non-polar.",
+                    note: "Two bonding electron domains and three non-bonding electron domains arrange in a trigonal bipyramid.",
+                    points: [
+                        "The three non-bonding electron domains occupy equatorial positions.",
+                        "XeF2 is the usual example.",
+                    ],
+                    draw: "linear",
+                },
+                "6-0": {
+                    molecularGeometry: "octahedral",
+                    angle: "90° and 180°",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule will be non-polar.",
+                    note: "Six bonding electron domains arrange octahedrally around the central atom.",
+                    points: [
+                        "Four surrounding atoms sit in a square plane, with one above and one below.",
+                        "SF6 is the usual example.",
+                    ],
+                    draw: "octahedral",
+                },
+                "6-1": {
+                    molecularGeometry: "square pyramidal",
+                    angle: "close to 90°",
+                    polarityHint:
+                        "Due to the square pyramidal shape, bond dipoles cause the molecule to be polar.",
+                    note: "Five bonding electron domains and one non-bonding electron domain arrange octahedrally.",
+                    points: [
+                        "The surrounding atoms form a square base with one atom above it.",
+                        "BrF5 is the standard example.",
+                    ],
+                    draw: "squarePyramidal",
+                },
+                "6-2": {
+                    molecularGeometry: "square planar",
+                    angle: "90° and 180°",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule will be non-polar.",
+                    note: "Four bonding electron domains and two non-bonding electron domains arrange octahedrally.",
+                    points: [
+                        "The two non-bonding electron domains occupy opposite positions.",
+                        "XeF4 is the familiar example.",
+                    ],
+                    draw: "squarePlanar",
+                },
+                "7-0": {
+                    molecularGeometry: "pentagonal bipyramidal",
+                    angle: "72°, 90°, and 180°",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule will be non-polar.",
+                    note: "Seven bonding electron domains arrange as a pentagonal bipyramid.",
+                    points: [
+                        "Five surrounding atoms sit around an equatorial pentagon, with one above and one below.",
+                        "IF7 is the common example.",
+                    ],
+                    draw: "pentagonalBipyramidal",
+                },
+                "7-1": {
+                    // Higher-coordinate examples are deliberately marked as advanced.
+                    // XeF6 is neutral and its real structure is distorted. Treat it as an
+                    // advanced comparison case, with CH4 and NH3 serving as cleaner models.
+                    molecularGeometry: "pentagonal pyramidal",
+                    angle: "approximately 72° and 90°",
+                    polarityHint:
+                        "Due to the pentagonal pyramidal shape, bond dipoles cause the molecule to be polar.",
+                    note: "Six bonding electron domains and one non-bonding electron domain arrange as a distorted pentagonal bipyramid.",
+                    points: [
+                        "XeF6 is often discussed as an AX6E case, though its real structure is distorted.",
+                        "Treat this as an advanced, approximate VSEPR example.",
+                    ],
+                    draw: "pentagonalPyramidal",
+                },
+            };
 
-    /*
+            /*
       Curated examples
       ----------------
       Keep this list conservative. The tool is intended for lesson use, so avoid
@@ -821,389 +816,600 @@
       regions/lonePairs: select the geometryMap entry.
       multipleBond: controls whether selected bonds are drawn as double/triple.
     */
-    const presets = [
-      { label: "CO2", central: "C", outer: "O", regions: 2, lonePairs: 0, multipleBond: "two double bonds" },
-      { label: "BF3", central: "B", outer: "F", regions: 3, lonePairs: 0, multipleBond: "none" },
-      { label: "SO2", central: "S", outer: "O", regions: 3, lonePairs: 1, multipleBond: "one double bond" },
-      { label: "CH4", central: "C", outer: "H", regions: 4, lonePairs: 0, multipleBond: "none" },
-      { label: "NH3", central: "N", outer: "H", regions: 4, lonePairs: 1, multipleBond: "none" },
-      { label: "H2O", central: "O", outer: "H", regions: 4, lonePairs: 2, multipleBond: "none" },
-      { label: "PCl5", central: "P", outer: "Cl", regions: 5, lonePairs: 0, multipleBond: "none" },
-      { label: "SF4", central: "S", outer: "F", regions: 5, lonePairs: 1, multipleBond: "none" },
-      { label: "ClF3", central: "Cl", outer: "F", regions: 5, lonePairs: 2, multipleBond: "none" },
-      { label: "XeF2", central: "Xe", outer: "F", regions: 5, lonePairs: 3, multipleBond: "none" },
-      { label: "SF6", central: "S", outer: "F", regions: 6, lonePairs: 0, multipleBond: "none" },
-      { label: "BrF5", central: "Br", outer: "F", regions: 6, lonePairs: 1, multipleBond: "none" },
-      { label: "XeF4", central: "Xe", outer: "F", regions: 6, lonePairs: 2, multipleBond: "none" },
-      { label: "IF7", central: "I", outer: "F", regions: 7, lonePairs: 0, multipleBond: "none" },
-      { label: "XeF6", central: "Xe", outer: "F", regions: 7, lonePairs: 1, multipleBond: "none" }
-    ];
+            const presets = [
+                {
+                    label: "CO2",
+                    central: "C",
+                    outer: "O",
+                    regions: 2,
+                    lonePairs: 0,
+                    multipleBond: "two double bonds",
+                },
+                {
+                    label: "BF3",
+                    central: "B",
+                    outer: "F",
+                    regions: 3,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
+                    label: "SO2",
+                    central: "S",
+                    outer: "O",
+                    regions: 3,
+                    lonePairs: 1,
+                    multipleBond: "one double bond",
+                },
+                {
+                    label: "CH4",
+                    central: "C",
+                    outer: "H",
+                    regions: 4,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
+                    label: "NH3",
+                    central: "N",
+                    outer: "H",
+                    regions: 4,
+                    lonePairs: 1,
+                    multipleBond: "none",
+                },
+                {
+                    label: "H2O",
+                    central: "O",
+                    outer: "H",
+                    regions: 4,
+                    lonePairs: 2,
+                    multipleBond: "none",
+                },
+                {
+                    label: "PCl5",
+                    central: "P",
+                    outer: "Cl",
+                    regions: 5,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
+                    label: "SF4",
+                    central: "S",
+                    outer: "F",
+                    regions: 5,
+                    lonePairs: 1,
+                    multipleBond: "none",
+                },
+                {
+                    label: "ClF3",
+                    central: "Cl",
+                    outer: "F",
+                    regions: 5,
+                    lonePairs: 2,
+                    multipleBond: "none",
+                },
+                {
+                    label: "XeF2",
+                    central: "Xe",
+                    outer: "F",
+                    regions: 5,
+                    lonePairs: 3,
+                    multipleBond: "none",
+                },
+                {
+                    label: "SF6",
+                    central: "S",
+                    outer: "F",
+                    regions: 6,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
+                    label: "BrF5",
+                    central: "Br",
+                    outer: "F",
+                    regions: 6,
+                    lonePairs: 1,
+                    multipleBond: "none",
+                },
+                {
+                    label: "XeF4",
+                    central: "Xe",
+                    outer: "F",
+                    regions: 6,
+                    lonePairs: 2,
+                    multipleBond: "none",
+                },
+                {
+                    label: "IF7",
+                    central: "I",
+                    outer: "F",
+                    regions: 7,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
+                    label: "XeF6",
+                    central: "Xe",
+                    outer: "F",
+                    regions: 7,
+                    lonePairs: 1,
+                    multipleBond: "none",
+                },
+            ];
 
-    const validityNote = document.getElementById("validityNote");
-    const presetGrid = document.getElementById("presetGrid");
-    const diagramShell = document.getElementById("diagramShell");
-    const headline = document.getElementById("headline");
-    const explanationText = document.getElementById("explanationText");
-    const studyPoints = document.getElementById("studyPoints");
-    let currentRegions = 4;
-    let currentLonePairs = 1;
-    let currentExample = presets.find((preset) => preset.label === "NH3");
-    let preservedExample = null;
+            const validityNote = document.getElementById("validityNote");
+            const presetGrid = document.getElementById("presetGrid");
+            const diagramShell = document.getElementById("diagramShell");
+            const headline = document.getElementById("headline");
+            const explanationText = document.getElementById("explanationText");
+            const studyPoints = document.getElementById("studyPoints");
+            let currentRegions = 4;
+            let currentLonePairs = 0;
+            let currentExample = presets.find(
+                (preset) => preset.label === "CH4",
+            );
+            let preservedExample = null;
 
-    function isSupportedPattern(regions, lonePairs) {
-      return Object.prototype.hasOwnProperty.call(geometryMap, `${regions}-${lonePairs}`);
-    }
+            function isSupportedPattern(regions, lonePairs) {
+                return Object.prototype.hasOwnProperty.call(
+                    geometryMap,
+                    `${regions}-${lonePairs}`,
+                );
+            }
 
-    function patternKeyFromPreset(preset) {
-      return `${preset.regions}-${preset.lonePairs}`;
-    }
+            function patternKeyFromPreset(preset) {
+                return `${preset.regions}-${preset.lonePairs}`;
+            }
 
-    function matchingExamples() {
-      const key = `${currentRegions}-${currentLonePairs}`;
-      return presets.filter((preset) => patternKeyFromPreset(preset) === key);
-    }
+            function matchingExamples() {
+                const key = `${currentRegions}-${currentLonePairs}`;
+                return presets.filter(
+                    (preset) => patternKeyFromPreset(preset) === key,
+                );
+            }
 
-    function displayedFormula(central, outer, bondRegions) {
-      return `${central}${outer}${bondRegions === 1 ? "" : bondRegions}`;
-    }
+            function displayedFormula(central, outer, bondRegions) {
+                return `${central}${outer}${bondRegions === 1 ? "" : bondRegions}`;
+            }
 
-    function preserveCurrentAtoms(regions, lonePairs, currentExample) {
-      const bondRegions = regions - lonePairs;
-      const currentBondRegions = currentExample.regions - currentExample.lonePairs;
-      return {
-        label: displayedFormula(currentExample.central, currentExample.outer, bondRegions),
-        central: currentExample.central,
-        outer: currentExample.outer,
-        regions,
-        lonePairs,
-        multipleBond: bondRegions === currentBondRegions ? currentExample.multipleBond : "none",
-        generated: true
-      };
-    }
+            function preserveCurrentAtoms(regions, lonePairs, currentExample) {
+                const bondRegions = regions - lonePairs;
+                const currentBondRegions =
+                    currentExample.regions - currentExample.lonePairs;
+                return {
+                    label: displayedFormula(
+                        currentExample.central,
+                        currentExample.outer,
+                        bondRegions,
+                    ),
+                    central: currentExample.central,
+                    outer: currentExample.outer,
+                    regions,
+                    lonePairs,
+                    multipleBond:
+                        bondRegions === currentBondRegions
+                            ? currentExample.multipleBond
+                            : "none",
+                    generated: true,
+                };
+            }
 
-    function selectedExample() {
-      if (preservedExample && patternKeyFromPreset(preservedExample) === `${currentRegions}-${currentLonePairs}`) {
-        return preservedExample;
-      }
-      if (currentExample && patternKeyFromPreset(currentExample) === `${currentRegions}-${currentLonePairs}`) {
-        return currentExample;
-      }
-      return matchingExamples()[0] || null;
-    }
+            function selectedExample() {
+                if (
+                    preservedExample &&
+                    patternKeyFromPreset(preservedExample) ===
+                        `${currentRegions}-${currentLonePairs}`
+                ) {
+                    return preservedExample;
+                }
+                if (
+                    currentExample &&
+                    patternKeyFromPreset(currentExample) ===
+                        `${currentRegions}-${currentLonePairs}`
+                ) {
+                    return currentExample;
+                }
+                return matchingExamples()[0] || null;
+            }
 
-    function setPattern(regions, lonePairs) {
-      preservedExample = null;
-      currentRegions = regions;
-      currentLonePairs = lonePairs;
-      currentExample = matchingExamples()[0] || null;
-      render();
-    }
+            function setPattern(regions, lonePairs) {
+                preservedExample = null;
+                currentRegions = regions;
+                currentLonePairs = lonePairs;
+                currentExample = matchingExamples()[0] || null;
+                render();
+            }
 
-    function setPatternKeepingAtoms(regions, lonePairs) {
-      const existingExample = selectedExample();
-      if (existingExample) {
-        preservedExample = preserveCurrentAtoms(regions, lonePairs, existingExample);
-      }
-      currentRegions = regions;
-      currentLonePairs = lonePairs;
-      currentExample = null;
-      render();
-    }
+            function setPatternKeepingAtoms(regions, lonePairs) {
+                const existingExample = selectedExample();
+                if (existingExample) {
+                    preservedExample = preserveCurrentAtoms(
+                        regions,
+                        lonePairs,
+                        existingExample,
+                    );
+                }
+                currentRegions = regions;
+                currentLonePairs = lonePairs;
+                currentExample = null;
+                render();
+            }
 
-    function createPresetButton(preset) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "preset-button";
-      button.dataset.pattern = patternKeyFromPreset(preset);
-      button.dataset.label = preset.label;
-      button.setAttribute("aria-pressed", "false");
-      button.innerHTML = `
+            function createPresetButton(preset) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "preset-button";
+                button.dataset.pattern = patternKeyFromPreset(preset);
+                button.dataset.label = preset.label;
+                button.setAttribute("aria-pressed", "false");
+                button.innerHTML = `
         <span class="preset-name">${formatFormula(preset.label)}</span>
       `;
-      button.addEventListener("click", () => {
-        preservedExample = null;
-        currentRegions = preset.regions;
-        currentLonePairs = preset.lonePairs;
-        currentExample = preset;
-        render();
-      });
-      return button;
-    }
+                button.addEventListener("click", () => {
+                    preservedExample = null;
+                    currentRegions = preset.regions;
+                    currentLonePairs = preset.lonePairs;
+                    currentExample = preset;
+                    render();
+                });
+                return button;
+            }
 
-    function updateActivePreset(example) {
-      presetGrid.querySelectorAll(".preset-button").forEach((button) => {
-        const isActive = example
-          && !example.generated
-          && button.dataset.pattern === patternKeyFromPreset(example)
-          && button.dataset.label === example.label;
-        button.classList.toggle("is-active", Boolean(isActive));
-        button.setAttribute("aria-pressed", isActive ? "true" : "false");
-      });
-    }
+            function updateActivePreset(example) {
+                presetGrid
+                    .querySelectorAll(".preset-button")
+                    .forEach((button) => {
+                        const isActive =
+                            example &&
+                            !example.generated &&
+                            button.dataset.pattern ===
+                                patternKeyFromPreset(example) &&
+                            button.dataset.label === example.label;
+                        button.classList.toggle("is-active", Boolean(isActive));
+                        button.setAttribute(
+                            "aria-pressed",
+                            isActive ? "true" : "false",
+                        );
+                    });
+            }
 
-    // Build the Wikipedia-style pattern table: S increases down rows, E
-    // increases across columns. Empty cells are intentional gaps in the
-    // curated example set.
-    function buildPresetSections() {
-      const stericNumbers = [2, 3, 4, 5, 6, 7];
-      const lonePairColumns = [0, 1, 2, 3];
-      const matrix = document.createElement("div");
-      matrix.className = "preset-matrix";
+            // Build the Wikipedia-style pattern table: S increases down rows, E
+            // increases across columns. Empty cells are intentional gaps in the
+            // curated example set.
+            function buildPresetSections() {
+                const stericNumbers = [2, 3, 4, 5, 6, 7];
+                const lonePairColumns = [0, 1, 2, 3];
+                const matrix = document.createElement("div");
+                matrix.className = "preset-matrix";
 
-      const corner = document.createElement("div");
-      corner.className = "preset-corner";
-      matrix.appendChild(corner);
+                const corner = document.createElement("div");
+                corner.className = "preset-corner";
+                matrix.appendChild(corner);
 
-      lonePairColumns.forEach((lonePairs) => {
-        const axis = document.createElement("div");
-        axis.className = "preset-axis";
-        axis.textContent = `E = ${lonePairs}`;
-        matrix.appendChild(axis);
-      });
+                lonePairColumns.forEach((lonePairs) => {
+                    const axis = document.createElement("div");
+                    axis.className = "preset-axis";
+                    axis.innerHTML = `<span class="preset-axis-label">E<sub>${lonePairs}</sub></span>`;
+                    matrix.appendChild(axis);
+                });
 
-      stericNumbers.forEach((regions) => {
-        const rowAxis = document.createElement("div");
-        rowAxis.className = "preset-axis";
-        rowAxis.textContent = `S = ${regions}`;
-        matrix.appendChild(rowAxis);
+                stericNumbers.forEach((regions) => {
+                    const rowAxis = document.createElement("div");
+                    rowAxis.className = "preset-axis";
+                    rowAxis.textContent = `S = ${regions}`;
+                    matrix.appendChild(rowAxis);
 
-        lonePairColumns.forEach((lonePairs) => {
-          const cell = document.createElement("div");
-          cell.className = "preset-cell";
-          const matches = presets.filter((preset) => preset.regions === regions && preset.lonePairs === lonePairs);
+                    lonePairColumns.forEach((lonePairs) => {
+                        const cell = document.createElement("div");
+                        cell.className = "preset-cell";
+                        const matches = presets.filter(
+                            (preset) =>
+                                preset.regions === regions &&
+                                preset.lonePairs === lonePairs,
+                        );
 
-          if (matches.length === 0) {
-            cell.classList.add("empty");
-            cell.textContent = "—";
-          } else {
-            matches.forEach((preset) => {
-              cell.appendChild(createPresetButton(preset));
-            });
-          }
+                        if (matches.length === 0) {
+                            cell.classList.add("empty");
+                            cell.textContent = "—";
+                        } else {
+                            matches.forEach((preset) => {
+                                cell.appendChild(createPresetButton(preset));
+                            });
+                        }
 
-          matrix.appendChild(cell);
-        });
-      });
+                        matrix.appendChild(cell);
+                    });
+                });
 
-      presetGrid.innerHTML = "";
-      presetGrid.appendChild(matrix);
-    }
+                presetGrid.innerHTML = "";
+                presetGrid.appendChild(matrix);
+            }
 
-    /*
+            /*
       SVG drawing helpers
       -------------------
       These diagrams are simplified teaching projections.
       The ring is a visual guide requested during development: surrounding atoms
       sit on it, while drawn bonds are shortened so labels remain legible.
     */
-    function bondLine(x1, y1, x2, y2, type = "solid", bondOrder = 1) {
-      const dx = x2 - x1;
-      const dy = y2 - y1;
-      const length = Math.hypot(dx, dy) || 1;
-      const startInset = 36;
-      const startX = x1 + dx / length * startInset;
-      const startY = y1 + dy / length * startInset;
-      const px = -dy / length;
-      const py = dx / length;
+            function bondLine(x1, y1, x2, y2, type = "solid", bondOrder = 1) {
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                const length = Math.hypot(dx, dy) || 1;
+                const startInset = 36;
+                const startX = x1 + (dx / length) * startInset;
+                const startY = y1 + (dy / length) * startInset;
+                const px = -dy / length;
+                const py = dx / length;
 
-      if (type === "solid") {
-        const offsets = bondOrder === 3 ? [-5, 0, 5] : bondOrder === 2 ? [-3, 3] : [0];
-        return offsets.map((offset) => {
-          const offsetX = px * offset;
-          const offsetY = py * offset;
-          return `<line x1="${startX + offsetX}" y1="${startY + offsetY}" x2="${x2 + offsetX}" y2="${y2 + offsetY}" style="stroke:#1a2230;stroke-width:${bondOrder === 1 ? 5 : 3.1};stroke-linecap:round;"/>`;
-        }).join("");
-      }
+                if (type === "solid") {
+                    const offsets =
+                        bondOrder === 3
+                            ? [-5, 0, 5]
+                            : bondOrder === 2
+                              ? [-3, 3]
+                              : [0];
+                    return offsets
+                        .map((offset) => {
+                            const offsetX = px * offset;
+                            const offsetY = py * offset;
+                            return `<line x1="${startX + offsetX}" y1="${startY + offsetY}" x2="${x2 + offsetX}" y2="${y2 + offsetY}" style="stroke:#1a2230;stroke-width:${bondOrder === 1 ? 5 : 3.1};stroke-linecap:round;"/>`;
+                        })
+                        .join("");
+                }
 
-      const tipHalfWidth = type === "wedge" ? 13 : 11;
-      const tipLeftX = x2 + px * tipHalfWidth;
-      const tipLeftY = y2 + py * tipHalfWidth;
-      const tipRightX = x2 - px * tipHalfWidth;
-      const tipRightY = y2 - py * tipHalfWidth;
+                const tipHalfWidth = type === "wedge" ? 13 : 11;
+                const tipLeftX = x2 + px * tipHalfWidth;
+                const tipLeftY = y2 + py * tipHalfWidth;
+                const tipRightX = x2 - px * tipHalfWidth;
+                const tipRightY = y2 - py * tipHalfWidth;
 
-      if (type === "wedge") {
-        return `
+                if (type === "wedge") {
+                    return `
           <polygon
             points="${startX},${startY} ${tipLeftX},${tipLeftY} ${tipRightX},${tipRightY}"
             fill="#1a2230"
           />
         `;
-      }
+                }
 
-      if (type === "hashed") {
-        const marks = [];
-        const count = 7;
-        for (let i = 1; i <= count; i += 1) {
-          const t = i / (count + 1);
-          const centerX = startX + (x2 - startX) * t;
-          const centerY = startY + (y2 - startY) * t;
-          const halfWidth = 1.5 + t * 11;
-          const leftX = centerX + px * halfWidth;
-          const leftY = centerY + py * halfWidth;
-          const rightX = centerX - px * halfWidth;
-          const rightY = centerY - py * halfWidth;
-          marks.push(
-            `<line x1="${leftX}" y1="${leftY}" x2="${rightX}" y2="${rightY}" style="stroke:#1a2230;stroke-width:2.1;stroke-linecap:round;opacity:${0.35 + t * 0.5};"/>`
-          );
-        }
-        return marks.join("");
-      }
+                if (type === "hashed") {
+                    const marks = [];
+                    const count = 7;
+                    for (let i = 1; i <= count; i += 1) {
+                        const t = i / (count + 1);
+                        const centerX = startX + (x2 - startX) * t;
+                        const centerY = startY + (y2 - startY) * t;
+                        const halfWidth = 1.5 + t * 11;
+                        const leftX = centerX + px * halfWidth;
+                        const leftY = centerY + py * halfWidth;
+                        const rightX = centerX - px * halfWidth;
+                        const rightY = centerY - py * halfWidth;
+                        marks.push(
+                            `<line x1="${leftX}" y1="${leftY}" x2="${rightX}" y2="${rightY}" style="stroke:#1a2230;stroke-width:2.1;stroke-linecap:round;opacity:${0.35 + t * 0.5};"/>`,
+                        );
+                    }
+                    return marks.join("");
+                }
 
-      return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:#1a2230;stroke-width:5;stroke-linecap:round;"/>`;
-    }
+                return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:#1a2230;stroke-width:5;stroke-linecap:round;"/>`;
+            }
 
-    function atomLabel(x, y, text, fill = "#1a2230", size = 32) {
-      return `
+            function atomLabel(x, y, text, fill = "#1a2230", size = 32) {
+                return `
         <text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" style="font:${size}px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:700;fill:${fill};paint-order:stroke;stroke:#fffdf9;stroke-width:8;stroke-linejoin:round;">${text}</text>
       `;
-    }
+            }
 
-    function lonePairDots(x, y, angleDeg = 0) {
-      const angle = angleDeg * Math.PI / 180;
-      const offsetX = Math.cos(angle) * 10;
-      const offsetY = Math.sin(angle) * 10;
-      return `
+            function lonePairDots(x, y, angleDeg = 0) {
+                const angle = (angleDeg * Math.PI) / 180;
+                const offsetX = Math.cos(angle) * 10;
+                const offsetY = Math.sin(angle) * 10;
+                return `
         <circle cx="${x - offsetX}" cy="${y - offsetY}" r="4" fill="#bf5b2b"/>
         <circle cx="${x + offsetX}" cy="${y + offsetY}" r="4" fill="#bf5b2b"/>
       `;
-    }
+            }
 
-    function axeDescriptorSvg(bondRegions, lonePairs) {
-      const xSubscript = bondRegions === 1 ? "" : `<tspan baseline-shift="sub" font-size="23">${bondRegions}</tspan>`;
-      const ePart = lonePairs === 0
-        ? ""
-        : `E${lonePairs === 1 ? "" : `<tspan baseline-shift="sub" font-size="23">${lonePairs}</tspan>`}`;
-      return `AX${xSubscript}${ePart}`;
-    }
+            function axeDescriptorSvg(bondRegions, lonePairs) {
+                const xSubscript =
+                    bondRegions === 1
+                        ? ""
+                        : `<tspan baseline-shift="sub" font-size="23">${bondRegions}</tspan>`;
+                const ePart =
+                    lonePairs === 0
+                        ? ""
+                        : `E${lonePairs === 1 ? "" : `<tspan baseline-shift="sub" font-size="23">${lonePairs}</tspan>`}`;
+                return `AX${xSubscript}${ePart}`;
+            }
 
-    function formulaSvg(raw) {
-      return raw.replace(/([A-Za-z\)])(\d+)/g, '$1<tspan baseline-shift="sub" font-size="23">$2</tspan>');
-    }
+            function formulaSvg(raw) {
+                return raw.replace(
+                    /([A-Za-z\)])(\d+)/g,
+                    '$1<tspan baseline-shift="sub" font-size="23">$2</tspan>',
+                );
+            }
 
-    function drawDiagram(mode, central, outer, lonePairs, multipleBond, bondRegions, formula) {
-      const pieces = [];
-      const lonePairPieces = [];
-      const outerColour = "#3553b8";
-      const centralX = 350;
-      const centralY = 230;
-      const length = 124;
-      let bondIndex = 0;
+            function axeDescriptorText(bondRegions, lonePairs) {
+                const xSubscript = bondRegions === 1 ? "" : bondRegions;
+                const ePart =
+                    lonePairs === 0
+                        ? ""
+                        : `E${lonePairs === 1 ? "" : lonePairs}`;
+                return `AX${xSubscript}${ePart}`;
+            }
 
-      // Multiple bonds count as one VSEPR domain but are drawn explicitly so
-      // examples such as CO2 show explicit double bonds.
-      function nextBondOrder() {
-        if (multipleBond === "two double bonds") {
-          return bondIndex++ < 2 ? 2 : 1;
-        }
-        if (multipleBond === "one double bond") {
-          return bondIndex++ === 0 ? 2 : 1;
-        }
-        if (multipleBond === "one triple bond") {
-          return bondIndex++ === 0 ? 3 : 1;
-        }
-        return 1;
-      }
+            function domainSummaryText(bondRegions, lonePairs, multipleBond) {
+                const bondingText = `${bondRegions} bonding electron domain${bondRegions === 1 ? "" : "s"}`;
+                const nonBondingText =
+                    lonePairs === 0
+                        ? "no non-bonding electron domains"
+                        : `${lonePairs} non-bonding electron domain${lonePairs === 1 ? "" : "s"}`;
+                const capitalisedMultipleBond = `${multipleBond[0].toUpperCase()}${multipleBond.slice(1)}`;
+                const multipleBondText =
+                    multipleBond === "none"
+                        ? ""
+                        : multipleBond.startsWith("one ")
+                          ? ` ${capitalisedMultipleBond} still counts as one domain.`
+                          : ` ${capitalisedMultipleBond} still count as one domain each.`;
+                return `${axeDescriptorText(bondRegions, lonePairs)}: ${bondingText} and ${nonBondingText} around the central atom.${multipleBondText}`;
+            }
 
-      function place(angleDeg, label, type = "solid", distance = length, bondScale = 0.73) {
-        const angle = angleDeg * Math.PI / 180;
-        const x = centralX + Math.cos(angle) * distance;
-        const y = centralY + Math.sin(angle) * distance;
-        const bondX = centralX + Math.cos(angle) * distance * bondScale;
-        const bondY = centralY + Math.sin(angle) * distance * bondScale;
-        pieces.push(bondLine(centralX, centralY, bondX, bondY, type, nextBondOrder()));
-        pieces.push(atomLabel(x, y, label, outerColour, 30));
-      }
+            function drawDiagram(
+                mode,
+                central,
+                outer,
+                lonePairs,
+                multipleBond,
+                bondRegions,
+                formula,
+            ) {
+                const pieces = [];
+                const lonePairPieces = [];
+                const outerColour = "#3553b8";
+                const centralX = 350;
+                const centralY = 230;
+                const length = 124;
+                let bondIndex = 0;
 
-      // Lone-pair dots are rotated according to their direction around the
-      // central atom, so they follow the local geometry.
-      function pair(angleDeg, distance = 56) {
-        const angle = angleDeg * Math.PI / 180;
-        const x = centralX + Math.cos(angle) * distance;
-        const y = centralY + Math.sin(angle) * distance;
-        lonePairPieces.push(lonePairDots(x, y, angleDeg + 90));
-      }
+                // Multiple bonds count as one VSEPR domain but are drawn explicitly so
+                // examples such as CO2 show explicit double bonds.
+                function nextBondOrder() {
+                    if (multipleBond === "two double bonds") {
+                        return bondIndex++ < 2 ? 2 : 1;
+                    }
+                    if (multipleBond === "one double bond") {
+                        return bondIndex++ === 0 ? 2 : 1;
+                    }
+                    if (multipleBond === "one triple bond") {
+                        return bondIndex++ === 0 ? 3 : 1;
+                    }
+                    return 1;
+                }
 
-      if (mode === "linear") {
-        place(0, outer);
-        place(180, outer);
-        if (lonePairs === 3) {
-          pair(-90);
-          pair(60);
-          pair(120);
-        }
-      } else if (mode === "trigonalPlanar") {
-        place(-90, outer);
-        place(30, outer);
-        place(150, outer);
-      } else if (mode === "bentTrigonal") {
-        place(35, outer);
-        place(145, outer);
-        pair(-90);
-      } else if (mode === "tetrahedral") {
-        place(-90, outer, "solid");
-        place(35, outer, "solid");
-        place(145, outer, "wedge");
-        place(90, outer, "hashed");
-      } else if (mode === "trigonalPyramidal") {
-        place(-90, outer, "solid");
-        place(35, outer, "hashed");
-        place(145, outer, "wedge");
-        pair(90);
-      } else if (mode === "bentTetra") {
-        place(35, outer, "hashed");
-        place(145, outer, "wedge");
-        pair(215);
-        pair(325);
-      } else if (mode === "trigonalBipyramidal") {
-        place(-90, outer, "solid");
-        place(90, outer, "solid");
-        place(0, outer, "solid");
-        place(150, outer, "wedge");
-        place(210, outer, "hashed");
-      } else if (mode === "seesaw") {
-        place(0, outer, "solid");
-        place(180, outer, "solid");
-        place(60, outer, "hashed");
-        place(120, outer, "wedge");
-        pair(270, 62);
-      } else if (mode === "tShaped") {
-        place(90, outer, "solid");
-        place(180, outer, "solid");
-        place(0, outer, "solid");
-        pair(240);
-        pair(300);
-      } else if (mode === "octahedral") {
-        place(-90, outer, "solid");
-        place(90, outer, "hashed");
-        place(0, outer, "solid");
-        place(180, outer, "solid");
-        place(45, outer, "wedge");
-        place(225, outer, "hashed");
-      } else if (mode === "squarePyramidal") {
-        place(-90, outer, "solid");
-        place(58, outer, "solid");
-        place(122, outer, "solid");
-        place(238, outer, "solid");
-        place(302, outer, "solid");
-        pair(90, 62);
-      } else if (mode === "squarePlanar") {
-        place(0, outer, "solid");
-        place(90, outer, "solid");
-        place(180, outer, "solid");
-        place(270, outer, "solid");
-        pair(-60);
-        pair(120);
-      } else if (mode === "pentagonalBipyramidal") {
-        place(-90, outer, "solid");
-        place(90, outer, "hashed");
-        [0, 72, 144, 216, 288].forEach((angle) => place(angle, outer, "solid"));
-      } else if (mode === "pentagonalPyramidal") {
-        place(-90, outer, "solid");
-        [18, 90, 162, 234, 306].forEach((angle) => place(angle, outer, "solid"));
-        pair(90, 62);
-      }
+                function place(
+                    angleDeg,
+                    label,
+                    type = "solid",
+                    distance = length,
+                    bondScale = 0.73,
+                ) {
+                    const angle = (angleDeg * Math.PI) / 180;
+                    const x = centralX + Math.cos(angle) * distance;
+                    const y = centralY + Math.sin(angle) * distance;
+                    const bondX =
+                        centralX + Math.cos(angle) * distance * bondScale;
+                    const bondY =
+                        centralY + Math.sin(angle) * distance * bondScale;
+                    pieces.push(
+                        bondLine(
+                            centralX,
+                            centralY,
+                            bondX,
+                            bondY,
+                            type,
+                            nextBondOrder(),
+                        ),
+                    );
+                    pieces.push(atomLabel(x, y, label, outerColour, 30));
+                }
 
-      return `
+                // Lone-pair dots are rotated according to their direction around the
+                // central atom, so they follow the local geometry.
+                function pair(angleDeg, distance = 56) {
+                    const angle = (angleDeg * Math.PI) / 180;
+                    const x = centralX + Math.cos(angle) * distance;
+                    const y = centralY + Math.sin(angle) * distance;
+                    lonePairPieces.push(lonePairDots(x, y, angleDeg + 90));
+                }
+
+                if (mode === "linear") {
+                    place(0, outer);
+                    place(180, outer);
+                    if (lonePairs === 3) {
+                        pair(-90);
+                        pair(60);
+                        pair(120);
+                    }
+                } else if (mode === "trigonalPlanar") {
+                    place(-90, outer);
+                    place(30, outer);
+                    place(150, outer);
+                } else if (mode === "bentTrigonal") {
+                    place(35, outer);
+                    place(145, outer);
+                    pair(-90);
+                } else if (mode === "tetrahedral") {
+                    place(-90, outer, "solid");
+                    place(35, outer, "solid");
+                    place(145, outer, "wedge");
+                    place(90, outer, "hashed");
+                } else if (mode === "trigonalPyramidal") {
+                    place(-90, outer, "solid");
+                    place(35, outer, "hashed");
+                    place(145, outer, "wedge");
+                    pair(90);
+                } else if (mode === "bentTetra") {
+                    place(35, outer, "hashed");
+                    place(145, outer, "wedge");
+                    pair(215);
+                    pair(325);
+                } else if (mode === "trigonalBipyramidal") {
+                    place(-90, outer, "solid");
+                    place(90, outer, "solid");
+                    place(0, outer, "solid");
+                    place(150, outer, "wedge");
+                    place(210, outer, "hashed");
+                } else if (mode === "seesaw") {
+                    place(0, outer, "solid");
+                    place(180, outer, "solid");
+                    place(60, outer, "hashed");
+                    place(120, outer, "wedge");
+                    pair(270, 62);
+                } else if (mode === "tShaped") {
+                    place(90, outer, "solid");
+                    place(180, outer, "solid");
+                    place(0, outer, "solid");
+                    pair(240);
+                    pair(300);
+                } else if (mode === "octahedral") {
+                    place(-90, outer, "solid");
+                    place(90, outer, "hashed");
+                    place(0, outer, "solid");
+                    place(180, outer, "solid");
+                    place(45, outer, "wedge");
+                    place(225, outer, "hashed");
+                } else if (mode === "squarePyramidal") {
+                    place(-90, outer, "solid");
+                    place(58, outer, "solid");
+                    place(122, outer, "solid");
+                    place(238, outer, "solid");
+                    place(302, outer, "solid");
+                    pair(90, 62);
+                } else if (mode === "squarePlanar") {
+                    place(0, outer, "solid");
+                    place(90, outer, "solid");
+                    place(180, outer, "solid");
+                    place(270, outer, "solid");
+                    pair(-60);
+                    pair(120);
+                } else if (mode === "pentagonalBipyramidal") {
+                    place(-90, outer, "solid");
+                    place(90, outer, "hashed");
+                    [0, 72, 144, 216, 288].forEach((angle) =>
+                        place(angle, outer, "solid"),
+                    );
+                } else if (mode === "pentagonalPyramidal") {
+                    place(-90, outer, "solid");
+                    [18, 90, 162, 234, 306].forEach((angle) =>
+                        place(angle, outer, "solid"),
+                    );
+                    pair(90, 62);
+                }
+
+                return `
         <svg viewBox="0 0 700 460" role="img" aria-label="VSEPR geometry diagram">
           <rect x="0" y="0" width="700" height="460" rx="26" fill="transparent"/>
           <text x="2" y="18" text-anchor="start" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${formulaSvg(formula)}</text>
@@ -1214,23 +1420,25 @@
           ${atomLabel(centralX, centralY, central, "#1a2230", 34)}
         </svg>
       `;
-    }
+            }
 
-    // Small formula formatter for visible text. It intentionally handles only
-    // the notation used by the curated examples and explanatory copy.
-    function formatFormula(raw) {
-      return raw
-        .replace(/([A-Za-z\)])(\d+)/g, "$1<sub>$2</sub>")
-        .replace(/\^(\d*[+-])$/, "<sup>$1</sup>")
-        .replace(/([^\s])([+-])$/, "$1<sup>$2</sup>");
-    }
+            // Small formula formatter for visible text. It intentionally handles only
+            // the notation used by the curated examples and explanatory copy.
+            function formatFormula(raw) {
+                return raw
+                    .replace(/([A-Za-z\)])(\d+)/g, "$1<sub>$2</sub>")
+                    .replace(/\^(\d*[+-])$/, "<sup>$1</sup>")
+                    .replace(/([^\s])([+-])$/, "$1<sup>$2</sup>");
+            }
 
-    function formatChemText(raw) {
-      return raw.replace(/([A-Z][a-z]?[\w()]*)/g, (match) => formatFormula(match));
-    }
+            function formatChemText(raw) {
+                return raw.replace(/([A-Z][a-z]?[\w()]*)/g, (match) =>
+                    formatFormula(match),
+                );
+            }
 
-    function relationshipPanel(regions, bondRegions, lonePairs) {
-      return `
+            function relationshipPanel(regions, bondRegions, lonePairs) {
+                return `
         <div class="relationship-block">
           <div class="relationship-grid">
             <div class="relation-card">
@@ -1252,91 +1460,117 @@
             <div class="operator-cell">+</div>
             <div class="relation-card">
               <div class="relation-symbol">E</div>
-              <div class="relation-name">lone pairs</div>
+              <div class="relation-name">non-bonding domains</div>
               <div class="relation-value">${lonePairs}</div>
               <div class="relation-controls">
-                <button class="step-button" type="button" data-adjust="e" data-step="-1" aria-label="Decrease lone pairs">−</button>
-                <button class="step-button" type="button" data-adjust="e" data-step="1" aria-label="Increase lone pairs">+</button>
+                <button class="step-button" type="button" data-adjust="e" data-step="-1" aria-label="Decrease non-bonding domains">−</button>
+                <button class="step-button" type="button" data-adjust="e" data-step="1" aria-label="Increase non-bonding domains">+</button>
               </div>
             </div>
           </div>
         </div>
       `;
-    }
+            }
 
-    function updateStepButtons(regions, lonePairs) {
-      const bondRegions = regions - lonePairs;
-      diagramShell.querySelectorAll(".step-button").forEach((button) => {
-        const step = Number(button.dataset.step);
-        const targetBondRegions = button.dataset.adjust === "x" ? bondRegions + step : bondRegions;
-        const targetLonePairs = button.dataset.adjust === "e" ? lonePairs + step : lonePairs;
-        const targetRegions = targetBondRegions + targetLonePairs;
-        button.disabled = targetBondRegions < 1
-          || targetLonePairs < 0
-          || !isSupportedPattern(targetRegions, targetLonePairs);
-      });
-    }
+            function updateStepButtons(regions, lonePairs) {
+                const bondRegions = regions - lonePairs;
+                diagramShell
+                    .querySelectorAll(".step-button")
+                    .forEach((button) => {
+                        const step = Number(button.dataset.step);
+                        const targetBondRegions =
+                            button.dataset.adjust === "x"
+                                ? bondRegions + step
+                                : bondRegions;
+                        const targetLonePairs =
+                            button.dataset.adjust === "e"
+                                ? lonePairs + step
+                                : lonePairs;
+                        const targetRegions =
+                            targetBondRegions + targetLonePairs;
+                        button.disabled =
+                            targetBondRegions < 1 ||
+                            targetLonePairs < 0 ||
+                            !isSupportedPattern(targetRegions, targetLonePairs);
+                    });
+            }
 
-    // Central render pass: reads controls, chooses the VSEPR entry/example, then
-    // updates the diagram, AXE equation, captions, and explanatory notes.
-    function render() {
-      const regions = currentRegions;
-      const lonePairs = currentLonePairs;
-      const key = `${regions}-${lonePairs}`;
-      const entry = geometryMap[key];
-      const example = selectedExample();
-      updateActivePreset(example);
+            // Central render pass: reads controls, chooses the VSEPR entry/example, then
+            // updates the diagram, AXE equation, captions, and explanatory notes.
+            function render() {
+                const regions = currentRegions;
+                const lonePairs = currentLonePairs;
+                const key = `${regions}-${lonePairs}`;
+                const entry = geometryMap[key];
+                const example = selectedExample();
+                updateActivePreset(example);
 
-      if (!entry) {
-        validityNote.textContent = "That combination is not supported in this tool. Reduce the lone-pair count or change the steric number.";
-        diagramShell.innerHTML = "";
-        headline.textContent = "Unsupported combination";
-        explanationText.textContent = "This generator currently covers the standard simple VSEPR patterns for steric numbers 2 to 6.";
-        studyPoints.innerHTML = "";
-        return;
-      }
+                if (!entry) {
+                    validityNote.textContent =
+                        "That combination is not supported in this tool. Reduce the non-bonding domains or change the steric number.";
+                    diagramShell.innerHTML = "";
+                    headline.textContent = "Unsupported combination";
+                    explanationText.textContent =
+                        "This generator currently covers the standard simple VSEPR patterns for steric numbers 2 to 6.";
+                    studyPoints.innerHTML = "";
+                    return;
+                }
 
-      const formula = example?.label || `AX`;
-      const central = example?.central || "A";
-      const outer = example?.outer || "X";
-      const multipleBond = example?.multipleBond || "none";
+                const formula = example?.label || `AX`;
+                const central = example?.central || "A";
+                const outer = example?.outer || "X";
+                const multipleBond = example?.multipleBond || "none";
 
-      const bondRegions = regions - lonePairs;
-      validityNote.textContent = multipleBond === "none"
-        ? `${bondRegions} bonding region${bondRegions === 1 ? "" : "s"} and ${lonePairs} lone pair${lonePairs === 1 ? "" : "s"} on the central atom.`
-        : `${bondRegions} bonding region${bondRegions === 1 ? "" : "s"}, including ${multipleBond}; multiple bonds still count as one region each.`;
+                const bondRegions = regions - lonePairs;
+                validityNote.textContent = domainSummaryText(
+                    bondRegions,
+                    lonePairs,
+                    multipleBond,
+                );
 
-      diagramShell.innerHTML = `
+                diagramShell.innerHTML = `
         ${drawDiagram(entry.draw, central, outer, lonePairs, multipleBond, bondRegions, formula)}
         ${relationshipPanel(regions, bondRegions, lonePairs)}
       `;
-      headline.textContent = `Molecular geometry: ${entry.molecularGeometry}.`;
-      explanationText.innerHTML = `${formatChemText(entry.note)} The expected bond angle is ${entry.angle}. ${formatChemText(entry.polarityHint)}`;
-      studyPoints.innerHTML = entry.points.map((point) => `<li>${formatChemText(point)}</li>`).join("");
-      updateStepButtons(regions, lonePairs);
-    }
+                headline.textContent = `Molecular geometry: ${entry.molecularGeometry}.`;
+                explanationText.innerHTML = `${formatChemText(entry.note)} The expected bond angle is ${entry.angle}. ${formatChemText(entry.polarityHint)}`;
+                studyPoints.innerHTML = entry.points
+                    .map((point) => `<li>${formatChemText(point)}</li>`)
+                    .join("");
+                updateStepButtons(regions, lonePairs);
+            }
 
-    diagramShell.addEventListener("click", (event) => {
-      const button = event.target.closest(".step-button");
-      if (!button) {
-        return;
-      }
+            diagramShell.addEventListener("click", (event) => {
+                const button = event.target.closest(".step-button");
+                if (!button) {
+                    return;
+                }
 
-      const regions = currentRegions;
-      const lonePairs = currentLonePairs;
-      const bondRegions = regions - lonePairs;
-      const step = Number(button.dataset.step);
-      const targetBondRegions = button.dataset.adjust === "x" ? bondRegions + step : bondRegions;
-      const targetLonePairs = button.dataset.adjust === "e" ? lonePairs + step : lonePairs;
-      const targetRegions = targetBondRegions + targetLonePairs;
+                const regions = currentRegions;
+                const lonePairs = currentLonePairs;
+                const bondRegions = regions - lonePairs;
+                const step = Number(button.dataset.step);
+                const targetBondRegions =
+                    button.dataset.adjust === "x"
+                        ? bondRegions + step
+                        : bondRegions;
+                const targetLonePairs =
+                    button.dataset.adjust === "e"
+                        ? lonePairs + step
+                        : lonePairs;
+                const targetRegions = targetBondRegions + targetLonePairs;
 
-      if (targetBondRegions >= 1 && targetLonePairs >= 0 && isSupportedPattern(targetRegions, targetLonePairs)) {
-        setPatternKeepingAtoms(targetRegions, targetLonePairs);
-      }
-    });
+                if (
+                    targetBondRegions >= 1 &&
+                    targetLonePairs >= 0 &&
+                    isSupportedPattern(targetRegions, targetLonePairs)
+                ) {
+                    setPatternKeepingAtoms(targetRegions, targetLonePairs);
+                }
+            });
 
-    buildPresetSections();
-    render();
-  </script>
-</body>
+            buildPresetSections();
+            render();
+        </script>
+    </body>
 </html>
