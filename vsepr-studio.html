@@ -1,4 +1,10 @@
 <!-- Generated from games/. Do not edit pages/ files directly. -->
+<!--
+  Source file for the VSEPR Studio activity.
+
+  Edit this file in games/. The matching file in pages/ is generated for
+  GitHub Pages by scripts/build_pages.py.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -341,14 +347,6 @@
       gap: 0.24rem;
     }
 
-    .relationship-axe {
-      padding-top: 0.35rem;
-      border-top: 1px solid var(--line);
-      font-size: 0.9rem;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-
     .relationship-grid {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
@@ -368,7 +366,8 @@
       grid-template-columns: max-content auto;
       grid-template-areas:
         "symbol name"
-        "value .";
+        "value ."
+        "controls controls";
       justify-content: center;
       align-items: baseline;
       column-gap: 0.28rem;
@@ -376,6 +375,7 @@
       padding: 0.35rem 0;
       border-top: 1px solid var(--line);
       text-align: center;
+      min-height: 4.7rem;
     }
 
     .relation-symbol {
@@ -402,6 +402,41 @@
       line-height: 1.12;
     }
 
+    .relation-controls {
+      grid-area: controls;
+      display: flex;
+      justify-content: center;
+      gap: 0.24rem;
+      margin-top: 0.18rem;
+      min-height: 1.35rem;
+    }
+
+    .step-button {
+      width: 1.65rem;
+      height: 1.35rem;
+      padding: 0;
+      border-radius: 999px;
+      text-align: center;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .step-button:hover {
+      transform: none;
+    }
+
+    .step-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.28;
+      transform: none;
+    }
+
+    .step-button:disabled:hover {
+      background: rgba(255, 255, 255, 0.48);
+      border-color: transparent;
+      transform: none;
+    }
+
     .caption-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -411,6 +446,7 @@
     .caption-card {
       padding: 0.35rem 0;
       border-top: 1px solid var(--line);
+      min-height: 4.2rem;
     }
 
     .caption-label {
@@ -428,10 +464,19 @@
       line-height: 1.18;
     }
 
+    #polarityCaption {
+      display: -webkit-box;
+      min-height: 2.18rem;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
     .explanation {
       display: grid;
       gap: 0.35rem;
       padding: 0.35rem 0 0;
+      min-height: 7rem;
     }
 
     .explanation h2 {
@@ -501,62 +546,41 @@
         <div class="group">
           <div class="group-title">Presets by VSEPR pattern</div>
           <div class="preset-grid" id="presetGrid"></div>
-        </div>
-
-        <div class="group">
-          <div class="group-title">VSEPR pattern</div>
-          <div class="field-grid">
-            <div class="pair-row">
-              <label>
-                Steric number
-                <select id="regionsSelect">
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4" selected>4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                </select>
-              </label>
-            </div>
-            <div class="pair-row">
-              <label>
-                Lone pairs on central atom
-                <select id="lonePairsSelect"></select>
-              </label>
-              <label>
-                Example molecule
-                <select id="exampleSelect">
-                </select>
-              </label>
-            </div>
-            <p class="field-note" id="validityNote">
-              Choose a supported VSEPR pattern, then switch between curated example molecules for that pattern.
-            </p>
-          </div>
+          <p class="field-note" id="validityNote">
+            Use the presets or the X/E controls below the diagram to choose a supported VSEPR pattern.
+          </p>
         </div>
       </div>
 
       <div class="viewer">
         <div class="diagram-shell" id="diagramShell"></div>
         <div class="relationship-block">
-          <div class="relationship-axe" id="axeStat">AX<sub>3</sub>E</div>
           <div class="relationship-grid">
             <div class="relation-card">
               <div class="relation-symbol">S</div>
               <div class="relation-name">steric number</div>
               <div class="relation-value" id="regionsStat">4</div>
+              <div class="relation-controls" aria-hidden="true"></div>
             </div>
             <div class="operator-cell">=</div>
             <div class="relation-card">
               <div class="relation-symbol">X</div>
-              <div class="relation-name">bonding domains</div>
+              <div class="relation-name">coordination number</div>
               <div class="relation-value" id="bondRegionsStat">3</div>
+              <div class="relation-controls">
+                <button class="step-button" type="button" data-adjust="x" data-step="-1" aria-label="Decrease coordination number">−</button>
+                <button class="step-button" type="button" data-adjust="x" data-step="1" aria-label="Increase coordination number">+</button>
+              </div>
             </div>
             <div class="operator-cell">+</div>
             <div class="relation-card">
               <div class="relation-symbol">E</div>
               <div class="relation-name">lone pairs</div>
               <div class="relation-value" id="lonePairStat">1</div>
+              <div class="relation-controls">
+                <button class="step-button" type="button" data-adjust="e" data-step="-1" aria-label="Decrease lone pairs">−</button>
+                <button class="step-button" type="button" data-adjust="e" data-step="1" aria-label="Increase lone pairs">+</button>
+              </div>
             </div>
           </div>
         </div>
@@ -587,6 +611,18 @@
   </main>
 
   <script>
+    /*
+      VSEPR data model
+      ----------------
+      geometryMap is keyed as "S-E", where:
+      - S is the steric number: total electron domains around the central atom.
+      - E is the number of lone-pair domains on the central atom.
+      - X is the coordination number; in these diagrams it is computed as S - E
+        because each bonded atom occupies one bonding domain.
+
+      Each entry describes the conceptual VSEPR pattern. The separate presets
+      list chooses concrete molecule examples for those patterns.
+    */
     const geometryMap = {
       "2-0": {
         electronGeometry: "linear",
@@ -652,7 +688,7 @@
         electronGeometry: "tetrahedral",
         molecularGeometry: "bent",
         angle: "about 104.5°",
-        polarityHint: "Often polar because the shape is bent rather than symmetrical.",
+        polarityHint: "Often polar because the bent shape is asymmetrical.",
         note: "Four electron regions remain tetrahedral, but two lone pairs leave only two visible bonds.",
         points: [
           "More lone pairs means stronger compression of the bond angle.",
@@ -743,9 +779,49 @@
           "XeF4 is the familiar example."
         ],
         draw: "squarePlanar"
+      },
+      "7-0": {
+        electronGeometry: "pentagonal bipyramidal",
+        molecularGeometry: "pentagonal bipyramidal",
+        angle: "72°, 90°, and 180°",
+        polarityHint: "Often non-polar if all seven outer atoms are identical.",
+        note: "Seven electron regions can arrange as a pentagonal bipyramid: five around an equatorial pentagon and two axial.",
+        points: [
+          "This is beyond the usual IB core examples, but it is a standard higher-coordinate VSEPR case.",
+          "IF7 is the common example."
+        ],
+        draw: "pentagonalBipyramidal"
+      },
+      "7-1": {
+        // Higher-coordinate examples are deliberately marked as advanced.
+        // XeF6 is neutral and its real structure is distorted. Treat it as an
+        // advanced comparison case, with CH4 and NH3 serving as cleaner models.
+        electronGeometry: "pentagonal bipyramidal",
+        molecularGeometry: "pentagonal pyramidal",
+        angle: "approximately 72° and 90°",
+        polarityHint: "Usually polar because the lone pair breaks the symmetry.",
+        note: "One lone pair in a seven-region arrangement leaves six bonded atoms in a pentagonal pyramid.",
+        points: [
+          "XeF6 is often discussed as an AX6E case, though its real structure is distorted.",
+          "Treat this as an advanced, approximate VSEPR example."
+        ],
+        draw: "pentagonalPyramidal"
       }
     };
 
+    /*
+      Curated examples
+      ----------------
+      Keep this list conservative. The tool is intended for lesson use, so avoid
+      ionic, hypothetical, high-pressure, or obscure examples. If an advanced
+      case is included, make that limitation explicit in the visible notes.
+
+      label: visible formula and preset button text.
+      central: label drawn at the centre of the SVG.
+      outer: label drawn for all surrounding atoms.
+      regions/lonePairs: select the geometryMap entry.
+      multipleBond: controls whether selected bonds are drawn as double/triple.
+    */
     const presets = [
       { label: "CO2", central: "C", outer: "O", regions: 2, lonePairs: 0, multipleBond: "two double bonds" },
       { label: "BF3", central: "B", outer: "F", regions: 3, lonePairs: 0, multipleBond: "none" },
@@ -759,12 +835,11 @@
       { label: "XeF2", central: "Xe", outer: "F", regions: 5, lonePairs: 3, multipleBond: "none" },
       { label: "SF6", central: "S", outer: "F", regions: 6, lonePairs: 0, multipleBond: "none" },
       { label: "BrF5", central: "Br", outer: "F", regions: 6, lonePairs: 1, multipleBond: "none" },
-      { label: "XeF4", central: "Xe", outer: "F", regions: 6, lonePairs: 2, multipleBond: "none" }
+      { label: "XeF4", central: "Xe", outer: "F", regions: 6, lonePairs: 2, multipleBond: "none" },
+      { label: "IF7", central: "I", outer: "F", regions: 7, lonePairs: 0, multipleBond: "none" },
+      { label: "XeF6", central: "Xe", outer: "F", regions: 7, lonePairs: 1, multipleBond: "none" }
     ];
 
-    const regionsSelect = document.getElementById("regionsSelect");
-    const lonePairsSelect = document.getElementById("lonePairsSelect");
-    const exampleSelect = document.getElementById("exampleSelect");
     const validityNote = document.getElementById("validityNote");
     const presetGrid = document.getElementById("presetGrid");
     const diagramShell = document.getElementById("diagramShell");
@@ -777,20 +852,14 @@
     const regionsStat = document.getElementById("regionsStat");
     const lonePairStat = document.getElementById("lonePairStat");
     const bondRegionsStat = document.getElementById("bondRegionsStat");
-    const axeStat = document.getElementById("axeStat");
+    const stepButtons = [...document.querySelectorAll(".step-button")];
+    let currentRegions = 4;
+    let currentLonePairs = 1;
+    let currentExample = presets.find((preset) => preset.label === "NH3");
+    let preservedExample = null;
 
-    function populateLonePairOptions() {
-      const regions = Number(regionsSelect.value);
-      const maxLonePairs = Math.max(0, regions - 1);
-      const current = Number(lonePairsSelect.value || "1");
-      lonePairsSelect.innerHTML = "";
-      for (let lonePairs = 0; lonePairs <= maxLonePairs; lonePairs += 1) {
-        const option = document.createElement("option");
-        option.value = String(lonePairs);
-        option.textContent = String(lonePairs);
-        lonePairsSelect.appendChild(option);
-      }
-      lonePairsSelect.value = String(Math.min(current, maxLonePairs));
+    function isSupportedPattern(regions, lonePairs) {
+      return Object.prototype.hasOwnProperty.call(geometryMap, `${regions}-${lonePairs}`);
     }
 
     function patternKeyFromPreset(preset) {
@@ -798,35 +867,55 @@
     }
 
     function matchingExamples() {
-      const key = `${regionsSelect.value}-${lonePairsSelect.value}`;
+      const key = `${currentRegions}-${currentLonePairs}`;
       return presets.filter((preset) => patternKeyFromPreset(preset) === key);
     }
 
-    function populateExampleOptions(preferredLabel = "") {
-      const examples = matchingExamples();
-      const previous = preferredLabel || exampleSelect.value;
-      exampleSelect.innerHTML = "";
+    function displayedFormula(central, outer, bondRegions) {
+      return `${central}${outer}${bondRegions === 1 ? "" : bondRegions}`;
+    }
 
-      examples.forEach((preset) => {
-        const option = document.createElement("option");
-        option.value = preset.label;
-        option.textContent = preset.label;
-        exampleSelect.appendChild(option);
-      });
-
-      if (examples.length === 0) {
-        const option = document.createElement("option");
-        option.value = "";
-        option.textContent = "No curated example";
-        exampleSelect.appendChild(option);
-      }
-
-      const preferredExists = examples.some((preset) => preset.label === previous);
-      exampleSelect.value = preferredExists ? previous : (examples[0]?.label || "");
+    function preserveCurrentAtoms(regions, lonePairs, currentExample) {
+      const bondRegions = regions - lonePairs;
+      const currentBondRegions = currentExample.regions - currentExample.lonePairs;
+      return {
+        label: displayedFormula(currentExample.central, currentExample.outer, bondRegions),
+        central: currentExample.central,
+        outer: currentExample.outer,
+        regions,
+        lonePairs,
+        multipleBond: bondRegions === currentBondRegions ? currentExample.multipleBond : "none",
+        generated: true
+      };
     }
 
     function selectedExample() {
-      return presets.find((preset) => preset.label === exampleSelect.value) || null;
+      if (preservedExample && patternKeyFromPreset(preservedExample) === `${currentRegions}-${currentLonePairs}`) {
+        return preservedExample;
+      }
+      if (currentExample && patternKeyFromPreset(currentExample) === `${currentRegions}-${currentLonePairs}`) {
+        return currentExample;
+      }
+      return matchingExamples()[0] || null;
+    }
+
+    function setPattern(regions, lonePairs) {
+      preservedExample = null;
+      currentRegions = regions;
+      currentLonePairs = lonePairs;
+      currentExample = matchingExamples()[0] || null;
+      render();
+    }
+
+    function setPatternKeepingAtoms(regions, lonePairs) {
+      const existingExample = selectedExample();
+      if (existingExample) {
+        preservedExample = preserveCurrentAtoms(regions, lonePairs, existingExample);
+      }
+      currentRegions = regions;
+      currentLonePairs = lonePairs;
+      currentExample = null;
+      render();
     }
 
     function createPresetButton(preset) {
@@ -836,17 +925,20 @@
         <span class="preset-name">${formatFormula(preset.label)}</span>
       `;
       button.addEventListener("click", () => {
-        regionsSelect.value = String(preset.regions);
-        populateLonePairOptions();
-        lonePairsSelect.value = String(preset.lonePairs);
-        populateExampleOptions(preset.label);
+        preservedExample = null;
+        currentRegions = preset.regions;
+        currentLonePairs = preset.lonePairs;
+        currentExample = preset;
         render();
       });
       return button;
     }
 
+    // Build the Wikipedia-style pattern table: S increases down rows, E
+    // increases across columns. Empty cells are intentional gaps in the
+    // curated example set.
     function buildPresetSections() {
-      const stericNumbers = [2, 3, 4, 5, 6];
+      const stericNumbers = [2, 3, 4, 5, 6, 7];
       const lonePairColumns = [0, 1, 2, 3];
       const matrix = document.createElement("div");
       matrix.className = "preset-matrix";
@@ -890,11 +982,18 @@
       presetGrid.appendChild(matrix);
     }
 
+    /*
+      SVG drawing helpers
+      -------------------
+      These diagrams are simplified teaching projections.
+      The ring is a visual guide requested during development: surrounding atoms
+      sit on it, while drawn bonds are shortened so labels remain legible.
+    */
     function bondLine(x1, y1, x2, y2, type = "solid", bondOrder = 1) {
       const dx = x2 - x1;
       const dy = y2 - y1;
       const length = Math.hypot(dx, dy) || 1;
-      const startInset = 20;
+      const startInset = 36;
       const startX = x1 + dx / length * startInset;
       const startY = y1 + dy / length * startInset;
       const px = -dy / length;
@@ -962,7 +1061,15 @@
       `;
     }
 
-    function drawDiagram(mode, central, outer, lonePairs, multipleBond) {
+    function axeDescriptorSvg(bondRegions, lonePairs) {
+      const xSubscript = bondRegions === 1 ? "" : `<tspan baseline-shift="sub" font-size="23">${bondRegions}</tspan>`;
+      const ePart = lonePairs === 0
+        ? ""
+        : `E${lonePairs === 1 ? "" : `<tspan baseline-shift="sub" font-size="23">${lonePairs}</tspan>`}`;
+      return `AX${xSubscript}${ePart}`;
+    }
+
+    function drawDiagram(mode, central, outer, lonePairs, multipleBond, bondRegions) {
       const pieces = [];
       const lonePairPieces = [];
       const outerColour = "#3553b8";
@@ -971,6 +1078,8 @@
       const length = 124;
       let bondIndex = 0;
 
+      // Multiple bonds count as one VSEPR domain but are drawn explicitly so
+      // examples such as CO2 show explicit double bonds.
       function nextBondOrder() {
         if (multipleBond === "two double bonds") {
           return bondIndex++ < 2 ? 2 : 1;
@@ -994,6 +1103,8 @@
         pieces.push(atomLabel(x, y, label, outerColour, 30));
       }
 
+      // Lone-pair dots are rotated according to their direction around the
+      // central atom, so they follow the local geometry.
       function pair(angleDeg, distance = 56) {
         const angle = angleDeg * Math.PI / 180;
         const x = centralX + Math.cos(angle) * distance;
@@ -1071,11 +1182,20 @@
         place(270, outer, "solid");
         pair(-60);
         pair(120);
+      } else if (mode === "pentagonalBipyramidal") {
+        place(-90, outer, "solid");
+        place(90, outer, "hashed");
+        [0, 72, 144, 216, 288].forEach((angle) => place(angle, outer, "solid"));
+      } else if (mode === "pentagonalPyramidal") {
+        place(-90, outer, "solid");
+        [18, 90, 162, 234, 306].forEach((angle) => place(angle, outer, "solid"));
+        pair(90, 62);
       }
 
       return `
         <svg viewBox="0 0 700 460" role="img" aria-label="VSEPR geometry diagram">
           <rect x="0" y="0" width="700" height="460" rx="26" fill="transparent"/>
+          <text x="2" y="18" text-anchor="start" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${axeDescriptorSvg(bondRegions, lonePairs)}</text>
           <circle cx="${centralX}" cy="${centralY}" r="${length}" fill="none" stroke="rgba(26,34,48,0.14)" stroke-width="2.5"/>
           ${pieces.join("")}
           ${lonePairPieces.join("")}
@@ -1084,25 +1204,37 @@
       `;
     }
 
+    // Small formula formatter for visible text. It intentionally handles only
+    // the notation used by the curated examples and explanatory copy.
     function formatFormula(raw) {
-      return raw.replace(/([A-Za-z\)])(\d+)/g, "$1<sub>$2</sub>");
+      return raw
+        .replace(/([A-Za-z\)])(\d+)/g, "$1<sub>$2</sub>")
+        .replace(/\^(\d*[+-])$/, "<sup>$1</sup>")
+        .replace(/([^\s])([+-])$/, "$1<sup>$2</sup>");
     }
 
     function formatChemText(raw) {
       return raw.replace(/([A-Z][a-z]?[\w()]*)/g, (match) => formatFormula(match));
     }
 
-    function axeDescriptor(bondRegions, lonePairs) {
-      const xPart = `AX${bondRegions === 1 ? "" : `<sub>${bondRegions}</sub>`}`;
-      if (lonePairs === 0) {
-        return xPart;
-      }
-      return `${xPart}E${lonePairs === 1 ? "" : `<sub>${lonePairs}</sub>`}`;
+    function updateStepButtons(regions, lonePairs) {
+      const bondRegions = regions - lonePairs;
+      stepButtons.forEach((button) => {
+        const step = Number(button.dataset.step);
+        const targetBondRegions = button.dataset.adjust === "x" ? bondRegions + step : bondRegions;
+        const targetLonePairs = button.dataset.adjust === "e" ? lonePairs + step : lonePairs;
+        const targetRegions = targetBondRegions + targetLonePairs;
+        button.disabled = targetBondRegions < 1
+          || targetLonePairs < 0
+          || !isSupportedPattern(targetRegions, targetLonePairs);
+      });
     }
 
+    // Central render pass: reads controls, chooses the VSEPR entry/example, then
+    // updates the diagram, AXE equation, captions, and explanatory notes.
     function render() {
-      const regions = Number(regionsSelect.value);
-      const lonePairs = Number(lonePairsSelect.value);
+      const regions = currentRegions;
+      const lonePairs = currentLonePairs;
       const key = `${regions}-${lonePairs}`;
       const entry = geometryMap[key];
       const example = selectedExample();
@@ -1126,34 +1258,36 @@
         ? `${bondRegions} bonding region${bondRegions === 1 ? "" : "s"} and ${lonePairs} lone pair${lonePairs === 1 ? "" : "s"} on the central atom.`
         : `${bondRegions} bonding region${bondRegions === 1 ? "" : "s"}, including ${multipleBond}; multiple bonds still count as one region each.`;
 
-      diagramShell.innerHTML = drawDiagram(entry.draw, central, outer, lonePairs, multipleBond);
+      diagramShell.innerHTML = drawDiagram(entry.draw, central, outer, lonePairs, multipleBond, bondRegions);
       formulaCaption.innerHTML = formatFormula(formula);
       angleCaption.textContent = entry.angle;
       polarityCaption.textContent = entry.polarityHint;
       headline.textContent = `Electron geometry: ${entry.electronGeometry}. Molecular geometry: ${entry.molecularGeometry}.`;
       explanationText.innerHTML = formatChemText(entry.note);
       studyPoints.innerHTML = entry.points.map((point) => `<li>${formatChemText(point)}</li>`).join("");
-      const axeHtml = axeDescriptor(bondRegions, lonePairs);
       regionsStat.textContent = String(regions);
       lonePairStat.textContent = String(lonePairs);
       bondRegionsStat.textContent = String(bondRegions);
-      axeStat.innerHTML = axeHtml;
+      updateStepButtons(regions, lonePairs);
     }
 
-    regionsSelect.addEventListener("change", () => {
-      populateLonePairOptions();
-      populateExampleOptions();
-      render();
-    });
+    stepButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const regions = currentRegions;
+        const lonePairs = currentLonePairs;
+        const bondRegions = regions - lonePairs;
+        const step = Number(button.dataset.step);
+        const targetBondRegions = button.dataset.adjust === "x" ? bondRegions + step : bondRegions;
+        const targetLonePairs = button.dataset.adjust === "e" ? lonePairs + step : lonePairs;
+        const targetRegions = targetBondRegions + targetLonePairs;
 
-    [lonePairsSelect, exampleSelect].forEach((element) => {
-      element.addEventListener("input", render);
-      element.addEventListener("change", render);
+        if (targetBondRegions >= 1 && targetLonePairs >= 0 && isSupportedPattern(targetRegions, targetLonePairs)) {
+          setPatternKeepingAtoms(targetRegions, targetLonePairs);
+        }
+      });
     });
 
     buildPresetSections();
-    populateLonePairOptions();
-    populateExampleOptions("NH3");
     render();
   </script>
 </body>
