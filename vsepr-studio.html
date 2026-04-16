@@ -324,6 +324,7 @@
     }
 
     .diagram-shell {
+      position: relative;
       display: grid;
       place-items: center;
       min-height: 0;
@@ -343,8 +344,13 @@
     }
 
     .relationship-block {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 10px;
       display: grid;
       gap: 0.24rem;
+      padding: 0;
     }
 
     .relationship-grid {
@@ -372,10 +378,9 @@
       align-items: baseline;
       column-gap: 0.28rem;
       row-gap: 0.1rem;
-      padding: 0.35rem 0;
-      border-top: 1px solid var(--line);
+      padding: 0.15rem 0 0;
       text-align: center;
-      min-height: 4.7rem;
+      min-height: 4.15rem;
     }
 
     .relation-symbol {
@@ -437,41 +442,6 @@
       transform: none;
     }
 
-    .caption-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.4rem;
-    }
-
-    .caption-card {
-      padding: 0.35rem 0;
-      border-top: 1px solid var(--line);
-      min-height: 4.2rem;
-    }
-
-    .caption-label {
-      font-size: 0.66rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .caption-value {
-      margin-top: 0.14rem;
-      font-size: 0.92rem;
-      font-weight: 800;
-      line-height: 1.18;
-    }
-
-    #polarityCaption {
-      display: -webkit-box;
-      min-height: 2.18rem;
-      overflow: hidden;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-
     .explanation {
       display: grid;
       gap: 0.35rem;
@@ -504,7 +474,6 @@
     @media (max-width: 940px) {
       .hero,
       .workspace,
-      .caption-grid,
       .pair-row,
       .preset-grid,
       .preset-matrix {
@@ -554,52 +523,8 @@
 
       <div class="viewer">
         <div class="diagram-shell" id="diagramShell"></div>
-        <div class="relationship-block">
-          <div class="relationship-grid">
-            <div class="relation-card">
-              <div class="relation-symbol">S</div>
-              <div class="relation-name">steric number</div>
-              <div class="relation-value" id="regionsStat">4</div>
-              <div class="relation-controls" aria-hidden="true"></div>
-            </div>
-            <div class="operator-cell">=</div>
-            <div class="relation-card">
-              <div class="relation-symbol">X</div>
-              <div class="relation-name">coordination number</div>
-              <div class="relation-value" id="bondRegionsStat">3</div>
-              <div class="relation-controls">
-                <button class="step-button" type="button" data-adjust="x" data-step="-1" aria-label="Decrease coordination number">−</button>
-                <button class="step-button" type="button" data-adjust="x" data-step="1" aria-label="Increase coordination number">+</button>
-              </div>
-            </div>
-            <div class="operator-cell">+</div>
-            <div class="relation-card">
-              <div class="relation-symbol">E</div>
-              <div class="relation-name">lone pairs</div>
-              <div class="relation-value" id="lonePairStat">1</div>
-              <div class="relation-controls">
-                <button class="step-button" type="button" data-adjust="e" data-step="-1" aria-label="Decrease lone pairs">−</button>
-                <button class="step-button" type="button" data-adjust="e" data-step="1" aria-label="Increase lone pairs">+</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="caption-grid">
-          <div class="caption-card">
-            <div class="caption-label">Formula</div>
-            <div class="caption-value" id="formulaCaption">NH<sub>3</sub></div>
-          </div>
-          <div class="caption-card">
-            <div class="caption-label">Approximate angle</div>
-            <div class="caption-value" id="angleCaption">about 107°</div>
-          </div>
-          <div class="caption-card">
-            <div class="caption-label">Polarity hint</div>
-            <div class="caption-value" id="polarityCaption">Often polar if the surrounding atoms are the same.</div>
-          </div>
-        </div>
         <div class="explanation">
-          <h2 id="headline">Electron geometry: tetrahedral. Molecular geometry: trigonal pyramidal.</h2>
+          <h2 id="headline">Molecular geometry: trigonal pyramidal.</h2>
           <p id="explanationText">
             Four regions of electron density arrange tetrahedrally. One of those regions is a lone pair,
             so the visible atoms form a trigonal pyramidal shape.
@@ -625,22 +550,20 @@
     */
     const geometryMap = {
       "2-0": {
-        electronGeometry: "linear",
         molecularGeometry: "linear",
         angle: "180°",
-        polarityHint: "Often non-polar if the outer atoms are identical.",
+        polarityHint: "The molecule is often non-polar if the outer atoms are identical.",
         note: "Two regions of electron density repel to opposite sides of the central atom.",
         points: [
           "A double bond still counts as one region of electron density.",
-          "Electron-domain geometry and molecular geometry are the same because there are no lone pairs."
+          "There are no lone pairs, so the molecular geometry follows the arrangement of the bonded atoms."
         ],
         draw: "linear"
       },
       "3-0": {
-        electronGeometry: "trigonal planar",
         molecularGeometry: "trigonal planar",
         angle: "120°",
-        polarityHint: "Often non-polar if the outer atoms are identical and arranged symmetrically.",
+        polarityHint: "The molecule is often non-polar if the outer atoms are identical and arranged symmetrically.",
         note: "Three electron regions spread into a plane as far apart as possible.",
         points: [
           "Each bonded atom sits at a corner of a trigonal planar arrangement.",
@@ -649,10 +572,9 @@
         draw: "trigonalPlanar"
       },
       "3-1": {
-        electronGeometry: "trigonal planar",
         molecularGeometry: "bent",
         angle: "slightly less than 120°",
-        polarityHint: "Often polar because the bent shape prevents bond dipoles from cancelling.",
+        polarityHint: "The molecule is often polar because the bent shape prevents bond dipoles from cancelling.",
         note: "Three electron regions still arrange trigonal-planarly, but one region is a lone pair.",
         points: [
           "Ignore the lone pair when naming the molecular geometry.",
@@ -661,10 +583,9 @@
         draw: "bentTrigonal"
       },
       "4-0": {
-        electronGeometry: "tetrahedral",
         molecularGeometry: "tetrahedral",
         angle: "109.5°",
-        polarityHint: "Often non-polar if the outer atoms are identical.",
+        polarityHint: "The molecule is often non-polar if the outer atoms are identical.",
         note: "Four electron regions adopt a tetrahedral arrangement.",
         points: [
           "This is the reference case before lone pairs compress bond angles.",
@@ -673,10 +594,9 @@
         draw: "tetrahedral"
       },
       "4-1": {
-        electronGeometry: "tetrahedral",
         molecularGeometry: "trigonal pyramidal",
         angle: "about 107°",
-        polarityHint: "Often polar because the lone pair breaks symmetry.",
+        polarityHint: "The molecule is often polar because the lone pair breaks symmetry.",
         note: "Four electron regions are tetrahedral overall, but one is a lone pair, leaving three atoms in a pyramid.",
         points: [
           "The lone pair repels more strongly than bonding pairs.",
@@ -685,10 +605,9 @@
         draw: "trigonalPyramidal"
       },
       "4-2": {
-        electronGeometry: "tetrahedral",
         molecularGeometry: "bent",
         angle: "about 104.5°",
-        polarityHint: "Often polar because the bent shape is asymmetrical.",
+        polarityHint: "The molecule is often polar because the bent shape is asymmetrical.",
         note: "Four electron regions remain tetrahedral, but two lone pairs leave only two visible bonds.",
         points: [
           "More lone pairs means stronger compression of the bond angle.",
@@ -697,10 +616,9 @@
         draw: "bentTetra"
       },
       "5-0": {
-        electronGeometry: "trigonal bipyramidal",
         molecularGeometry: "trigonal bipyramidal",
         angle: "90°, 120°, and 180°",
-        polarityHint: "May be non-polar if the outer atoms are identical and the arrangement is symmetrical.",
+        polarityHint: "The molecule may be non-polar if the outer atoms are identical and the arrangement is symmetrical.",
         note: "Five regions arrange with three equatorial positions and two axial positions.",
         points: [
           "Equatorial positions are separated by 120°.",
@@ -709,10 +627,9 @@
         draw: "trigonalBipyramidal"
       },
       "5-1": {
-        electronGeometry: "trigonal bipyramidal",
         molecularGeometry: "seesaw",
         angle: "slightly less than 90° and 120°",
-        polarityHint: "Usually polar because the shape is not symmetrical.",
+        polarityHint: "The molecule is usually polar because the shape is not symmetrical.",
         note: "A lone pair occupies an equatorial position to minimise 90° repulsions.",
         points: [
           "The equatorial lone pair leaves a seesaw arrangement of atoms.",
@@ -721,10 +638,9 @@
         draw: "seesaw"
       },
       "5-2": {
-        electronGeometry: "trigonal bipyramidal",
         molecularGeometry: "T-shaped",
         angle: "close to 90° and 180°",
-        polarityHint: "Usually polar because the T-shape is not symmetrical.",
+        polarityHint: "The molecule is usually polar because the T-shape is not symmetrical.",
         note: "Two equatorial lone pairs leave three bonded atoms in a T-shape.",
         points: [
           "Both lone pairs prefer equatorial positions.",
@@ -733,22 +649,20 @@
         draw: "tShaped"
       },
       "5-3": {
-        electronGeometry: "trigonal bipyramidal",
         molecularGeometry: "linear",
         angle: "180°",
-        polarityHint: "Can be non-polar if the two outer atoms are identical.",
+        polarityHint: "The molecule can be non-polar if the two outer atoms are identical.",
         note: "Three equatorial lone pairs leave two axial bonds opposite each other.",
         points: [
-          "Electron-domain geometry stays trigonal bipyramidal.",
+          "The three lone pairs occupy equatorial positions.",
           "XeF2 is the usual example."
         ],
         draw: "linear"
       },
       "6-0": {
-        electronGeometry: "octahedral",
         molecularGeometry: "octahedral",
         angle: "90° and 180°",
-        polarityHint: "Often non-polar if the outer atoms are identical.",
+        polarityHint: "The molecule is often non-polar if the outer atoms are identical.",
         note: "Six regions arrange octahedrally around the central atom.",
         points: [
           "Four bonds sit roughly in a square plane with two axial bonds.",
@@ -757,10 +671,9 @@
         draw: "octahedral"
       },
       "6-1": {
-        electronGeometry: "octahedral",
         molecularGeometry: "square pyramidal",
         angle: "close to 90°",
-        polarityHint: "Usually polar because one site is occupied by a lone pair.",
+        polarityHint: "The molecule is usually polar because one site is occupied by a lone pair.",
         note: "One lone pair removes one vertex from an octahedral arrangement.",
         points: [
           "The remaining atoms form a square base with one atom above it.",
@@ -769,22 +682,20 @@
         draw: "squarePyramidal"
       },
       "6-2": {
-        electronGeometry: "octahedral",
         molecularGeometry: "square planar",
         angle: "90° and 180°",
-        polarityHint: "Can be non-polar if identical atoms occupy the corners symmetrically.",
+        polarityHint: "The molecule can be non-polar if identical atoms occupy the corners symmetrically.",
         note: "Two opposite lone pairs leave four atoms arranged in a square plane.",
         points: [
-          "The electron-domain geometry remains octahedral.",
+          "The two lone pairs occupy opposite positions.",
           "XeF4 is the familiar example."
         ],
         draw: "squarePlanar"
       },
       "7-0": {
-        electronGeometry: "pentagonal bipyramidal",
         molecularGeometry: "pentagonal bipyramidal",
         angle: "72°, 90°, and 180°",
-        polarityHint: "Often non-polar if all seven outer atoms are identical.",
+        polarityHint: "The molecule is often non-polar if all seven outer atoms are identical.",
         note: "Seven electron regions can arrange as a pentagonal bipyramid: five around an equatorial pentagon and two axial.",
         points: [
           "This is beyond the usual IB core examples, but it is a standard higher-coordinate VSEPR case.",
@@ -796,10 +707,9 @@
         // Higher-coordinate examples are deliberately marked as advanced.
         // XeF6 is neutral and its real structure is distorted. Treat it as an
         // advanced comparison case, with CH4 and NH3 serving as cleaner models.
-        electronGeometry: "pentagonal bipyramidal",
         molecularGeometry: "pentagonal pyramidal",
         angle: "approximately 72° and 90°",
-        polarityHint: "Usually polar because the lone pair breaks the symmetry.",
+        polarityHint: "The molecule is usually polar because the lone pair breaks the symmetry.",
         note: "One lone pair in a seven-region arrangement leaves six bonded atoms in a pentagonal pyramid.",
         points: [
           "XeF6 is often discussed as an AX6E case, though its real structure is distorted.",
@@ -843,16 +753,9 @@
     const validityNote = document.getElementById("validityNote");
     const presetGrid = document.getElementById("presetGrid");
     const diagramShell = document.getElementById("diagramShell");
-    const formulaCaption = document.getElementById("formulaCaption");
-    const angleCaption = document.getElementById("angleCaption");
-    const polarityCaption = document.getElementById("polarityCaption");
     const headline = document.getElementById("headline");
     const explanationText = document.getElementById("explanationText");
     const studyPoints = document.getElementById("studyPoints");
-    const regionsStat = document.getElementById("regionsStat");
-    const lonePairStat = document.getElementById("lonePairStat");
-    const bondRegionsStat = document.getElementById("bondRegionsStat");
-    const stepButtons = [...document.querySelectorAll(".step-button")];
     let currentRegions = 4;
     let currentLonePairs = 1;
     let currentExample = presets.find((preset) => preset.label === "NH3");
@@ -1069,7 +972,11 @@
       return `AX${xSubscript}${ePart}`;
     }
 
-    function drawDiagram(mode, central, outer, lonePairs, multipleBond, bondRegions) {
+    function formulaSvg(raw) {
+      return raw.replace(/([A-Za-z\)])(\d+)/g, '$1<tspan baseline-shift="sub" font-size="23">$2</tspan>');
+    }
+
+    function drawDiagram(mode, central, outer, lonePairs, multipleBond, bondRegions, formula) {
       const pieces = [];
       const lonePairPieces = [];
       const outerColour = "#3553b8";
@@ -1195,7 +1102,8 @@
       return `
         <svg viewBox="0 0 700 460" role="img" aria-label="VSEPR geometry diagram">
           <rect x="0" y="0" width="700" height="460" rx="26" fill="transparent"/>
-          <text x="2" y="18" text-anchor="start" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${axeDescriptorSvg(bondRegions, lonePairs)}</text>
+          <text x="2" y="18" text-anchor="start" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${formulaSvg(formula)}</text>
+          <text x="698" y="18" text-anchor="end" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${axeDescriptorSvg(bondRegions, lonePairs)}</text>
           <circle cx="${centralX}" cy="${centralY}" r="${length}" fill="none" stroke="rgba(26,34,48,0.14)" stroke-width="2.5"/>
           ${pieces.join("")}
           ${lonePairPieces.join("")}
@@ -1217,9 +1125,44 @@
       return raw.replace(/([A-Z][a-z]?[\w()]*)/g, (match) => formatFormula(match));
     }
 
+    function relationshipPanel(regions, bondRegions, lonePairs) {
+      return `
+        <div class="relationship-block">
+          <div class="relationship-grid">
+            <div class="relation-card">
+              <div class="relation-symbol">S</div>
+              <div class="relation-name">steric number</div>
+              <div class="relation-value">${regions}</div>
+              <div class="relation-controls" aria-hidden="true"></div>
+            </div>
+            <div class="operator-cell">=</div>
+            <div class="relation-card">
+              <div class="relation-symbol">X</div>
+              <div class="relation-name">coordination number</div>
+              <div class="relation-value">${bondRegions}</div>
+              <div class="relation-controls">
+                <button class="step-button" type="button" data-adjust="x" data-step="-1" aria-label="Decrease coordination number">−</button>
+                <button class="step-button" type="button" data-adjust="x" data-step="1" aria-label="Increase coordination number">+</button>
+              </div>
+            </div>
+            <div class="operator-cell">+</div>
+            <div class="relation-card">
+              <div class="relation-symbol">E</div>
+              <div class="relation-name">lone pairs</div>
+              <div class="relation-value">${lonePairs}</div>
+              <div class="relation-controls">
+                <button class="step-button" type="button" data-adjust="e" data-step="-1" aria-label="Decrease lone pairs">−</button>
+                <button class="step-button" type="button" data-adjust="e" data-step="1" aria-label="Increase lone pairs">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function updateStepButtons(regions, lonePairs) {
       const bondRegions = regions - lonePairs;
-      stepButtons.forEach((button) => {
+      diagramShell.querySelectorAll(".step-button").forEach((button) => {
         const step = Number(button.dataset.step);
         const targetBondRegions = button.dataset.adjust === "x" ? bondRegions + step : bondRegions;
         const targetLonePairs = button.dataset.adjust === "e" ? lonePairs + step : lonePairs;
@@ -1258,33 +1201,33 @@
         ? `${bondRegions} bonding region${bondRegions === 1 ? "" : "s"} and ${lonePairs} lone pair${lonePairs === 1 ? "" : "s"} on the central atom.`
         : `${bondRegions} bonding region${bondRegions === 1 ? "" : "s"}, including ${multipleBond}; multiple bonds still count as one region each.`;
 
-      diagramShell.innerHTML = drawDiagram(entry.draw, central, outer, lonePairs, multipleBond, bondRegions);
-      formulaCaption.innerHTML = formatFormula(formula);
-      angleCaption.textContent = entry.angle;
-      polarityCaption.textContent = entry.polarityHint;
-      headline.textContent = `Electron geometry: ${entry.electronGeometry}. Molecular geometry: ${entry.molecularGeometry}.`;
-      explanationText.innerHTML = formatChemText(entry.note);
+      diagramShell.innerHTML = `
+        ${drawDiagram(entry.draw, central, outer, lonePairs, multipleBond, bondRegions, formula)}
+        ${relationshipPanel(regions, bondRegions, lonePairs)}
+      `;
+      headline.textContent = `Molecular geometry: ${entry.molecularGeometry}.`;
+      explanationText.innerHTML = `${formatChemText(entry.note)} The expected bond angle is ${entry.angle}. ${formatChemText(entry.polarityHint)}`;
       studyPoints.innerHTML = entry.points.map((point) => `<li>${formatChemText(point)}</li>`).join("");
-      regionsStat.textContent = String(regions);
-      lonePairStat.textContent = String(lonePairs);
-      bondRegionsStat.textContent = String(bondRegions);
       updateStepButtons(regions, lonePairs);
     }
 
-    stepButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const regions = currentRegions;
-        const lonePairs = currentLonePairs;
-        const bondRegions = regions - lonePairs;
-        const step = Number(button.dataset.step);
-        const targetBondRegions = button.dataset.adjust === "x" ? bondRegions + step : bondRegions;
-        const targetLonePairs = button.dataset.adjust === "e" ? lonePairs + step : lonePairs;
-        const targetRegions = targetBondRegions + targetLonePairs;
+    diagramShell.addEventListener("click", (event) => {
+      const button = event.target.closest(".step-button");
+      if (!button) {
+        return;
+      }
 
-        if (targetBondRegions >= 1 && targetLonePairs >= 0 && isSupportedPattern(targetRegions, targetLonePairs)) {
-          setPatternKeepingAtoms(targetRegions, targetLonePairs);
-        }
-      });
+      const regions = currentRegions;
+      const lonePairs = currentLonePairs;
+      const bondRegions = regions - lonePairs;
+      const step = Number(button.dataset.step);
+      const targetBondRegions = button.dataset.adjust === "x" ? bondRegions + step : bondRegions;
+      const targetLonePairs = button.dataset.adjust === "e" ? lonePairs + step : lonePairs;
+      const targetRegions = targetBondRegions + targetLonePairs;
+
+      if (targetBondRegions >= 1 && targetLonePairs >= 0 && isSupportedPattern(targetRegions, targetLonePairs)) {
+        setPatternKeepingAtoms(targetRegions, targetLonePairs);
+      }
     });
 
     buildPresetSections();
