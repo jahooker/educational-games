@@ -315,6 +315,18 @@
       overflow-wrap: anywhere;
     }
 
+    .preset-button.is-active {
+      background: rgba(15, 118, 110, 0.12);
+      border-color: rgba(15, 118, 110, 0.42);
+      color: var(--accent);
+      box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.16);
+    }
+
+    .preset-button.is-active:hover {
+      background: rgba(15, 118, 110, 0.16);
+      border-color: rgba(15, 118, 110, 0.48);
+    }
+
     .viewer {
       display: grid;
       gap: 0.45rem;
@@ -341,6 +353,73 @@
       width: min(100%, 820px);
       height: 100%;
       max-height: 100%;
+      animation: diagram-in 180ms ease-out both;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    .diagram-shell svg line,
+    .diagram-shell svg polygon {
+      animation: bond-in 180ms ease-out both;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    .diagram-shell svg text,
+    .diagram-shell svg circle {
+      animation: atom-in 220ms ease-out both;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    .diagram-shell svg circle:first-of-type {
+      animation: guide-in 180ms ease-out both;
+    }
+
+    @keyframes diagram-in {
+      from {
+        opacity: 0;
+        transform: scale(0.985);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes bond-in {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes atom-in {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes guide-in {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     .relationship-block {
@@ -487,6 +566,16 @@
       .diagram-shell {
         min-height: 240px;
         height: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .diagram-shell svg,
+      .diagram-shell svg line,
+      .diagram-shell svg polygon,
+      .diagram-shell svg text,
+      .diagram-shell svg circle {
+        animation: none;
       }
     }
   </style>
@@ -824,6 +913,10 @@
     function createPresetButton(preset) {
       const button = document.createElement("button");
       button.type = "button";
+      button.className = "preset-button";
+      button.dataset.pattern = patternKeyFromPreset(preset);
+      button.dataset.label = preset.label;
+      button.setAttribute("aria-pressed", "false");
       button.innerHTML = `
         <span class="preset-name">${formatFormula(preset.label)}</span>
       `;
@@ -835,6 +928,17 @@
         render();
       });
       return button;
+    }
+
+    function updateActivePreset(example) {
+      presetGrid.querySelectorAll(".preset-button").forEach((button) => {
+        const isActive = example
+          && !example.generated
+          && button.dataset.pattern === patternKeyFromPreset(example)
+          && button.dataset.label === example.label;
+        button.classList.toggle("is-active", Boolean(isActive));
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
     }
 
     // Build the Wikipedia-style pattern table: S increases down rows, E
@@ -1024,8 +1128,8 @@
         place(180, outer);
         if (lonePairs === 3) {
           pair(-90);
-          pair(30);
-          pair(150);
+          pair(60);
+          pair(120);
         }
       } else if (mode === "trigonalPlanar") {
         place(-90, outer);
@@ -1057,11 +1161,11 @@
         place(150, outer, "wedge");
         place(210, outer, "hashed");
       } else if (mode === "seesaw") {
-        place(-90, outer, "solid");
-        place(90, outer, "hashed");
-        place(35, outer, "wedge");
-        place(160, outer, "solid");
-        pair(220);
+        place(0, outer, "solid");
+        place(180, outer, "solid");
+        place(60, outer, "hashed");
+        place(120, outer, "wedge");
+        pair(270, 62);
       } else if (mode === "tShaped") {
         place(90, outer, "solid");
         place(180, outer, "solid");
@@ -1181,6 +1285,7 @@
       const key = `${regions}-${lonePairs}`;
       const entry = geometryMap[key];
       const example = selectedExample();
+      updateActivePreset(example);
 
       if (!entry) {
         validityNote.textContent = "That combination is not supported in this tool. Reduce the lone-pair count or change the steric number.";
