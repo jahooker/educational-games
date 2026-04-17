@@ -303,6 +303,30 @@
                 border-color: rgba(15, 118, 110, 0.48);
             }
 
+            .example-choices {
+                display: grid;
+                gap: 0.35rem;
+                padding-top: 0.35rem;
+            }
+
+            .example-label {
+                font-size: 0.66rem;
+                font-weight: 800;
+                color: var(--muted);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+
+            .example-buttons {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 0.3rem;
+            }
+
+            .generic-example-button {
+                color: var(--accent);
+            }
+
             .viewer {
                 display: grid;
                 gap: 0.45rem;
@@ -433,14 +457,14 @@
 
             .relation-card {
                 display: inline-grid;
-                grid-template-columns: max-content auto;
+                grid-template-columns: minmax(0, 1fr);
                 grid-template-areas:
-                    "symbol name"
-                    "value ."
-                    "controls controls";
+                    "name"
+                    "symbol"
+                    "value"
+                    "controls";
                 justify-content: center;
-                align-items: baseline;
-                column-gap: 0.28rem;
+                align-items: center;
                 row-gap: 0.1rem;
                 padding: 0.15rem 0 0;
                 text-align: center;
@@ -460,7 +484,7 @@
                 font-size: 0.64rem;
                 color: var(--muted);
                 line-height: 1.2;
-                text-align: left;
+                text-align: center;
             }
 
             .relation-value {
@@ -469,6 +493,10 @@
                 font-size: 0.96rem;
                 font-weight: 800;
                 line-height: 1.12;
+            }
+
+            .relation-value:empty {
+                display: none;
             }
 
             .relation-controls {
@@ -540,7 +568,8 @@
                 .workspace,
                 .pair-row,
                 .preset-grid,
-                .preset-matrix {
+                .preset-matrix,
+                .example-buttons {
                     grid-template-columns: 1fr;
                 }
 
@@ -571,10 +600,11 @@
                 <div class="hero-copy">
                     <h1>VSEPR Studio</h1>
                     <p class="subtitle">
-                        Explore VSEPR shapes by choosing a preset molecule or
-                        adjusting the AXE pattern directly. The molecular
-                        geometry, bond-angle note, and polarity comment update
-                        live as the bonding and non-bonding domains change.
+                        Explore VSEPR shapes by choosing an AXE formula or
+                        assigning A and X with an example molecule. The
+                        molecular geometry, bond-angle note, and polarity
+                        comment update live as the bonding and non-bonding
+                        domains change.
                     </p>
                 </div>
             </section>
@@ -583,6 +613,11 @@
                 <div class="controls">
                     <div class="group">
                         <div class="preset-grid" id="presetGrid"></div>
+                        <div
+                            class="example-choices"
+                            id="exampleChoices"
+                            aria-live="polite"
+                        ></div>
                     </div>
                 </div>
 
@@ -593,8 +628,8 @@
                             Molecular geometry: trigonal pyramidal.
                         </h2>
                         <p class="field-note" id="validityNote">
-                            Use the presets or the X/E controls below the
-                            diagram to choose a supported VSEPR pattern.
+                            Choose an AXE formula or use the X/E controls below
+                            the diagram to choose a supported VSEPR pattern.
                         </p>
                         <p id="explanationText">
                             Four bonding electron domains spread themselves out
@@ -615,7 +650,7 @@
       geometryMap is keyed as "S-E", where:
       - S is the steric number: total electron domains around the central atom.
       - E represents the non-bonding electron domains on the central atom.
-      - X is the coordination number; in these diagrams it is computed as S - E
+      - X is the number of surrounding atoms; in these diagrams it is computed as S - E
         because each bonded atom occupies one bonding domain.
 
       Each entry describes the conceptual VSEPR pattern. The separate presets
@@ -941,16 +976,14 @@
 
             const validityNote = document.getElementById("validityNote");
             const presetGrid = document.getElementById("presetGrid");
+            const exampleChoices = document.getElementById("exampleChoices");
             const diagramShell = document.getElementById("diagramShell");
             const headline = document.getElementById("headline");
             const explanationText = document.getElementById("explanationText");
             const studyPoints = document.getElementById("studyPoints");
             let currentRegions = 4;
             let currentLonePairs = 0;
-            let currentExample = presets.find(
-                (preset) => preset.label === "CH4",
-            );
-            let preservedExample = null;
+            let currentExample = null;
 
             function isSupportedPattern(regions, lonePairs) {
                 return Object.prototype.hasOwnProperty.call(
@@ -961,6 +994,16 @@
 
             function patternKeyFromPreset(preset) {
                 return `${preset.regions}-${preset.lonePairs}`;
+            }
+
+            function axeFormulaHtml(bondRegions, lonePairs) {
+                const xSubscript =
+                    bondRegions === 1 ? "" : `<sub>${bondRegions}</sub>`;
+                const ePart =
+                    lonePairs === 0
+                        ? ""
+                        : `E${lonePairs === 1 ? "" : `<sub>${lonePairs}</sub>`}`;
+                return `AX${xSubscript}${ePart}`;
             }
 
             function matchingExamples() {
@@ -974,36 +1017,7 @@
                 return `${central}${outer}${bondRegions === 1 ? "" : bondRegions}`;
             }
 
-            function preserveCurrentAtoms(regions, lonePairs, currentExample) {
-                const bondRegions = regions - lonePairs;
-                const currentBondRegions =
-                    currentExample.regions - currentExample.lonePairs;
-                return {
-                    label: displayedFormula(
-                        currentExample.central,
-                        currentExample.outer,
-                        bondRegions,
-                    ),
-                    central: currentExample.central,
-                    outer: currentExample.outer,
-                    regions,
-                    lonePairs,
-                    multipleBond:
-                        bondRegions === currentBondRegions
-                            ? currentExample.multipleBond
-                            : "none",
-                    generated: true,
-                };
-            }
-
             function selectedExample() {
-                if (
-                    preservedExample &&
-                    patternKeyFromPreset(preservedExample) ===
-                        `${currentRegions}-${currentLonePairs}`
-                ) {
-                    return preservedExample;
-                }
                 if (
                     currentExample &&
                     patternKeyFromPreset(currentExample) ===
@@ -1011,26 +1025,10 @@
                 ) {
                     return currentExample;
                 }
-                return matchingExamples()[0] || null;
+                return null;
             }
 
             function setPattern(regions, lonePairs) {
-                preservedExample = null;
-                currentRegions = regions;
-                currentLonePairs = lonePairs;
-                currentExample = matchingExamples()[0] || null;
-                render();
-            }
-
-            function setPatternKeepingAtoms(regions, lonePairs) {
-                const existingExample = selectedExample();
-                if (existingExample) {
-                    preservedExample = preserveCurrentAtoms(
-                        regions,
-                        lonePairs,
-                        existingExample,
-                    );
-                }
                 currentRegions = regions;
                 currentLonePairs = lonePairs;
                 currentExample = null;
@@ -1040,7 +1038,7 @@
             function createPresetButton(preset) {
                 const button = document.createElement("button");
                 button.type = "button";
-                button.className = "preset-button";
+                button.className = "preset-button example-button";
                 button.dataset.pattern = patternKeyFromPreset(preset);
                 button.dataset.label = preset.label;
                 button.setAttribute("aria-pressed", "false");
@@ -1048,7 +1046,6 @@
         <span class="preset-name">${formatFormula(preset.label)}</span>
       `;
                 button.addEventListener("click", () => {
-                    preservedExample = null;
                     currentRegions = preset.regions;
                     currentLonePairs = preset.lonePairs;
                     currentExample = preset;
@@ -1057,10 +1054,53 @@
                 return button;
             }
 
+            function createPatternButton(regions, lonePairs) {
+                const bondRegions = regions - lonePairs;
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "preset-button pattern-button";
+                button.dataset.pattern = `${regions}-${lonePairs}`;
+                button.dataset.regions = regions;
+                button.dataset.lonePairs = lonePairs;
+                button.setAttribute("aria-pressed", "false");
+                button.innerHTML = `
+        <span class="preset-name">${axeFormulaHtml(bondRegions, lonePairs)}</span>
+      `;
+                button.addEventListener("click", () => {
+                    setPattern(regions, lonePairs);
+                });
+                return button;
+            }
+
             function updateActivePreset(example) {
                 presetGrid
-                    .querySelectorAll(".preset-button")
+                    .querySelectorAll(".pattern-button")
                     .forEach((button) => {
+                        const isActive =
+                            button.dataset.pattern ===
+                            `${currentRegions}-${currentLonePairs}`;
+                        button.classList.toggle("is-active", isActive);
+                        button.setAttribute(
+                            "aria-pressed",
+                            isActive ? "true" : "false",
+                        );
+                    });
+
+                exampleChoices
+                    .querySelectorAll(".example-button")
+                    .forEach((button) => {
+                        if (
+                            button.classList.contains("generic-example-button")
+                        ) {
+                            const isGeneric = !example;
+                            button.classList.toggle("is-active", isGeneric);
+                            button.setAttribute(
+                                "aria-pressed",
+                                isGeneric ? "true" : "false",
+                            );
+                            return;
+                        }
+
                         const isActive =
                             example &&
                             !example.generated &&
@@ -1073,6 +1113,46 @@
                             isActive ? "true" : "false",
                         );
                     });
+            }
+
+            function renderExampleChoices() {
+                const examples = matchingExamples();
+
+                if (examples.length === 0) {
+                    exampleChoices.innerHTML = "";
+                    return;
+                }
+
+                exampleChoices.innerHTML = `
+        <div class="example-label">Examples</div>
+        <div class="example-buttons"></div>
+      `;
+                const buttonGrid =
+                    exampleChoices.querySelector(".example-buttons");
+                const genericButton = document.createElement("button");
+                genericButton.type = "button";
+                genericButton.className =
+                    "preset-button example-button generic-example-button";
+                genericButton.innerHTML = `
+        <span class="preset-name">${axeFormulaHtml(currentRegions - currentLonePairs, currentLonePairs)}</span>
+      `;
+                genericButton.setAttribute(
+                    "aria-label",
+                    "Clear element identities",
+                );
+                genericButton.setAttribute(
+                    "aria-pressed",
+                    selectedExample() ? "false" : "true",
+                );
+                genericButton.classList.toggle("is-active", !selectedExample());
+                genericButton.addEventListener("click", () => {
+                    currentExample = null;
+                    render();
+                });
+                buttonGrid.appendChild(genericButton);
+                examples.forEach((preset) => {
+                    buttonGrid.appendChild(createPresetButton(preset));
+                });
             }
 
             // Build the Wikipedia-style pattern table: S increases down rows, E
@@ -1104,19 +1184,13 @@
                     lonePairColumns.forEach((lonePairs) => {
                         const cell = document.createElement("div");
                         cell.className = "preset-cell";
-                        const matches = presets.filter(
-                            (preset) =>
-                                preset.regions === regions &&
-                                preset.lonePairs === lonePairs,
-                        );
-
-                        if (matches.length === 0) {
+                        if (!isSupportedPattern(regions, lonePairs)) {
                             cell.classList.add("empty");
                             cell.textContent = "—";
                         } else {
-                            matches.forEach((preset) => {
-                                cell.appendChild(createPresetButton(preset));
-                            });
+                            cell.appendChild(
+                                createPatternButton(regions, lonePairs),
+                            );
                         }
 
                         matrix.appendChild(cell);
@@ -1264,7 +1338,7 @@
                 lonePairs,
                 multipleBond,
                 bondRegions,
-                formula,
+                formula = "",
             ) {
                 const pieces = [];
                 const lonePairPieces = [];
@@ -1412,8 +1486,8 @@
                 return `
         <svg viewBox="0 0 700 460" role="img" aria-label="VSEPR geometry diagram">
           <rect x="0" y="0" width="700" height="460" rx="26" fill="transparent"/>
-          <text x="2" y="18" text-anchor="start" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${formulaSvg(formula)}</text>
-          <text x="698" y="18" text-anchor="end" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${axeDescriptorSvg(bondRegions, lonePairs)}</text>
+          <text x="2" y="18" text-anchor="start" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${axeDescriptorSvg(bondRegions, lonePairs)}</text>
+          ${formula ? `<text x="698" y="18" text-anchor="end" dominant-baseline="middle" style="font:34px 'IBM Plex Mono','Menlo','Consolas',monospace;font-weight:800;fill:#1a2230;">${formulaSvg(formula)}</text>` : ""}
           <circle cx="${centralX}" cy="${centralY}" r="${length}" fill="none" stroke="rgba(26,34,48,0.14)" stroke-width="2.5"/>
           ${pieces.join("")}
           ${lonePairPieces.join("")}
@@ -1440,27 +1514,27 @@
             function relationshipPanel(regions, bondRegions, lonePairs) {
                 return `
         <div class="relationship-block">
-          <div class="relationship-grid">
-            <div class="relation-card">
+            <div class="relationship-grid">
+              <div class="relation-card">
+              <div class="relation-name">Steric number</div>
               <div class="relation-symbol">S</div>
-              <div class="relation-name">steric number</div>
               <div class="relation-value">${regions}</div>
               <div class="relation-controls" aria-hidden="true"></div>
             </div>
             <div class="operator-cell">=</div>
             <div class="relation-card">
-              <div class="relation-symbol">X</div>
-              <div class="relation-name">coordination number</div>
+              <div class="relation-name">Surrounding atoms</div>
+              <div class="relation-symbol">m</div>
               <div class="relation-value">${bondRegions}</div>
               <div class="relation-controls">
-                <button class="step-button" type="button" data-adjust="x" data-step="-1" aria-label="Decrease coordination number">−</button>
-                <button class="step-button" type="button" data-adjust="x" data-step="1" aria-label="Increase coordination number">+</button>
+                <button class="step-button" type="button" data-adjust="x" data-step="-1" aria-label="Decrease surrounding atoms">−</button>
+                <button class="step-button" type="button" data-adjust="x" data-step="1" aria-label="Increase surrounding atoms">+</button>
               </div>
             </div>
             <div class="operator-cell">+</div>
             <div class="relation-card">
-              <div class="relation-symbol">E</div>
-              <div class="relation-name">non-bonding domains</div>
+              <div class="relation-name">Non-bonding domains</div>
+              <div class="relation-symbol">n</div>
               <div class="relation-value">${lonePairs}</div>
               <div class="relation-controls">
                 <button class="step-button" type="button" data-adjust="e" data-step="-1" aria-label="Decrease non-bonding domains">−</button>
@@ -1503,11 +1577,12 @@
                 const key = `${regions}-${lonePairs}`;
                 const entry = geometryMap[key];
                 const example = selectedExample();
-                updateActivePreset(example);
 
                 if (!entry) {
                     validityNote.textContent =
                         "That combination is not supported in this tool. Reduce the non-bonding domains or change the steric number.";
+                    exampleChoices.innerHTML = "";
+                    updateActivePreset(null);
                     diagramShell.innerHTML = "";
                     headline.textContent = "Unsupported combination";
                     explanationText.textContent =
@@ -1516,12 +1591,12 @@
                     return;
                 }
 
-                const formula = example?.label || `AX`;
+                const bondRegions = regions - lonePairs;
+                const formula = example?.label || "";
                 const central = example?.central || "A";
                 const outer = example?.outer || "X";
                 const multipleBond = example?.multipleBond || "none";
 
-                const bondRegions = regions - lonePairs;
                 validityNote.textContent = domainSummaryText(
                     bondRegions,
                     lonePairs,
@@ -1537,6 +1612,8 @@
                 studyPoints.innerHTML = entry.points
                     .map((point) => `<li>${formatChemText(point)}</li>`)
                     .join("");
+                renderExampleChoices();
+                updateActivePreset(example);
                 updateStepButtons(regions, lonePairs);
             }
 
@@ -1565,7 +1642,7 @@
                     targetLonePairs >= 0 &&
                     isSupportedPattern(targetRegions, targetLonePairs)
                 ) {
-                    setPatternKeepingAtoms(targetRegions, targetLonePairs);
+                    setPattern(targetRegions, targetLonePairs);
                 }
             });
 
