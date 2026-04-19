@@ -193,18 +193,68 @@
                 gap: 0.4rem;
             }
 
+            .template-compact {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 0.45rem;
+                align-items: stretch;
+            }
+
+            .template-summary {
+                display: grid;
+                gap: 0.25rem;
+                min-width: 0;
+                padding: 0.55rem 0.65rem;
+                border: 1px solid rgba(26, 34, 48, 0.12);
+                border-radius: 16px;
+                background: rgba(255, 255, 255, 0.42);
+            }
+
+            .template-summary-label {
+                font-size: 0.62rem;
+                font-weight: 800;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--muted);
+            }
+
+            .template-summary-value {
+                font-size: 1.05rem;
+                font-weight: 800;
+                color: var(--accent);
+                line-height: 1;
+            }
+
+            .template-summary-value sub {
+                font-size: 0.66em;
+                line-height: 0;
+                vertical-align: sub;
+            }
+
+            .template-open-button {
+                display: grid;
+                place-items: center;
+                min-width: 3.4rem;
+                padding-inline: 0.75rem;
+                text-align: center;
+                font-weight: 800;
+            }
+
             .preset-grid {
                 display: grid;
                 gap: 0.4rem;
                 min-width: 0;
+                overflow-x: auto;
+                padding-bottom: 0.2rem;
+                scrollbar-gutter: stable;
             }
 
             .preset-matrix {
                 display: grid;
-                grid-template-columns: 88px repeat(4, minmax(0, 1fr));
+                grid-template-columns: 72px repeat(7, minmax(76px, 1fr));
                 gap: 0.3rem;
                 align-items: stretch;
-                min-width: 0;
+                min-width: 680px;
             }
 
             .preset-corner,
@@ -325,6 +375,54 @@
 
             .generic-example-button {
                 color: var(--accent);
+            }
+
+            .template-dialog {
+                width: min(92vw, 850px);
+                max-height: min(88vh, 720px);
+                padding: 0;
+                border: 1px solid rgba(26, 34, 48, 0.14);
+                border-radius: 20px;
+                background: #fffaf1;
+                color: var(--ink);
+                box-shadow: var(--shadow);
+            }
+
+            .template-dialog::backdrop {
+                background: rgba(26, 34, 48, 0.38);
+                backdrop-filter: blur(3px);
+            }
+
+            .template-dialog-panel {
+                display: grid;
+                gap: 0.75rem;
+                padding: 0.85rem;
+                max-height: min(88vh, 720px);
+                overflow: auto;
+            }
+
+            .template-dialog-header {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 0.75rem;
+                align-items: center;
+            }
+
+            .template-dialog-title {
+                font-size: 1rem;
+                font-weight: 800;
+                line-height: 1.2;
+            }
+
+            .template-close-button {
+                display: grid;
+                place-items: center;
+                width: 2.5rem;
+                height: 2.5rem;
+                padding: 0;
+                text-align: center;
+                font-size: 1.2rem;
+                font-weight: 800;
             }
 
             .viewer {
@@ -567,8 +665,7 @@
                 .hero,
                 .workspace,
                 .pair-row,
-                .preset-grid,
-                .preset-matrix,
+                .template-compact,
                 .example-buttons {
                     grid-template-columns: 1fr;
                 }
@@ -612,7 +709,28 @@
             <section class="workspace">
                 <div class="controls">
                     <div class="group">
-                        <div class="preset-grid" id="presetGrid"></div>
+                        <div class="template-compact">
+                            <div class="template-summary">
+                                <div class="template-summary-label">
+                                    AXE formula
+                                </div>
+                                <div
+                                    class="template-summary-value"
+                                    id="templateSummary"
+                                >
+                                    AX4
+                                </div>
+                            </div>
+                            <button
+                                class="template-open-button"
+                                id="openTemplateGrid"
+                                type="button"
+                                aria-label="Open AXE formula grid"
+                                title="Open AXE formula grid"
+                            >
+                                ▦
+                            </button>
+                        </div>
                         <div
                             class="example-choices"
                             id="exampleChoices"
@@ -642,6 +760,27 @@
                 </div>
             </section>
         </main>
+
+        <dialog class="template-dialog" id="templateDialog">
+            <div class="template-dialog-panel">
+                <div class="template-dialog-header">
+                    <div>
+                        <div class="template-dialog-title">
+                            AXE formulae
+                        </div>
+                    </div>
+                    <button
+                        class="template-close-button"
+                        id="closeTemplateGrid"
+                        type="button"
+                        aria-label="Close AXE formula grid"
+                    >
+                        ×
+                    </button>
+                </div>
+                <div class="preset-grid" id="presetGrid"></div>
+            </div>
+        </dialog>
 
         <script>
             /*
@@ -787,12 +926,13 @@
                 },
                 "6-1": {
                     molecularGeometry: "square pyramidal",
-                    angle: "close to 90°",
+                    angle: "close to 90° and 180°",
                     polarityHint:
                         "Due to the square pyramidal shape, bond dipoles cause the molecule to be polar.",
-                    note: "Five bonding electron domains and one non-bonding electron domain arrange octahedrally.",
+                    note: "Five bonding electron domains and one non-bonding electron domain give an octahedral electron-domain geometry and a square pyramidal molecular geometry.",
                     points: [
-                        "The surrounding atoms form a square base with one atom above it.",
+                        "Four surrounding atoms form a square base, with one surrounding atom above the central atom.",
+                        "The non-bonding electron domain occupies the position opposite the atom at the top of the pyramid.",
                         "BrF5 is the standard example.",
                     ],
                     draw: "squarePyramidal",
@@ -808,6 +948,31 @@
                         "XeF4 is the familiar example.",
                     ],
                     draw: "squarePlanar",
+                },
+                "6-3": {
+                    molecularGeometry: "T-shaped",
+                    angle: "close to 90° and 180°",
+                    polarityHint:
+                        "Due to the T-shape, bond dipoles cause the molecule or ion to be polar.",
+                    note: "Three bonding electron domains and three non-bonding electron domains give an octahedral electron-domain geometry and a T-shaped molecular geometry.",
+                    points: [
+                        "The three non-bonding electron domains occupy three positions in the octahedral arrangement.",
+                        "The remaining three surrounding atoms form a T-shape.",
+                        "Neutral textbook examples are not common, so no concrete example is included here.",
+                    ],
+                    draw: "tShapedOctahedral",
+                },
+                "6-4": {
+                    molecularGeometry: "linear",
+                    angle: "180°",
+                    polarityHint:
+                        "If the two surrounding atoms are identical, the molecule or ion will be non-polar.",
+                    note: "Two bonding electron domains and four non-bonding electron domains give an octahedral electron-domain geometry and a linear molecular geometry.",
+                    points: [
+                        "The two surrounding atoms occupy opposite positions.",
+                        "Neutral textbook examples are not common, so no concrete example is included here.",
+                    ],
+                    draw: "linearOctahedral",
                 },
                 "7-0": {
                     molecularGeometry: "pentagonal bipyramidal",
@@ -848,6 +1013,42 @@
                     ],
                     draw: "pentagonalPlanar",
                 },
+                "7-3": {
+                    molecularGeometry: "seesaw-like",
+                    angle: "approximately 72°, 90°, and 180°",
+                    polarityHint:
+                        "Due to the asymmetric shape, bond dipoles may cause the molecule or ion to be polar.",
+                    note: "Four bonding electron domains and three non-bonding electron domains can be treated as a pentagonal-bipyramidal arrangement with three positions occupied by non-bonding domains.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "pentagonalSeesaw",
+                },
+                "7-4": {
+                    molecularGeometry: "T-shaped",
+                    angle: "approximately 90° and 180°",
+                    polarityHint:
+                        "Due to the T-shape, bond dipoles may cause the molecule or ion to be polar.",
+                    note: "Three bonding electron domains and four non-bonding electron domains can be treated as a pentagonal-bipyramidal arrangement with four positions occupied by non-bonding domains.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "pentagonalTShaped",
+                },
+                "7-5": {
+                    molecularGeometry: "linear",
+                    angle: "180°",
+                    polarityHint:
+                        "If the two surrounding atoms are identical, the molecule or ion will be non-polar.",
+                    note: "Two bonding electron domains and five non-bonding electron domains can be treated as a pentagonal-bipyramidal arrangement with five positions occupied by non-bonding domains.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "pentagonalLinear",
+                },
                 "8-0": {
                     molecularGeometry: "square antiprismatic",
                     angle: "not a single fixed value",
@@ -856,6 +1057,78 @@
                     note: "Eight bonding electron domains can arrange as a square antiprism.",
                     points: [
                         "This is an advanced higher-coordinate case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "squareAntiprismatic",
+                },
+                "8-1": {
+                    molecularGeometry: "square-antiprismatic fragment",
+                    angle: "not a single fixed value",
+                    polarityHint:
+                        "Due to the asymmetric shape, bond dipoles may cause the molecule or ion to be polar.",
+                    note: "Seven bonding electron domains and one non-bonding electron domain can be treated as a square-antiprismatic arrangement with one position occupied by a non-bonding domain.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "squareAntiprismatic",
+                },
+                "8-2": {
+                    molecularGeometry: "square-antiprismatic fragment",
+                    angle: "not a single fixed value",
+                    polarityHint:
+                        "Due to the asymmetric shape, bond dipoles may cause the molecule or ion to be polar.",
+                    note: "Six bonding electron domains and two non-bonding electron domains can be treated as a square-antiprismatic arrangement with two positions occupied by non-bonding domains.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "squareAntiprismatic",
+                },
+                "8-3": {
+                    molecularGeometry: "square-antiprismatic fragment",
+                    angle: "not a single fixed value",
+                    polarityHint:
+                        "Due to the asymmetric shape, bond dipoles may cause the molecule or ion to be polar.",
+                    note: "Five bonding electron domains and three non-bonding electron domains can be treated as a square-antiprismatic arrangement with three positions occupied by non-bonding domains.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "squareAntiprismatic",
+                },
+                "8-4": {
+                    molecularGeometry: "square-antiprismatic fragment",
+                    angle: "not a single fixed value",
+                    polarityHint:
+                        "Due to the asymmetric shape, bond dipoles may cause the molecule or ion to be polar.",
+                    note: "Four bonding electron domains and four non-bonding electron domains can be treated as a square-antiprismatic arrangement with four positions occupied by non-bonding domains.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "squareAntiprismatic",
+                },
+                "8-5": {
+                    molecularGeometry: "square-antiprismatic fragment",
+                    angle: "not a single fixed value",
+                    polarityHint:
+                        "Due to the asymmetric shape, bond dipoles may cause the molecule or ion to be polar.",
+                    note: "Three bonding electron domains and five non-bonding electron domains can be treated as a square-antiprismatic arrangement with five positions occupied by non-bonding domains.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "squareAntiprismatic",
+                },
+                "8-6": {
+                    molecularGeometry: "square-antiprismatic fragment",
+                    angle: "not a single fixed value",
+                    polarityHint:
+                        "If the two surrounding atoms occupy opposite positions and are identical, the molecule or ion will be non-polar.",
+                    note: "Two bonding electron domains and six non-bonding electron domains can be treated as a square-antiprismatic arrangement with six positions occupied by non-bonding domains.",
+                    points: [
+                        "This is an advanced, approximate VSEPR case.",
                         "No concrete example is included for this AXE formula.",
                     ],
                     draw: "squareAntiprismatic",
@@ -1120,6 +1393,12 @@
 
             const validityNote = document.getElementById("validityNote");
             const presetGrid = document.getElementById("presetGrid");
+            const templateSummary = document.getElementById("templateSummary");
+            const openTemplateGrid =
+                document.getElementById("openTemplateGrid");
+            const closeTemplateGrid =
+                document.getElementById("closeTemplateGrid");
+            const templateDialog = document.getElementById("templateDialog");
             const exampleChoices = document.getElementById("exampleChoices");
             const diagramShell = document.getElementById("diagramShell");
             const headline = document.getElementById("headline");
@@ -1179,6 +1458,20 @@
                 render();
             }
 
+            function openTemplateDialog() {
+                if (typeof templateDialog.showModal === "function") {
+                    templateDialog.showModal();
+                } else {
+                    templateDialog.setAttribute("open", "");
+                }
+            }
+
+            function closeTemplateDialog() {
+                if (templateDialog.open) {
+                    templateDialog.close();
+                }
+            }
+
             function createPresetButton(preset) {
                 const button = document.createElement("button");
                 button.type = "button";
@@ -1212,6 +1505,7 @@
       `;
                 button.addEventListener("click", () => {
                     setPattern(regions, lonePairs);
+                    closeTemplateDialog();
                 });
                 return button;
             }
@@ -1307,7 +1601,7 @@
             // curated example set.
             function buildPresetSections() {
                 const stericNumbers = [2, 3, 4, 5, 6, 7, 8];
-                const lonePairColumns = [0, 1, 2, 3];
+                const lonePairColumns = [0, 1, 2, 3, 4, 5, 6];
                 const matrix = document.createElement("div");
                 matrix.className = "preset-matrix";
 
@@ -1598,6 +1892,44 @@
                     place(49, outer, "wedge", 88);
                 }
 
+                function squareAntiprismPattern() {
+                    const sites = [
+                        { angle: -90, type: "solid", distance: length },
+                        { angle: 0, type: "solid", distance: length },
+                        { angle: 90, type: "solid", distance: length },
+                        { angle: 180, type: "solid", distance: length },
+                        { angle: -45, type: "hashed", distance: 112 },
+                        { angle: 45, type: "wedge", distance: 112 },
+                        { angle: 135, type: "wedge", distance: 112 },
+                        { angle: 225, type: "hashed", distance: 112 },
+                    ];
+                    const indexesByBondCount = {
+                        2: [0, 2],
+                        3: [0, 1, 3],
+                        4: [0, 1, 2, 3],
+                        5: [0, 1, 2, 3, 4],
+                        6: [0, 1, 2, 3, 4, 6],
+                        7: [0, 1, 2, 3, 4, 5, 6],
+                        8: [0, 1, 2, 3, 4, 5, 6, 7],
+                    };
+                    const bondIndexes = new Set(
+                        indexesByBondCount[bondRegions] || [],
+                    );
+
+                    sites.forEach((site, index) => {
+                        if (bondIndexes.has(index)) {
+                            place(
+                                site.angle,
+                                outer,
+                                site.type,
+                                site.distance,
+                            );
+                        } else {
+                            pair(site.angle, 62);
+                        }
+                    });
+                }
+
                 if (mode === "linear") {
                     place(0, outer);
                     place(180, outer);
@@ -1668,6 +2000,20 @@
                     place(210, outer, "hashed");
                     pair(-90);
                     pair(90);
+                } else if (mode === "tShapedOctahedral") {
+                    place(-90, outer, "solid");
+                    place(0, outer, "solid");
+                    place(180, outer, "solid");
+                    pair(90);
+                    pair(30);
+                    pair(150);
+                } else if (mode === "linearOctahedral") {
+                    place(-90, outer, "solid");
+                    place(90, outer, "solid");
+                    pair(0);
+                    pair(180);
+                    pair(30);
+                    pair(150);
                 } else if (mode === "pentagonalBipyramidal") {
                     place(-90, outer, "solid");
                     place(90, outer, "solid");
@@ -1680,15 +2026,32 @@
                     pentagonalPlane();
                     pairOffset(0, -62, 0);
                     pairOffset(0, 62, 0);
-                } else if (mode === "squareAntiprismatic") {
+                } else if (mode === "pentagonalSeesaw") {
                     place(-90, outer, "solid");
-                    place(0, outer, "solid");
                     place(90, outer, "solid");
+                    place(0, outer, "solid");
                     place(180, outer, "solid");
-                    place(-45, outer, "hashed", 112);
-                    place(45, outer, "wedge", 112);
-                    place(135, outer, "wedge", 112);
-                    place(225, outer, "hashed", 112);
+                    pair(-42);
+                    pair(49);
+                    pair(156);
+                } else if (mode === "pentagonalTShaped") {
+                    place(-90, outer, "solid");
+                    place(90, outer, "solid");
+                    place(0, outer, "solid");
+                    pair(180);
+                    pair(-42);
+                    pair(49);
+                    pair(156);
+                } else if (mode === "pentagonalLinear") {
+                    place(-90, outer, "solid");
+                    place(90, outer, "solid");
+                    pair(0);
+                    pair(180);
+                    pair(-42);
+                    pair(49);
+                    pair(156);
+                } else if (mode === "squareAntiprismatic") {
+                    squareAntiprismPattern();
                 }
 
                 return `
@@ -1805,6 +2168,11 @@
                 const outer = example?.outer || "X";
                 const multipleBond = example?.multipleBond || "none";
 
+                templateSummary.innerHTML = axeFormulaHtml(
+                    bondRegions,
+                    lonePairs,
+                );
+
                 validityNote.textContent = domainSummaryText(
                     bondRegions,
                     lonePairs,
@@ -1851,6 +2219,14 @@
                     isSupportedPattern(targetRegions, targetLonePairs)
                 ) {
                     setPattern(targetRegions, targetLonePairs);
+                }
+            });
+
+            openTemplateGrid.addEventListener("click", openTemplateDialog);
+            closeTemplateGrid.addEventListener("click", closeTemplateDialog);
+            templateDialog.addEventListener("click", (event) => {
+                if (event.target === templateDialog) {
+                    closeTemplateDialog();
                 }
             });
 

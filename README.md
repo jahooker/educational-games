@@ -12,8 +12,9 @@ Small browser-based learning tools published with GitHub Pages.
 ### Current design
 
 - The template grid displays AXE formulae.
+- The template grid opens in a pop-out dialog.
 - Once an AXE formula is selected, matching molecule examples are shown.
-- Some supported AXE formulae, such as `AX5E2` and `AX8`, have no neutral example included.
+- Some supported AXE formulae, such as `AX3E3`, `AX2E4`, `AX5E2`, and the lone-pair-containing `S = 8` patterns, have no neutral example included.
 - By default, the viewport uses generic `A` and `X` atom labels.
 - Selecting an example molecule assigns `A` and `X` to the appropriate elements.
 - Users can clear the element identities to return to generic `A` and `X` labels.
