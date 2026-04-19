@@ -836,6 +836,30 @@
                     ],
                     draw: "pentagonalPyramidal",
                 },
+                "7-2": {
+                    molecularGeometry: "pentagonal planar",
+                    angle: "72°",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule or ion will be non-polar.",
+                    note: "Five bonding electron domains and two non-bonding electron domains arrange as a pentagonal bipyramid.",
+                    points: [
+                        "The two non-bonding electron domains occupy opposite axial positions.",
+                        "Simple examples are usually ions, so no neutral example is included here.",
+                    ],
+                    draw: "pentagonalPlanar",
+                },
+                "8-0": {
+                    molecularGeometry: "square antiprismatic",
+                    angle: "not a single fixed value",
+                    polarityHint:
+                        "If the surrounding atoms are identical, the molecule or ion will be non-polar.",
+                    note: "Eight bonding electron domains can arrange as a square antiprism.",
+                    points: [
+                        "This is an advanced higher-coordinate case.",
+                        "No concrete example is included for this AXE formula.",
+                    ],
+                    draw: "squareAntiprismatic",
+                },
             };
 
             /*
@@ -861,6 +885,14 @@
                     multipleBond: "two double bonds",
                 },
                 {
+                    label: "CS2",
+                    central: "C",
+                    outer: "S",
+                    regions: 2,
+                    lonePairs: 0,
+                    multipleBond: "two double bonds",
+                },
+                {
                     label: "BF3",
                     central: "B",
                     outer: "F",
@@ -869,8 +901,24 @@
                     multipleBond: "none",
                 },
                 {
+                    label: "BCl3",
+                    central: "B",
+                    outer: "Cl",
+                    regions: 3,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
                     label: "SO2",
                     central: "S",
+                    outer: "O",
+                    regions: 3,
+                    lonePairs: 1,
+                    multipleBond: "one double bond",
+                },
+                {
+                    label: "O3",
+                    central: "O",
                     outer: "O",
                     regions: 3,
                     lonePairs: 1,
@@ -885,8 +933,40 @@
                     multipleBond: "none",
                 },
                 {
+                    label: "CF4",
+                    central: "C",
+                    outer: "F",
+                    regions: 4,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
+                    label: "CCl4",
+                    central: "C",
+                    outer: "Cl",
+                    regions: 4,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
                     label: "NH3",
                     central: "N",
+                    outer: "H",
+                    regions: 4,
+                    lonePairs: 1,
+                    multipleBond: "none",
+                },
+                {
+                    label: "NF3",
+                    central: "N",
+                    outer: "F",
+                    regions: 4,
+                    lonePairs: 1,
+                    multipleBond: "none",
+                },
+                {
+                    label: "PH3",
+                    central: "P",
                     outer: "H",
                     regions: 4,
                     lonePairs: 1,
@@ -901,6 +981,22 @@
                     multipleBond: "none",
                 },
                 {
+                    label: "H2S",
+                    central: "S",
+                    outer: "H",
+                    regions: 4,
+                    lonePairs: 2,
+                    multipleBond: "none",
+                },
+                {
+                    label: "OF2",
+                    central: "O",
+                    outer: "F",
+                    regions: 4,
+                    lonePairs: 2,
+                    multipleBond: "none",
+                },
+                {
                     label: "PCl5",
                     central: "P",
                     outer: "Cl",
@@ -909,8 +1005,24 @@
                     multipleBond: "none",
                 },
                 {
+                    label: "PF5",
+                    central: "P",
+                    outer: "F",
+                    regions: 5,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
                     label: "SF4",
                     central: "S",
+                    outer: "F",
+                    regions: 5,
+                    lonePairs: 1,
+                    multipleBond: "none",
+                },
+                {
+                    label: "SeF4",
+                    central: "Se",
                     outer: "F",
                     regions: 5,
                     lonePairs: 1,
@@ -925,8 +1037,24 @@
                     multipleBond: "none",
                 },
                 {
+                    label: "BrF3",
+                    central: "Br",
+                    outer: "F",
+                    regions: 5,
+                    lonePairs: 2,
+                    multipleBond: "none",
+                },
+                {
                     label: "XeF2",
                     central: "Xe",
+                    outer: "F",
+                    regions: 5,
+                    lonePairs: 3,
+                    multipleBond: "none",
+                },
+                {
+                    label: "KrF2",
+                    central: "Kr",
                     outer: "F",
                     regions: 5,
                     lonePairs: 3,
@@ -941,8 +1069,24 @@
                     multipleBond: "none",
                 },
                 {
+                    label: "SeF6",
+                    central: "Se",
+                    outer: "F",
+                    regions: 6,
+                    lonePairs: 0,
+                    multipleBond: "none",
+                },
+                {
                     label: "BrF5",
                     central: "Br",
+                    outer: "F",
+                    regions: 6,
+                    lonePairs: 1,
+                    multipleBond: "none",
+                },
+                {
+                    label: "IF5",
+                    central: "I",
                     outer: "F",
                     regions: 6,
                     lonePairs: 1,
@@ -1118,11 +1262,6 @@
             function renderExampleChoices() {
                 const examples = matchingExamples();
 
-                if (examples.length === 0) {
-                    exampleChoices.innerHTML = "";
-                    return;
-                }
-
                 exampleChoices.innerHTML = `
         <div class="example-label">Examples</div>
         <div class="example-buttons"></div>
@@ -1153,13 +1292,21 @@
                 examples.forEach((preset) => {
                     buttonGrid.appendChild(createPresetButton(preset));
                 });
+
+                if (examples.length === 0) {
+                    const emptyNote = document.createElement("div");
+                    emptyNote.className = "field-note";
+                    emptyNote.textContent =
+                        "No neutral example is included for this AXE formula.";
+                    exampleChoices.appendChild(emptyNote);
+                }
             }
 
             // Build the Wikipedia-style pattern table: S increases down rows, E
             // increases across columns. Empty cells are intentional gaps in the
             // curated example set.
             function buildPresetSections() {
-                const stericNumbers = [2, 3, 4, 5, 6, 7];
+                const stericNumbers = [2, 3, 4, 5, 6, 7, 8];
                 const lonePairColumns = [0, 1, 2, 3];
                 const matrix = document.createElement("div");
                 matrix.className = "preset-matrix";
@@ -1251,9 +1398,19 @@
 
                 if (type === "hashed") {
                     const marks = [];
-                    const count = 7;
-                    for (let i = 1; i <= count; i += 1) {
-                        const t = i / (count + 1);
+                    const hatchSpacing = 10;
+                    const hatchStart = 7;
+                    const hatchLength = Math.hypot(x2 - startX, y2 - startY);
+                    const count = Math.max(
+                        3,
+                        Math.floor((hatchLength - hatchStart) / hatchSpacing),
+                    );
+                    for (let i = 0; i < count; i += 1) {
+                        const distanceAlong = Math.min(
+                            hatchStart + i * hatchSpacing,
+                            hatchLength - 4,
+                        );
+                        const t = distanceAlong / hatchLength;
                         const centerX = startX + (x2 - startX) * t;
                         const centerY = startY + (y2 - startY) * t;
                         const halfWidth = 1.5 + t * 11;
@@ -1390,6 +1547,30 @@
                     pieces.push(atomLabel(x, y, label, outerColour, 30));
                 }
 
+                function placeOffset(
+                    offsetX,
+                    offsetY,
+                    label,
+                    type = "solid",
+                    bondScale = 0.73,
+                ) {
+                    const x = centralX + offsetX;
+                    const y = centralY + offsetY;
+                    const bondX = centralX + offsetX * bondScale;
+                    const bondY = centralY + offsetY * bondScale;
+                    pieces.push(
+                        bondLine(
+                            centralX,
+                            centralY,
+                            bondX,
+                            bondY,
+                            type,
+                            nextBondOrder(),
+                        ),
+                    );
+                    pieces.push(atomLabel(x, y, label, outerColour, 30));
+                }
+
                 // Lone-pair dots are rotated according to their direction around the
                 // central atom, so they follow the local geometry.
                 function pair(angleDeg, distance = 56) {
@@ -1397,6 +1578,24 @@
                     const x = centralX + Math.cos(angle) * distance;
                     const y = centralY + Math.sin(angle) * distance;
                     lonePairPieces.push(lonePairDots(x, y, angleDeg + 90));
+                }
+
+                function pairOffset(offsetX, offsetY, angleDeg = 0) {
+                    lonePairPieces.push(
+                        lonePairDots(
+                            centralX + offsetX,
+                            centralY + offsetY,
+                            angleDeg,
+                        ),
+                    );
+                }
+
+                function pentagonalPlane() {
+                    placeOffset(124, 0, outer, "solid");
+                    place(-42, outer, "hashed", 78);
+                    place(-164, outer, "hashed", 104);
+                    place(156, outer, "wedge", 109);
+                    place(49, outer, "wedge", 88);
                 }
 
                 if (mode === "linear") {
@@ -1450,37 +1649,46 @@
                     pair(300);
                 } else if (mode === "octahedral") {
                     place(-90, outer, "solid");
-                    place(90, outer, "hashed");
-                    place(0, outer, "solid");
-                    place(180, outer, "solid");
-                    place(45, outer, "wedge");
-                    place(225, outer, "hashed");
+                    place(-30, outer, "hashed");
+                    place(30, outer, "wedge");
+                    place(90, outer, "solid");
+                    place(150, outer, "wedge");
+                    place(210, outer, "hashed");
                 } else if (mode === "squarePyramidal") {
                     place(-90, outer, "solid");
-                    place(58, outer, "solid");
-                    place(122, outer, "solid");
-                    place(238, outer, "solid");
-                    place(302, outer, "solid");
-                    pair(90, 62);
+                    place(-30, outer, "hashed");
+                    place(30, outer, "wedge");
+                    place(150, outer, "wedge");
+                    place(210, outer, "hashed");
+                    pair(90);
                 } else if (mode === "squarePlanar") {
+                    place(-30, outer, "hashed");
+                    place(30, outer, "wedge");
+                    place(150, outer, "wedge");
+                    place(210, outer, "hashed");
+                    pair(-90);
+                    pair(90);
+                } else if (mode === "pentagonalBipyramidal") {
+                    place(-90, outer, "solid");
+                    place(90, outer, "solid");
+                    pentagonalPlane();
+                } else if (mode === "pentagonalPyramidal") {
+                    place(-90, outer, "solid");
+                    pentagonalPlane();
+                    pair(90, 62);
+                } else if (mode === "pentagonalPlanar") {
+                    pentagonalPlane();
+                    pairOffset(0, -62, 0);
+                    pairOffset(0, 62, 0);
+                } else if (mode === "squareAntiprismatic") {
+                    place(-90, outer, "solid");
                     place(0, outer, "solid");
                     place(90, outer, "solid");
                     place(180, outer, "solid");
-                    place(270, outer, "solid");
-                    pair(-60);
-                    pair(120);
-                } else if (mode === "pentagonalBipyramidal") {
-                    place(-90, outer, "solid");
-                    place(90, outer, "hashed");
-                    [0, 72, 144, 216, 288].forEach((angle) =>
-                        place(angle, outer, "solid"),
-                    );
-                } else if (mode === "pentagonalPyramidal") {
-                    place(-90, outer, "solid");
-                    [18, 90, 162, 234, 306].forEach((angle) =>
-                        place(angle, outer, "solid"),
-                    );
-                    pair(90, 62);
+                    place(-45, outer, "hashed", 112);
+                    place(45, outer, "wedge", 112);
+                    place(135, outer, "wedge", 112);
+                    place(225, outer, "hashed", 112);
                 }
 
                 return `
