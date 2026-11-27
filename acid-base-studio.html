@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore dilution, neutralisation and excess acid with adjustable experiments and chemistry practice.">
+  <title>What happens to the acid? | Chemistry studio</title>
+  <style>
+    :root { --ink:#183a39; --muted:#4c6665; --teal:#006e68; --soft:#edf6f3; --line:#bfd1cb; --acid:#a84028; --base:#245b91; --paper:#fafcfb; --warm:#f9eee8; font-family:"IBM Plex Sans","Avenir Next",Verdana,sans-serif; color:var(--ink); background:var(--paper); }
+    * { box-sizing:border-box; }
+    [hidden] { display:none !important; }
+    body { margin:0; background:radial-gradient(ellipse at 95% 0%,#deeee7 0,transparent 40%),linear-gradient(90deg,#183a3904 1px,transparent 1px); background-size:auto,32px 32px; }
+    main { max-width:1160px; margin:auto; padding:32px clamp(16px,4vw,48px) 40px; }
+    header { border-top:4px solid var(--ink); padding-top:20px; }
+    .eyebrow { font-size:.85rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--teal); }
+    h1 { max-width:850px; margin:16px 0; font:normal clamp(2.7rem,7vw,5.4rem)/1.02 Georgia,serif; letter-spacing:-.045em; }
+    h2 { margin:8px 0 16px; font:normal clamp(1.9rem,4vw,3rem)/1.12 Georgia,serif; letter-spacing:-.025em; }
+    h3 { margin:0 0 16px; font-size:1.15rem; }
+    p,li { line-height:1.65; } p { margin:0 0 16px; }
+    .intro { max-width:730px; font-size:1.06rem; color:var(--muted); }
+    .tabs { display:flex; flex-wrap:wrap; gap:8px; margin:28px 0 24px; }
+    button,select,input,textarea { font:inherit; }
+    button { min-height:44px; padding:10px 16px; cursor:pointer; border:1px solid var(--line); background:white; color:var(--ink); border-radius:4px; font-weight:600; }
+    button:hover { background:var(--soft); border-color:var(--teal); }
+    button[aria-current="step"],.primary { background:var(--ink); color:white; border-color:var(--ink); }
+    button[aria-pressed="true"] { background:var(--soft); border:2px solid var(--teal); }
+    button:disabled { opacity:.45; cursor:default; }
+    :focus-visible { outline:3px solid #c65c27; outline-offset:4px; }
+    .station { background:white; border:1px solid var(--line); padding:clamp(18px,4vw,32px); box-shadow:0 12px 40px #163b3206; }
+    .station-head { max-width:790px; }
+    .mode { display:flex; gap:8px; margin:24px 0; flex-wrap:wrap; }
+    .lab { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(260px,.85fr); gap:28px; align-items:start; }
+    .visual { background:var(--soft); border:1px solid var(--line); padding:20px; min-width:0; }
+    .visual svg { width:100%; height:auto; display:block; }
+    .visual h3 { font-family:Georgia,serif; font-size:1.4rem; font-weight:normal; }
+    .caption,.small { color:var(--muted); font-size:.9rem; line-height:1.6; }
+    .caption { margin:12px 0 0; }
+    .control { margin-bottom:24px; }
+    .control label { display:block; font-weight:600; margin-bottom:10px; line-height:1.5; }
+    .control output { display:block; margin:8px 0; font-size:1.4rem; font-variant-numeric:tabular-nums; }
+    input[type="range"] { width:100%; min-height:44px; accent-color:var(--teal); cursor:pointer; }
+    select { padding:10px 40px 10px 12px; width:100%; color:var(--ink); border:1px solid var(--line); background:white; min-height:44px; }
+    .limits { display:flex; justify-content:space-between; color:var(--muted); font-size:.88rem; }
+    .formula { border-left:3px solid var(--teal); padding:12px 16px; background:#f5f9f7; font-size:1.05rem; line-height:1.7; margin:20px 0; }
+    .readings { margin-top:20px; }
+    .readings dl { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 0 16px; }
+    .readings dl>div { border-bottom:1px solid var(--line); padding:10px 0; }
+    dt { font-size:.88rem; color:var(--muted); line-height:1.4; }
+    dd { margin:6px 0 0; font-size:1.25rem; font-weight:650; font-variant-numeric:tabular-nums; }
+    .badge { display:inline-block; font-size:.9rem; border:1px solid var(--line); padding:6px 10px; margin:0 0 16px; }
+    .prediction { font-weight:600; margin-bottom:16px; }
+    .actions { display:flex; flex-wrap:wrap; gap:8px; }
+    .experiment-note { margin-top:24px; color:var(--muted); }
+    .practice-intro { max-width:780px; }
+    .problem { margin-top:24px; border-top:1px solid var(--line); padding-top:20px; }
+    .problem-label { color:var(--teal); font-weight:700; margin-bottom:12px; }
+    .fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin:20px 0; }
+    .field label { display:block; font-size:.95rem; line-height:1.5; margin-bottom:8px; }
+    input[type="text"],textarea { display:block; width:100%; padding:12px; border:1px solid #8ca8a0; border-radius:3px; background:white; color:var(--ink); min-height:46px; }
+    textarea { min-height:100px; resize:vertical; line-height:1.6; }
+    input[aria-invalid="true"] { border:2px solid var(--acid); }
+    .feedback { font-size:.95rem; line-height:1.5; margin:10px 0 0; color:var(--teal); }
+    .feedback:empty { display:none; }
+    .feedback.retry { color:#91391f; }
+    .written { margin:22px 0; }
+    .written label { display:block; font-weight:600; margin-bottom:8px; line-height:1.5; }
+    details { margin:16px 0; padding:12px 16px; background:#f7faf8; border-left:2px solid var(--line); }
+    summary { cursor:pointer; min-height:30px; line-height:1.6; font-weight:600; }
+    details p { margin:12px 0 0; }
+    .practice form { margin:0; }
+    .summary { margin-top:16px; font-weight:600; }
+    footer { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:24px 0; }
+    .endnote { max-width:900px; font-size:.88rem; color:var(--muted); }
+    .skip { position:absolute; left:-9999px; } .skip:focus { left:20px; top:10px; background:white; z-index:10; padding:10px; }
+    noscript { display:block; padding:20px; border:1px solid var(--acid); }
+    @media(max-width:700px) { main { padding-top:18px; } .lab { grid-template-columns:1fr; } .fields { grid-template-columns:1fr; } .tabs button { flex:1 1 40%; } .station { padding:18px; } h1 { font-size:3rem; } .visual { padding:12px; } .visual svg text { font-size:24px; } }
+    @media(prefers-reduced-motion:no-preference) { .station { animation:arrive .25s ease-out; } @keyframes arrive { from { opacity:.6; transform:translateY(5px); } to { opacity:1; transform:none; } } }
+  </style>
+</head>
+<body>
+<a class="skip" href="#station-title">Skip to experiment</a>
+<main>
+  <header>
+    <div class="eyebrow">Chemistry studio · Acids and bases</div>
+    <h1>What happens<br>to the acid?</h1>
+    <p class="intro">Add water. Add a base. Follow what stays, what reacts and what the pH is telling you. Explore first, then put the readings away and try the questions.</p>
+  </header>
+  <noscript>This activity needs JavaScript. Use the separate dilution and neutralisation PDF if scripts are unavailable.</noscript>
+  <nav class="tabs" aria-label="Experiments">
+    <button type="button" data-station="dilution" aria-current="step">Dilution</button>
+    <button type="button" data-station="neutralisation">Neutralisation</button>
+    <button type="button" data-station="excess">Excess acid</button>
+    <button type="button" data-station="ratio">Reaction ratios · optional</button>
+  </nav>
+  <article class="station">
+    <div class="station-head">
+      <span class="eyebrow" id="station-kicker"></span>
+      <h2 id="station-title" tabindex="-1"></h2>
+      <p id="station-intro"></p>
+    </div>
+    <div class="mode" role="group" aria-label="Activity mode">
+      <button type="button" id="explore-mode" aria-pressed="true">Explore</button>
+      <button type="button" id="practice-mode" aria-pressed="false">Practise without readings</button>
+    </div>
+    <div id="explore">
+      <div class="lab">
+        <div class="visual">
+          <h3 id="visual-title"></h3>
+          <svg id="diagram" viewBox="0 0 480 280" role="img" aria-labelledby="diagram-title diagram-description"></svg>
+          <p class="caption" id="visual-caption"></p>
+        </div>
+        <div>
+          <div class="control" id="base-control" hidden>
+            <label for="base-type">Choose the base</label>
+            <select id="base-type"><option value="1">NaOH: one OH⁻ per formula unit</option><option value="2" selected>Ca(OH)₂: two OH⁻ per formula unit</option></select>
+          </div>
+          <div class="control">
+            <label id="slider-label" for="quantity"></label>
+            <output id="quantity-value" for="quantity"></output>
+            <input type="range" id="quantity" min="25" max="1000" step="25" value="100">
+            <div class="limits"><span id="range-min"></span><span id="range-max"></span></div>
+          </div>
+          <p class="prediction" id="prediction"></p>
+          <div class="actions">
+            <button type="button" id="show-readings" aria-expanded="false" aria-controls="readings">Show readings</button>
+            <button type="button" id="reset">Reset experiment</button>
+          </div>
+          <div class="readings" id="readings" hidden aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="formula" id="principle"></div>
+      <details><summary>Definitions and assumptions</summary><p id="definitions"></p></details>
+      <p class="experiment-note">The experiments respond immediately. Readings begin hidden so you can make a prediction. Hide them again whenever you change the quantity. The practice view does not display these readings.</p>
+    </div>
+    <div id="practice" class="practice" hidden>
+      <div class="practice-intro">
+        <p>Use a calculator and show your reasoning. Enter concentrations in mol dm⁻³, amounts in mol, volumes in cm³ and pH to two decimal places, as labelled. Scientific notation such as <strong>5e-3</strong> or <strong>5 × 10⁻³</strong> is accepted.</p>
+        <p class="small">Numbers can be checked here. Written explanations and equations are for discussion with your tutor; they are not automatically marked. Your work stays in this tab when you change experiments, but reloading clears it. Nothing is sent or saved online.</p>
+      </div>
+      <div id="question-panels"></div>
+    </div>
+  </article>
+  <footer><button type="button" id="previous">Previous experiment</button><span class="small" id="position"></span><button type="button" id="next">Next experiment</button></footer>
+  <p class="endnote">Original practice adapted from the dilution and neutralisation handout. Ideal dilute solutions at 25 °C, complete ionisation of the stated strong acids and dissolved hydroxides, and additive volumes. H⁺ denotes hydrated hydrogen ions. This is a model, not instructions for handling chemicals. No account, tracking or internet connection required.</p>
+</main>
+<script id="chemistry-model">
+'use strict';
+const Chemistry = (() => {
+  const kw = 1e-14;
+  function positive(value, name) { if (!Number.isFinite(value) || value <= 0) throw new RangeError(name + ' must be positive'); }
+  function dilution(amount, volume) {
+    positive(amount, 'Amount'); positive(volume, 'Volume');
+    const concentration = amount / (volume / 1000);
+    return {amount, volume, concentration, ph:-Math.log10(concentration)};
+  }
+  function mixture(acidAmount, hydroxideAmount, volume) {
+    if (![acidAmount,hydroxideAmount].every(v => Number.isFinite(v) && v >= 0)) throw new RangeError('Invalid amount');
+    positive(volume, 'Volume');
+    const difference = acidAmount - hydroxideAmount;
+    const net = difference / (volume / 1000);
+    const root = Math.sqrt(net * net + 4 * kw);
+    // Use the stable root for alkaline mixtures to avoid subtractive cancellation.
+    const hydrogen = net >= 0 ? (net + root) / 2 : (2 * kw) / (root - net);
+    const state = Math.abs(difference) < 1e-12 ? 'neutral' : difference > 0 ? 'acidic' : 'alkaline';
+    return {acidAmount,hydroxideAmount,volume,acidLeft:Math.max(0,difference),baseLeft:Math.max(0,-difference),reacted:Math.min(acidAmount,hydroxideAmount),hydrogen,ph:-Math.log10(hydrogen),state};
+  }
+  function parseNumber(raw) {
+    const superscripts = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+    let s = String(raw).trim().replace(/[−–]/g,'-');
+    s = s.replace(/10([⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+)/g,(_,e) => '10^' + [...e].map(c => superscripts[c]).join(''));
+    s = s.replace(/\s+/g,'');
+    if (/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(s)) return Number.isFinite(Number(s)) ? Number(s) : NaN;
+    const match = s.match(/^([+-]?(?:\d+(?:\.\d*)?|\.\d+))[×x*]10\^(?:([+-]?\d+)|\(([+-]?\d+)\))$/i);
+    const n = match ? Number(match[1]) * 10 ** Number(match[2] ?? match[3]) : NaN;
+    return Number.isFinite(n) ? n : NaN;
+  }
+  function correct(raw, expected, tolerance) { const n = parseNumber(raw); return Number.isFinite(n) && Math.abs(n - expected) <= tolerance; }
+  return Object.freeze({dilution,mixture,parseNumber,correct});
+})();
+</script>
+<script id="studio-app">
+'use strict';
+const $ = id => document.getElementById(id);
+const order = ['dilution','neutralisation','excess','ratio'];
+const stations = {
+  dilution:{title:'More water. Same amount of acid.',intro:'Start with 25.0 cm³ of 0.0400 mol dm⁻³ HCl. You are adding only water: no acid is removed or neutralised.',label:'Final total volume',min:25,max:1000,step:25,start:100,visual:'Spread the same amount further',caption:'Each dot represents an equal amount of acid-derived H⁺. The same number remains after dilution. Particle positions and vessel sizes are schematic, not to scale; water and spectator ions are omitted.',prediction:'Predict: if the final volume doubles, what happens to concentration and pH?',principle:'Amount = concentration × volume. For dilution, c₁V₁ = c₂V₂. The final volume includes the original solution and the added water.',definitions:'Concentration is amount per unit volume. Dilution adds solvent without changing the amount of solute. Here [H⁺] ≈ acid concentration and pH = −log₁₀[H⁺], using mol dm⁻³. The model is restricted to concentrations where water’s contribution is negligible.'},
+  neutralisation:{title:'One H⁺ meets one OH⁻.',intro:'Take 25.0 cm³ of 0.0800 mol dm⁻³ HCl and add 0.100 mol dm⁻³ NaOH. Move through too little base, exactly enough and too much.',label:'Volume of NaOH added',min:0,max:40,step:.5,start:10,visual:'Follow the reacting amounts',caption:'Bars show initial and added amounts in mmol (1 mmol = 0.001 mol), not concentrations. The coloured bars are also labelled. Spectator ions are omitted.',prediction:'Predict: when will neither acid nor base be in excess?',principle:'H⁺(aq) + OH⁻(aq) → H₂O(l). The balanced equation pairs one mole of hydrogen ions with one mole of hydroxide ions.',definitions:'Neutralisation consumes acid and base in the ratio given by the balanced equation. At the equivalence point, neither is in stoichiometric excess. Na⁺ and Cl⁻ are spectator ions. For this strong-acid/strong-base pair, equivalence is approximately pH 7 at 25 °C.'},
+  excess:{title:'React first. Dilute what remains.',intro:'Mix 30.0 cm³ of 0.120 mol dm⁻³ HNO₃ with 20.0 cm³ of 0.100 mol dm⁻³ KOH. After they react, use the slider to add water to the mixture.',label:'Final volume after adding water',min:50,max:500,step:10,start:50,visual:'A reaction, then a dilution',caption:'The first two bars show the amounts supplied before reaction. The last bar shows H⁺ left after reaction. Adding water changes its concentration, not the length of this amount bar.',prediction:'Predict: can adding water use up the remaining acid?',principle:'[H⁺] = amount of H⁺ remaining ÷ total solution volume in dm³. The reaction changes the amount; dilution changes the volume.',definitions:'The limiting reactant is consumed completely. An excess reactant remains after reaction. HNO₃ and KOH react 1:1. pH = −log₁₀[H⁺]; adding water raises pH towards neutrality but does not supply OH⁻ to neutralise the excess acid.'},
+  ratio:{title:'Count the hydroxide ions.',intro:'Use 20.0 cm³ of a 0.0150 mol dm⁻³ base. Compare NaOH with Ca(OH)₂, then add 0.0400 mol dm⁻³ HNO₃. The amount of base formula units stays the same when you switch.',label:'Volume of HNO₃ added',min:0,max:25,step:.5,start:10,visual:'Same amount of base. Different capacity.',caption:'The base solution has the same volume and solute concentration in both cases. Ca(OH)₂ supplies two OH⁻ ions per formula unit; NaOH supplies one. Bars show amounts in mmol.',prediction:'Predict: which base sample needs more acid to reach equivalence?',principle:'Each H⁺ consumes one OH⁻. The formula of the base tells you how many hydroxide ions each formula unit supplies.',definitions:'Stoichiometry connects reacting amounts through a balanced equation. One mole of Ca(OH)₂ requires two moles of a monoprotic acid, whereas one mole of NaOH requires one mole. Treat the dissolved hydroxides as fully dissociated; the models do not describe undissolved solids.'}
+};
+const state = Object.fromEntries(order.map(id => [id,{volume:stations[id].start,readings:false,factor:2}]));
+let current = 'dilution', mode = 'explore';
+const fmt = n => n === 0 ? '0' : Number(n.toPrecision(3)).toString();
+const concentration = n => n >= .001 ? n.toFixed(5).replace(/0+$/,'').replace(/\.$/,'') : n.toExponential(2);
+function text(x,y,value,options='') { return `<text x="${x}" y="${y}" font-family="IBM Plex Sans, Avenir Next, sans-serif" font-size="17" fill="#183a39" ${options}>${value}</text>`; }
+function bar(y,label,amount,max,colour) {
+  const width = Math.max(0,Math.min(330,amount/max*330));
+  return text(18,y,label) + `<rect x="18" y="${y+12}" width="330" height="24" rx="2" fill="#dce9e3"/><rect x="18" y="${y+12}" width="${width}" height="24" rx="2" fill="${colour}"/>` + text(363,y+31,fmt(amount*1000));
+}
+function drawDilution(volume) {
+  const width = 80 + 145 * Math.log(volume/25) / Math.log(40);
+  let svg = '<title id="diagram-title">The same amount of hydrogen ions before and after dilution</title><desc id="diagram-description">Eight schematic hydrogen-ion markers remain in each vessel. The second vessel expands as water is added; it is not drawn to scale.</desc>';
+  svg += text(80,27,'Before','text-anchor="middle"') + text(322,27,'After','text-anchor="middle"');
+  for (const [centre,w,h,v] of [[80,80,100,25],[322,width,100+(width-80)*.35,volume]]) {
+    const x=centre-w/2, y=220-h;
+    svg += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#d0e8df"/><path d="M${x} ${y-14} V220 H${x+w} V${y-14}" fill="none" stroke="#426b65" stroke-width="2"/>`;
+    for(let i=0;i<8;i++) svg += `<circle cx="${x+w*(.15+(i%4)*.23)}" cy="${y+h*(i<4?.32:.72)}" r="5" fill="#a84028"/>`;
+    svg += text(centre,253,v.toFixed(1)+' cm³','text-anchor="middle"');
+  }
+  return svg;
+}
+function metrics(items) { return '<dl>'+items.map(([label,value])=>`<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')+'</dl>'; }
+function update() {
+  const s=state[current], volume=s.volume;
+  $('quantity-value').textContent=volume.toFixed(1)+' cm³';
+  $('quantity').setAttribute('aria-valuetext',volume.toFixed(1)+' cubic centimetres');
+  let svg='', html='';
+  if(current==='dilution') {
+    const result=Chemistry.dilution(.001,volume);
+    svg=drawDilution(volume);
+    html=metrics([['Acid amount','0.00100 mol'],['[H⁺]',concentration(result.concentration)+' mol dm⁻³'],['pH',result.ph.toFixed(2)],['Water added',(volume-25).toFixed(1)+' cm³']]);
+    html+='<p class="small">The amount stays fixed. Volume is '+fmt(volume/25)+' times the original, so concentration is divided by '+fmt(volume/25)+'.</p>';
+  } else {
+    let acid,base,total,max;
+    if(current==='neutralisation') { acid=.002; base=.1*volume/1000; total=25+volume; max=.004; }
+    if(current==='excess') { acid=.0036; base=.002; total=volume; max=.004; }
+    if(current==='ratio') { acid=.04*volume/1000; base=.0003*s.factor; total=20+volume; max=.001; }
+    const result=Chemistry.mixture(acid,base,total);
+    const excess=result.state==='acidic'?result.acidLeft:result.state==='alkaline'?result.baseLeft:0;
+    const excessLabel=result.state==='acidic'?'H⁺ left':result.state==='alkaline'?'OH⁻ left':'Neither in excess';
+    svg='<title id="diagram-title">Reacting amounts in millimoles</title><desc id="diagram-description">'+fmt(acid*1000)+' mmol hydrogen ions supplied, '+fmt(base*1000)+' mmol hydroxide ions supplied. '+excessLabel+': '+fmt(excess*1000)+' mmol.</desc>';
+    svg+=text(363,22,'mmol')+bar(45,'H⁺ supplied',acid,max,'#a84028')+bar(123,'OH⁻ supplied',base,max,'#245b91')+bar(201,excessLabel,excess,max,result.state==='alkaline'?'#245b91':'#a84028');
+    html='<span class="badge">'+result.state[0].toUpperCase()+result.state.slice(1)+(result.state==='neutral'?' · equivalence':'')+'</span>';
+    html+=metrics([['H⁺ remaining',fmt(result.acidLeft)+' mol'],['OH⁻ remaining',fmt(result.baseLeft)+' mol'],['Total volume',total.toFixed(1)+' cm³'],['pH',result.state==='alkaline'?'Above 7':result.ph.toFixed(2)]]);
+    if(result.state==='acidic') html+='<p class="small">[H⁺] ≈ '+concentration(result.acidLeft/(total/1000))+' mol dm⁻³. Divide the amount left by the total volume in dm³.</p>';
+    if(result.state==='neutral') html+='<p class="small">Neither reactant is in excess. Water still supplies H⁺ and OH⁻; their concentrations are each approximately 10⁻⁷ mol dm⁻³ at 25 °C.</p>';
+    if(result.state==='alkaline') html+='<p class="small">Hydroxide remains in excess. Numerical alkaline pH calculations are outside this lesson; no pOH method is needed here.</p>';
+    if(current==='ratio') html+='<p class="small">Acid volume for equivalence: '+(base/.04*1000).toFixed(1)+' cm³.</p>';
+  }
+  $('diagram').innerHTML=svg; $('readings').innerHTML=html; $('readings').hidden=!s.readings;
+  $('show-readings').textContent=s.readings?'Hide readings':'Show readings';
+  $('show-readings').setAttribute('aria-expanded',String(s.readings));
+}
+function showStation(id,focus=true) {
+  current=id; const config=stations[id], s=state[id];
+  $('station-title').textContent=config.title;
+  $('station-intro').textContent=config.intro;
+  $('station-kicker').textContent=id==='ratio'?'Optional experiment':'Core experiment';
+  $('visual-title').textContent=config.visual; $('visual-caption').textContent=config.caption;
+  $('slider-label').textContent=config.label; $('prediction').textContent=config.prediction;
+  $('principle').textContent=config.principle; $('definitions').textContent=config.definitions;
+  for(const key of ['min','max','step']) $('quantity')[key]=config[key];
+  $('quantity').value=s.volume; $('range-min').textContent=config.min+' cm³'; $('range-max').textContent=config.max+' cm³';
+  $('base-control').hidden=id!=='ratio'; $('base-type').value=String(s.factor);
+  document.querySelectorAll('[data-station]').forEach(button=>{ if(button.dataset.station===id) button.setAttribute('aria-current','step'); else button.removeAttribute('aria-current'); });
+  document.querySelectorAll('.question-panel').forEach(panel=>panel.hidden=panel.dataset.for!==id);
+  const index=order.indexOf(id); $('previous').disabled=index===0; $('next').disabled=index===order.length-1; $('position').textContent=(index+1)+' of '+order.length;
+  update(); if(focus) $('station-title').focus();
+}
+function setMode(next) {
+  mode=next; $('explore').hidden=mode!=='explore'; $('practice').hidden=mode!=='practice';
+  $('explore-mode').setAttribute('aria-pressed',String(mode==='explore')); $('practice-mode').setAttribute('aria-pressed',String(mode==='practice'));
+  // The practice view never includes the experiment's numerical setup or predictions.
+  $('station-intro').hidden=mode==='practice';
+}
+document.querySelectorAll('[data-station]').forEach(button=>button.addEventListener('click',()=>showStation(button.dataset.station)));
+$('quantity').addEventListener('input',()=>{state[current].volume=Number($('quantity').value); update();});
+$('base-type').addEventListener('change',()=>{state[current].factor=Number($('base-type').value); update();});
+$('show-readings').addEventListener('click',()=>{state[current].readings=!state[current].readings; update();});
+$('reset').addEventListener('click',()=>{state[current]={volume:stations[current].start,readings:false,factor:2}; showStation(current,false);});
+$('explore-mode').addEventListener('click',()=>setMode('explore'));
+$('practice-mode').addEventListener('click',()=>setMode('practice'));
+$('previous').addEventListener('click',()=>showStation(order[Math.max(0,order.indexOf(current)-1)]));
+$('next').addEventListener('click',()=>showStation(order[Math.min(order.length-1,order.indexOf(current)+1)]));
+
+const questions = [
+  {station:'dilution',number:4,setup:'A 25.0 cm³ sample of 0.0400 mol dm⁻³ HCl is diluted to a final volume of 200.0 cm³. Assume complete ionisation and neglect water’s contribution to [H⁺].',parts:[
+    {text:'a. Calculate the new [H⁺]. [2]',fields:[['q4a','[H⁺] / mol dm⁻³',.005,.000005]],hint:'The amount is concentration × the original volume in dm³. Divide that amount by the new total volume in dm³.'},
+    {text:'b. Calculate the pH before and after dilution. Explain the direction of the change. [3]',fields:[['q4b-before','pH before',1.40,.005],['q4b-after','pH after',2.30,.005]],written:'Explain the direction of the pH change.',hint:'Apply −log₁₀ to each hydrogen ion concentration. Explain what adding water does to concentration.'},
+    {text:'c. More water is added until the pH reaches 3.00. Calculate the final total volume and the extra volume of water added after the first dilution. Assume volumes are additive. [3]',fields:[['q4c-total','Final total volume / cm³',1000,.5],['q4c-extra','Extra water after the first dilution / cm³',800,.5]],hint:'Convert the target pH to [H⁺] using 10^(−pH), then use V = n/c. Extra water is measured from the volume after the first dilution.'}
+  ]},
+  {station:'neutralisation',number:5,setup:'At 25 °C, 25.0 cm³ of 0.0800 mol dm⁻³ HCl reacts with 0.100 mol dm⁻³ NaOH.',parts:[
+    {text:'a. Write the net ionic equation for the reaction. [1]',written:'Net ionic equation, including charges and state symbols.',hint:'Show the ions that react to form water. Spectator ions do not appear.'},
+    {text:'b. Calculate the NaOH volume needed for exact neutralisation. [3]',fields:[['q5b','NaOH volume / cm³',20,.05]],hint:'Find the moles of acid, use the reacting ratio, then divide the required base amount by its concentration. Convert dm³ to cm³.'},
+    {text:'c. Instead, 25.0 cm³ of the NaOH is added. Determine which reactant is in excess and by how many moles. State whether the mixture is acidic, neutral or alkaline. [3]',fields:[['q5c','Excess amount / mol',.0005,.0000005]],choices:[['q5-excess','Reactant in excess',['HCl','NaOH'],'NaOH'],['q5-state','Mixture',['Acidic','Neutral','Alkaline'],'Alkaline']],hint:'Compare the actual amounts supplied in moles. Subtract the amount that reacts from the amount of the excess reactant.'}
+  ]},
+  {station:'excess',number:6,setup:'At 25 °C, 30.0 cm³ of 0.120 mol dm⁻³ HNO₃ is mixed with 20.0 cm³ of 0.100 mol dm⁻³ KOH. Both ionise completely. Assume complete neutralisation of the limiting reactant, additive volumes, and negligible contribution from water to [H⁺].',parts:[
+    {text:'a. Calculate the initial amounts of H⁺ and OH⁻, in mol.',fields:[['q6a-h','Initial H⁺ / mol',.0036,.0000036],['q6a-oh','Initial OH⁻ / mol',.002,.000002]],hint:'Use n = cV separately for the two solutions, with volumes in dm³.'},
+    {text:'b. Determine which reactant is in excess and the amount of H⁺ remaining.',fields:[['q6b','H⁺ remaining / mol',.0016,.0000016]],choices:[['q6-excess','Reactant in excess',['HNO₃','KOH'],'HNO₃']],hint:'One H⁺ reacts with one OH⁻. Compare the initial amounts, then find the difference.'},
+    {text:'c. Calculate the pH of the mixture.',fields:[['q6c','Mixture pH',1.49,.005]],hint:'The remaining hydrogen ions occupy the combined solution volume. Calculate their concentration before taking the negative logarithm.'},
+    {text:'d. The mixture is then diluted with water to a final total volume of 200.0 cm³. Calculate its new pH and explain why the solution remains acidic.',fields:[['q6d','pH after dilution',2.10,.005]],written:'Why does the solution remain acidic?',hint:'Adding water does not consume the remaining acid. Use the new total volume, and compare the calculated pH with neutrality at 25 °C.'}
+  ]},
+  {station:'ratio',number:7,setup:'A 20.0 cm³ sample of 0.0150 mol dm⁻³ Ca(OH)₂ solution is neutralised using 0.0400 mol dm⁻³ HNO₃. Treat both dissolved reactants as fully ionised.',parts:[
+    {text:'a. Write the balanced equation, including state symbols, for the reaction producing calcium nitrate and water. Calcium nitrate contains Ca²⁺ and NO₃⁻ ions.',written:'Balanced equation and state symbols.',hint:'Balance the charges to write calcium nitrate, then balance all atoms in the reaction.'},
+    {text:'b. Calculate the volume of HNO₃ required for exact neutralisation.',fields:[['q7b','HNO₃ volume / cm³',15,.05]],hint:'Find the amount of calcium hydroxide, then account for both hydroxide ions per formula unit before calculating the acid volume.'},
+    {text:'c. Instead, only 10.0 cm³ of HNO₃ is added. Calculate the amount of OH⁻ remaining, in mol, and state whether the mixture is acidic, neutral or alkaline.',fields:[['q7c','OH⁻ remaining / mol',.0002,.0000002]],choices:[['q7-state','Mixture',['Acidic','Neutral','Alkaline'],'Alkaline']],hint:'Find the initial amount of OH⁻, then subtract the H⁺ supplied. The remaining ion determines the classification.'}
+  ]}
+];
+function make(tag,attrs={},content='') { const el=document.createElement(tag); for(const [key,value] of Object.entries(attrs)) el.setAttribute(key,value); if(content) el.textContent=content; return el; }
+for(const question of questions) {
+  const panel=make('div',{'class':'question-panel','data-for':question.station});
+  panel.append(make('h3',{},'Question '+question.number+'.'),make('p',{},question.setup));
+  for(const [index,part] of question.parts.entries()) {
+    const form=make('form',{'class':'problem','novalidate':''});
+    form.append(make('p',{'class':'problem-label'},part.text));
+    const fields=make('div',{'class':'fields'}), checks=[];
+    for(const [id,label,expected,tolerance] of part.fields||[]) {
+      const box=make('div',{'class':'field'}), feedback=make('p',{'id':id+'-feedback','class':'feedback','role':'status'});
+      const input=make('input',{'id':id,'type':'text','autocomplete':'off','spellcheck':'false','aria-describedby':id+'-feedback'});
+      box.append(make('label',{'for':id},label),input,feedback); fields.append(box);
+      checks.push({input,feedback,validate:()=>Chemistry.correct(input.value,expected,tolerance),number:true});
+    }
+    for(const [id,label,options,expected] of part.choices||[]) {
+      const box=make('div',{'class':'field'}), select=make('select',{'id':id,'aria-describedby':id+'-feedback'});
+      select.append(make('option',{'value':''},'Choose an answer'));
+      for(const option of options) select.append(make('option',{'value':option},option));
+      const feedback=make('p',{'id':id+'-feedback','class':'feedback','role':'status'});
+      box.append(make('label',{'for':id},label),select,feedback); fields.append(box);
+      checks.push({input:select,feedback,validate:()=>select.value===expected,number:false});
+    }
+    if(checks.length) form.append(fields);
+    if(part.written) {
+      const id='written-'+question.number+'-'+index, box=make('div',{'class':'written'});
+      box.append(make('label',{'for':id},part.written),make('textarea',{'id':id,'aria-describedby':id+'-note'}),make('p',{'id':id+'-note','class':'small'},'For discussion with your tutor; not automatically marked.'));
+      form.append(box);
+    }
+    const summary=make('p',{'class':'summary','role':'status'});
+    if(checks.length) form.append(make('button',{'type':'submit','class':'primary'},'Check answers'),summary);
+    const detail=make('details'); detail.append(make('summary',{},'A hint, not the answer'),make('p',{},part.hint)); form.append(detail);
+    form.addEventListener('submit',event=>{
+      event.preventDefault(); let passed=0;
+      for(const check of checks) {
+        const raw=check.input.value.trim(), valid=check.validate();
+        check.feedback.textContent=!raw?'Enter an answer first.':check.number&&!Number.isFinite(Chemistry.parseNumber(raw))?'Enter a number, such as 0.005 or 5e-3, without units.':valid?'Correct.':'Not quite. Check the units and use the hint below.';
+        check.feedback.classList.toggle('retry',!valid); check.input.setAttribute('aria-invalid',String(!valid)); if(valid) passed++;
+      }
+      summary.textContent=passed+' of '+checks.length+' checkable answers correct.'+(part.written?' Discuss your written explanation with your tutor.':'');
+    });
+    for(const check of checks) check.input.addEventListener('input',()=>{check.feedback.textContent=''; check.input.removeAttribute('aria-invalid'); summary.textContent='';});
+    panel.append(form);
+  }
+  $('question-panels').append(panel);
+}
+showStation('dilution',false);
+</script>
+</body>
+</html>
