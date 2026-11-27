@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-GB">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reaction ratios</title>
+<style>html,body,object{width:100%;height:100%;margin:0}object{display:block}</style>
+<object type="application/pdf" data="reaction-ratios.pdf" aria-label="Reaction ratios">
+<p><a href="reaction-ratios.pdf">Open the student handout (PDF)</a></p>
+</object>
+<script>
+const viewer = document.querySelector('object');
+const pdf = viewer.querySelector('a').href;
+function showPage() {
+  const page = location.hash.match(/^#(?:section-|page=)([1-9][0-9]*)$/);
+  const target = pdf + (page ? '#page=' + page[1] : '');
+  if (navigator.pdfViewerEnabled === false) location.replace(target);
+  else if (viewer.data !== target) viewer.data = target;
+}
+showPage();
+window.addEventListener('hashchange', showPage);
+</script>
+</html>
