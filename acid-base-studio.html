@@ -141,6 +141,7 @@
     </div>
   </article>
   <footer><button type="button" id="previous">Previous experiment</button><span class="small" id="position"></span><button type="button" id="next">Next experiment</button></footer>
+  <p>Lesson handouts: <a href="acids-and-bases.html">Acids and bases</a> · <a href="dilution-and-neutralisation.html">Dilution and neutralisation</a>. Both include a printable student PDF.</p>
   <p class="endnote">Original practice adapted from the dilution and neutralisation handout. Ideal dilute solutions at 25 °C, complete ionisation of the stated strong acids and dissolved hydroxides, and additive volumes. H⁺ denotes hydrated hydrogen ions. This is a model, not instructions for handling chemicals. No account, tracking or internet connection required.</p>
 </main>
 <script id="chemistry-model">
@@ -341,7 +342,15 @@ for(const question of questions) {
   }
   $('question-panels').append(panel);
 }
-showStation('dilution',false);
+function followLessonLink() {
+  const [station,view] = location.hash.slice(1).split('-');
+  showStation(order.includes(station) ? station : 'dilution',false);
+  setMode(view === 'practice' ? 'practice' : 'explore');
+}
+window.addEventListener('hashchange', () => {
+  if (order.includes(location.hash.slice(1).split('-')[0])) followLessonLink();
+});
+followLessonLink();
 </script>
 </body>
 </html>
